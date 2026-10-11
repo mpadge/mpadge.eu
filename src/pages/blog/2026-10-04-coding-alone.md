@@ -114,6 +114,7 @@ relationships shown in the following figure:
 
 <figure class="blog-figure" id="fig-popularity-authors">
     <picture>
+        <source media="(max-width: 639px)" srcset="/assets/img/coding-alone/fig-popularity-authors-1-narrow.png">
         <source media="(min-width: 640px)" srcset="/assets/img/coding-alone/fig-popularity-authors-1.png">
         <img
             src="/assets/img/coding-alone/fig-popularity-authors-1.png"
@@ -214,6 +215,7 @@ changes” between January 2021 and the present (Oct 2026)
 
 <figure class="blog-figure" id="fig-commit-rate-plot">
     <picture>
+        <source media="(max-width: 639px)" srcset="/assets/img/coding-alone/fig-commit-rate-plot-1-narrow.png">
         <source media="(min-width: 640px)" srcset="/assets/img/coding-alone/fig-commit-rate-plot-1.png">
         <img
             src="/assets/img/coding-alone/fig-commit-rate-plot-1.png"
@@ -260,6 +262,7 @@ decreased since that time.
 
 <figure class="blog-figure" id="fig-trend-plots">
     <picture>
+        <source media="(max-width: 639px)" srcset="/assets/img/coding-alone/fig-trend-plots-1-narrow.png">
         <source media="(min-width: 640px)" srcset="/assets/img/coding-alone/fig-trend-plots-1.png">
         <img
             src="/assets/img/coding-alone/fig-trend-plots-1.png"
@@ -364,6 +367,7 @@ of people showing up for the first time at all.
 
 <figure class="blog-figure" id="fig-new-author-rate">
     <picture>
+        <source media="(max-width: 639px)" srcset="/assets/img/coding-alone/fig-new-author-rate-1-narrow.png">
         <source media="(min-width: 640px)" srcset="/assets/img/coding-alone/fig-new-author-rate-1.png">
         <img
             src="/assets/img/coding-alone/fig-new-author-rate-1.png"
@@ -402,6 +406,7 @@ authors
 
 <figure class="blog-figure" id="fig-new-author-intervals">
     <picture>
+        <source media="(max-width: 639px)" srcset="/assets/img/coding-alone/fig-new-author-intervals-1-narrow.png">
         <source media="(min-width: 640px)" srcset="/assets/img/coding-alone/fig-new-author-intervals-1.png">
         <img
             src="/assets/img/coding-alone/fig-new-author-intervals-1.png"
@@ -444,6 +449,7 @@ contributors.
 
 <figure class="blog-figure" id="fig-step-change-bytype">
     <picture>
+        <source media="(max-width: 639px)" srcset="/assets/img/coding-alone/fig-step-change-bytype-1-narrow.png">
         <source media="(min-width: 640px)" srcset="/assets/img/coding-alone/fig-step-change-bytype-1.png">
         <img
             src="/assets/img/coding-alone/fig-step-change-bytype-1.png"
