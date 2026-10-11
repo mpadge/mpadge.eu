@@ -1,6 +1,14 @@
 ---
 title: "Coding Alone"
-description: "Everybody is coding alone. And it's not good."
+description: In which I show how, over the last few years, the world has
+    rapidly moved from open-source software being produced and maintained by
+    online communities, to software projects being built and maintained in
+    isolation. By single developers, with ever-decreasing input from others. AI
+    coding tools are now dramatically accelerating movement away from code as a
+    collective endeavour to "coding alone". I conclude by describing how such
+    progression need not be considered inevitable. Every step has reflected the
+    collective influence of countless individual human decisions. The fate of
+    open-source software communities is still determined by us.
 date: 2026-10-10
 tags: code, ai
 link: coding-alone.html
@@ -23,6 +31,21 @@ links:
 ---
 
 # Coding Alone
+
+<div class="summary-block">
+    It's been over 30 years since Robert Putnam started writing about the
+    American phenomenon of "bowling alone". This analyses shows how the same
+    thing is now happening to coding. Over the last few years, the world has
+    rapidly moved from open-source software being produced and maintained by
+    online communities, to software projects being built and maintained in
+    isolation. By single developers, with ever-decreasing input from others.
+    AI coding tools are now dramatically accelerating movement away from code
+    as a collective endeavour to "coding alone". I conclude by describing how
+    such progression need not be considered inevitable. Every step has
+    reflected the collective influence of countless individual human decisions.
+    We can still decide to help re-activate open-source software communities,
+    including through using AI coding tools in ways that help retain community.
+</div>
 
 In 1995, Robert Putnam noticed that more Americans were bowling than
 ever before, but the growth was in solo or casual bowling at the expense
