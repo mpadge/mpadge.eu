@@ -2,7 +2,7 @@
 title: "Coding Alone"
 subtitle: "Open-source communities are being progressively replaced by solo-developers."
 author: "Mark Padgham"
-date: "02 October 2026"
+date: "11 October 2026"
 vignette: >
   %\VignetteIndexEntry{Coding Alone}
   %\VignetteEngine{quarto::html}
@@ -139,6 +139,8 @@ All data are taken from GitHub, primarily as measures of interaction with
 software repositories through "issues". Issues are the place for anybody to ask
 questions of software authors, to report bugs, or to request new features.
 A corpus of repositories was taken from the five sources described above.
+Full source code for these analyses are at
+[github.com/mpadge/coding-alone](https://github.com/mpadge/coding-alone).
 
 Analyses included every repository reviewed by [JOSS](https://joss.theoj.org/)
 and [rOpenSci](https://ropensci.org/), every package currently on
@@ -174,6 +176,12 @@ through issues.
 The focus of these analyses is on the primary point of community interactions
 with open-source software, and these have always been issues and not pull
 requests.
+
+#### But don't repositories settle down with age?
+
+Nope. Repository age has no effect on the analyses or conclusions here, as
+shown in [this online
+appendix](https://mpadge.github.io/coding-alone/articles/coding-alone.html#appendix).
 
 ---
 
@@ -495,29 +503,3 @@ spaces.
 ::: {#refs}
 
 :::
-
----
-
-## Appendix {.appendix}
-
-### Projects do not simply settle down with age
-
-Of course, general interest and activity in repositories may simply decrease
-over time, and many of the effects observed above may simply reflect process of
-"settling down": Documentation gets clarified, many questions have already been
-answered, and the need for engagement decreases.
-
-This appendix demonstrates that repository age does not influence the main
-conclusions. @fig-cohort-age shows two lines for each software source: One
-exclusively for repositories started in the indicated year, and one for
-repositories in their second year of life in that year. Any effects of
-repository age should manifest in differences between these two lines, and yet
-that is not what is observed. In all cases, observed rates of change remain
-very similar regardless of repository age. Moreover, replicating this figure
-for any of the metrics analysed in the main text yields qualitatively very
-similar results. Repository age therefore has little or no qualitative effect
-on any of the results shown in the main text.
-
-
-
-![Effects of cohort age on rates of new issues](coding-alone-figures/fig-cohort-age-1.png){#fig-cohort-age fig-align="center"}

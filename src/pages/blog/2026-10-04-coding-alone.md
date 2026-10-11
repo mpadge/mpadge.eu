@@ -25,8 +25,12 @@ links:
         An organization dedicated to "*Transforming science through open data, software & reproducibility*", particularly through peer review of open source research software packages in the R language.
     https://mpadge.eu/blog/machina-machista.html: |
         "*Your AI thinks you're a dude. And that's a problem for everybody who is not.*" Blog post from 22nd July 2026 on mpadge.eu.
+    https://mpadge.github.io/coding-alone/articles/coding-alone.html#appendix: |
+        Appendix in the repository containing all analyses presented here.
     https://agents.md/: |
         A simple, open format for guiding coding agents
+    https://github.com/mpadge/coding-alone: |
+        Repository on 'github.com' containing source code for all analyses presented here.
 
 ---
 
@@ -146,7 +150,8 @@ All data are taken from GitHub, primarily as measures of interaction
 with software repositories through “issues”. Issues are the place for
 anybody to ask questions of software authors, to report bugs, or to
 request new features. A corpus of repositories was taken from the five
-sources described above.
+sources described above. Full source code for these analyses are at
+[github.com/mpadge/coding-alone](https://github.com/mpadge/coding-alone).
 
 Analyses included every repository reviewed by
 [JOSS](https://joss.theoj.org/) and [rOpenSci](https://ropensci.org/),
@@ -183,6 +188,12 @@ with repositories on GitHub, with the rest coming through issues.
 The focus of these analyses is on the primary point of community
 interactions with open-source software, and these have always been
 issues and not pull requests.
+
+#### But don’t repositories settle down with age?
+
+Nope. Repository age has no effect on the analyses or conclusions here,
+as shown in [this online
+appendix](https://mpadge.github.io/coding-alone/articles/coding-alone.html#appendix).
 
 ------------------------------------------------------------------------
 
@@ -759,41 +770,3 @@ Aggressive Behavior.” *Journal of Personality and Social Psychology* 81
 </div>
 
 </div>
-
-------------------------------------------------------------------------
-
-## Appendix
-
-### Projects do not simply settle down with age
-
-Of course, general interest and activity in repositories may simply
-decrease over time, and many of the effects observed above may simply
-reflect process of “settling down”: Documentation gets clarified, many
-questions have already been answered, and the need for engagement
-decreases.
-
-This appendix demonstrates that repository age does not influence the
-main conclusions.
-<a href="#fig-cohort-age" class="quarto-xref">Figure 12</a> shows two
-lines for each software source: One exclusively for repositories started
-in the indicated year, and one for repositories in their second year of
-life in that year. Any effects of repository age should manifest in
-differences between these two lines, and yet that is not what is
-observed. In all cases, observed rates of change remain very similar
-regardless of repository age. Moreover, replicating this figure for any
-of the metrics analysed in the main text yields qualitatively very
-similar results. Repository age therefore has little or no qualitative
-effect on any of the results shown in the main text.
-
-<figure class="blog-figure" id="fig-cohort-age">
-    <picture>
-        <source media="(min-width: 640px)" srcset="/assets/img/coding-alone/fig-cohort-age-1.png">
-        <img
-            src="/assets/img/coding-alone/fig-cohort-age-1.png"
-            alt="Effects of cohort age on rates of new issues"
-            loading="lazy">
-    </picture>
-    <figcaption>
-        Figure 12: Effects of cohort age on rates of new issues
-    </figcaption>
-</figure>
