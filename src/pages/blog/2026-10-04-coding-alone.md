@@ -4,6 +4,21 @@ description: "Everybody is coding alone. And it's not good."
 date: 2026-10-10
 tags: code, ai
 link: coding-alone.html
+links:
+    https://npmjs.com: |
+      'npm' (Node Package Manager) package distribution system for JavaScript.
+    https://pypi.org/: |
+        Python Package Index (PyPI). Package distribution sytem for Python packages.
+    https://cran.r-project.org/: |
+        The Comprehensive R Archive Network (CRAN). Package distribution system for R packages.
+    https://joss.theoj.org/: |
+        The Journal of Open Source Software. A developer friendly, open access journal for research software packages.
+    https://ropensci.org/: |
+        An organization dedicated to "*Transforming science through open data, software & reproducibility*", particularly through peer review of open source research software packages in the R language.
+    https://mpadge.eu/blog/machina-machista.html: |
+        "*Your AI thinks you're a dude. And that's a problem for everybody who is not.*" Blog post from 22nd July 2026 on mpadge.eu.
+    https://agents.md/: |
+        A simple, open format for guiding coding agents
 
 ---
 
@@ -50,11 +65,11 @@ have “starred” software repositories on GitHub.
 
 All of the following analyses use random selections of repositories from
 several common software distribution systems, including [npm for
-Javascript](https://npmjs.com), [PyPI for Python](pypi.org), [CRAN for
-R](https://cran.r-project.org), and two GitHub-based software review
+Javascript](https://npmjs.com), [PyPI for Python](https://pypi.org/), [CRAN for
+R](https://cran.r-project.org/), and two GitHub-based software review
 organizations, [JOSS (the Journal of Open-Source
-Software)](https://joss.theoj.org), and
-[rOpenSci](https://ropensci.org). Data extracted for each of these can
+Software)](https://joss.theoj.org/), and
+[rOpenSci](https://ropensci.org/). Data extracted for each of these can
 show whether larger communities help produce better software, as
 measured through popularity.
 
@@ -109,8 +124,8 @@ request new features. A corpus of repositories was taken from the five
 sources described above.
 
 Analyses included every repository reviewed by
-[JOSS](https://joss.theoj.org) and [rOpenSci](https://ropensci.org),
-every package currently on [CRAN](https://cran.r-project.org), and
+[JOSS](https://joss.theoj.org/) and [rOpenSci](https://ropensci.org/),
+every package currently on [CRAN](https://cran.r-project.org/), and
 samples from the other three. Samples were stratified by popularity to
 ensure even sampling and representation regardless of popularity. In
 total, 3,139,779 issues were analysed across 52,461 repositories.
@@ -366,8 +381,8 @@ authors
 </figure>
 
 These rates have also uniformly increased over the past few years. They
-are also notably far higher for [CRAN](https://cran.r-project.org),
-[JOSS](https://joss.theoj.org), and [rOpenSci](https://ropensci.org), in
+are also notably far higher for [CRAN](https://cran.r-project.org/),
+[JOSS](https://joss.theoj.org/), and [rOpenSci](https://ropensci.org/), in
 which new authors now arrive more than once per month only for the most
 popular packages. Only PyPi appears to not suffer this trend, with
 intervals between the arrival of new authors progressively decreasing
