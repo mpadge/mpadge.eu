@@ -47,27 +47,25 @@ links:
     including through using AI coding tools in ways that help retain community.
 </div>
 
-In 1995, Robert Putnam noticed that more Americans were bowling than
-ever before, but the growth was in solo or casual bowling at the expense
-of organised, collective bowling He argued that this was reflective of a
-broader collapse of associational habits which used to knit Americans
-into overlapping social groups. Local clubs, unions, congregations,
-leagues had been quietly hollowing out for a generation, not because
-people had lost interest in the underlying activities, but because
-they’d stopped doing them together (Putnam 1995, 2000). The incidental
-organizational structure of bowling leagues turned out to have been key
-to the way a potentially solitary pastime contributed to social
-cohesion.
+In 1995, Robert Putnam noticed that more Americans were bowling than ever
+before, but the growth was in solo or casual bowling at the expense of
+organised, collective bowling. He argued that this was reflective of a broader
+collapse of associational habits which used to knit Americans into overlapping
+social groups. Local clubs, unions, congregations, and leagues had been quietly
+hollowing out for a generation, not because people had lost interest in the
+underlying activities, but because they’d stopped doing them together (Putnam
+1995, 2000). The incidental organizational structure of bowling leagues turned
+out to have been key to the way a potentially solitary pastime contributed to
+social cohesion.
 
-Open-source software has its own version of a league: public
-repositories, with a few core maintainers and shifting casts of
-outsiders who ask questions, report bugs, or leave comments. These
-communities of contributors guide and nurture ongoing software
-development. People still write code, but this analysis shows that the
-collective structures that have supported and sustained that writing are
-changing dramatically. Public software repositories are changing from
-places of social coherence and cohesion to become more like mere mirrors
-of a single person’s work.
+Open-source software has its own version of a league: public repositories, with
+a few core maintainers and shifting casts of outsiders who ask questions,
+report bugs, or leave comments. These communities of contributors guide and
+nurture ongoing software development. People still write code, but this
+analysis shows that the collective structures that have supported and sustained
+that writing are changing dramatically. Public software repositories are
+changing from places of social coherence and cohesion to become more like mere
+mirrors of a single person’s work.
 
 ## Why does this matter?
 
@@ -215,7 +213,7 @@ changes” between January 2021 and the present (Oct 2026)
 </figure>
 
 Decreases in repository creation could of course simply reflect people
-moving towards alternative code hosting sites. other than GitHub. Such
+moving towards alternative code hosting sites other than GitHub. Such
 effects are not considered further here, but all analyses that follow
 are derived from software which (still) identifies GitHub as its primary
 source, and are therefore independent of whether or not people are
@@ -293,7 +291,7 @@ pattern.
 
 Total numbers of comments on each issue show a similar pattern
 (<a href="#fig-step-change-commits" class="quarto-xref">Figure 5</a>),
-with similarly reversed trends for PyPi as well as npm. Taken together,
+with similarly reversed trends for PyPI as well as npm. Taken together,
 these two figures reveal both numbers of issue authors and numbers of
 comments per issue have declined severely in all software systems over
 the past few years. Only for python packages in PyPI have declines been
@@ -407,7 +405,7 @@ These rates have also uniformly increased over the past few years. They
 are also notably far higher for [CRAN](https://cran.r-project.org/),
 [JOSS](https://joss.theoj.org/), and [rOpenSci](https://ropensci.org/), in
 which new authors now arrive more than once per month only for the most
-popular packages. Only PyPi appears to not suffer this trend, with
+popular packages. Only PyPI appears to not suffer this trend, with
 intervals between the arrival of new authors progressively decreasing
 over the past couple of years.
 
@@ -463,7 +461,7 @@ single person in January 2021. By October 2026, that share had risen to
             loading="lazy">
     </picture>
     <figcaption>
-        Figure 10: Share ot active repositories with only one person active
+        Figure 10: Share of active repositories with only one person active
     </figcaption>
 </figure>
 
