@@ -32,7 +32,10 @@ blog: ## Render latest blog post (or hard-code value in 'tools/blog/update_one.R
 render: ## Render $(BLOG) to gfm .md from .qmd or .Rmd (no-op if only .md)
 	@f=src/pages/blog/$(BLOG); \
 	if [ -f "$$f.qmd" ]; then \
-		quarto render "$$f.qmd" --to gfm; \
+		cp "$$f.md" "$$f.md.prev" 2>/dev/null || true; \
+		quarto render "$$f.qmd" --to gfm && \
+		Rscript tools/qmd-figures.R "$$f.md" "$$f.md.prev"; \
+		rm -f "$$f.md.prev"; \
 	elif [ -f "$$f.Rmd" ]; then \
 		Rscript -e 'rmarkdown::render("'"$$f.Rmd"'", output_format = rmarkdown::md_document(variant = "gfm"))'; \
 	else \

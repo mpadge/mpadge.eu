@@ -8,6 +8,7 @@ vignette: >
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
 bibliography: 2026-10-04-coding-alone-references.bib
+link-citations: true
 ---
 
 <!--
