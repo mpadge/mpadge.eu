@@ -38,11 +38,11 @@ links:
 
 <div class="summary-block">
 
-It’s been over 30 years since Robert Putnam started writing about the
-American phenomenon of “bowling alone”. This analyses shows how the same
-thing is now happening to coding. Over the last few years, the world has
-rapidly moved from open-source software being produced and maintained by
-online communities, to software projects being built and maintained in
+It’s been over 30 years since Robert Putnam wrote about the American
+phenomenon of “bowling alone”. This analyses shows how the same thing is
+now happening to coding. Over the last few years, the world has rapidly
+moved from open-source software being produced and maintained by online
+communities, to software projects being built and maintained in
 isolation. By single developers, with ever-decreasing input from others.
 AI coding tools are now dramatically accelerating movement away from
 code as a collective endeavour to “coding alone”. I conclude by
@@ -645,13 +645,14 @@ Perhaps most importantly if you use AI coding assistants, ensure you use
 them in socially aware ways. These machines are trained to implement
 their own work-arounds to any software issues they encounter. And they
 often do so silently. Start with clear instructions in an [`AGENTS.md`
-file](https://agents.md/) or similar **NOT** to so that silently, rather
-to tell you, to help you as a human being connect with the human
-developers of other software. At the very least, never let an AI coding
-tool open an unsolicited pull request on any repository you do not know
-well. That is doing without asking, which is rude. Always ask first, and
-do so with your own, human words. Help to re-establish open-source
-communities as genuinely collaborative spaces.
+file](https://agents.md/) or similar **NOT** to do that silently, rather
+to tell you about it. It really is quite easy to use AI coding tools in
+ways that help you as a human being connect with the human developers of
+other software. At the very least, never let an AI coding tool open an
+unsolicited pull request on any repository you do not know well. That is
+doing without asking, which is rude. Always ask first, and do so with
+your own, human words. Help to re-establish open-source communities as
+genuinely collaborative spaces.
 
 ## References
 

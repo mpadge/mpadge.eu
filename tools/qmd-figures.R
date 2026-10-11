@@ -29,6 +29,9 @@ prev_file <- if (length (args) > 1L) args [2] else NULL
 # Image dir is derived from file name, dropping the date prefix:
 slug <- sub ("^[0-9]{4}-[0-9]{2}-[0-9]{2}-", "", tools::file_path_sans_ext (basename (md_file)))
 img_dir <- paste0 ("/assets/img/", slug, "/")
+# Local location of those images, to check for optional files:
+site_root <- normalizePath (file.path (dirname (md_file), "..", "..", ".."))
+img_path <- file.path (site_root, "src", img_dir)
 
 x <- paste0 (readLines (md_file, warn = FALSE), collapse = "\n")
 
@@ -66,12 +69,22 @@ fig_html <- function (id, src, caption) {
     # pandoc uses non-breaking spaces in "Figure N:"
     caption <- gsub ("\u00a0", " ", caption)
     img <- paste0 (img_dir, basename (src))
+    # Narrow-format versions are used for small screens where they exist:
+    narrow <- sub ("\\.png$", "-narrow.png", basename (src))
+    narrow_src <- ""
+    if (file.exists (file.path (img_path, narrow))) {
+        narrow_src <- paste0 (
+            "        <source media=\"(max-width: 639px)\" srcset=\"",
+            img_dir, narrow, "\">\n"
+        )
+    }
     alt <- sub ("^Figure [0-9]+: *", "", gsub ("\\s+", " ", caption))
     alt <- esc_html (sub ("([.?!]) .*$", "\\1", alt)) # first sentence only
     cap <- paste0 ("        ", gsub ("\n", "\n        ", caption))
     paste0 (
         "<figure class=\"blog-figure\" id=\"", id, "\">\n",
         "    <picture>\n",
+        narrow_src,
         "        <source media=\"(min-width: 640px)\" srcset=\"", img, "\">\n",
         "        <img\n",
         "            src=\"", img, "\"\n",
