@@ -9,7 +9,7 @@ description: In which I show how, over the last few years, the world has
     progression need not be considered inevitable. Every step has reflected the
     collective influence of countless individual human decisions. The fate of
     open-source software communities is still determined by us.
-date: 2026-10-10
+date: 2026-10-12
 tags: code, ai
 link: coding-alone.html
 links:
@@ -59,6 +59,11 @@ links:
         Suler, John (2004) "_The Online Disinhibition Effect_." _CyberPsychology, Behavior, and Social Networking_ 7(3): 321-26.
     https://doi.org/10.1177/15248380261476605: |
         Chu, Zhou, Lu, Zhang, and Liu (2026) "_Anonymity, Online Disinhibition, and Cyber Aggression: A Systematic Review and Meta-Analysis_." _Trauma, Violence, & Abuse_, epub ahead of print.
+    https://doi.org/10.5281/zenodo.4017493: |
+        Floyd, Rossi, Enfield, Kendrick, Blythe, Zinken, Baranova & Dingemanse. 2020. "_Getting others to do things: A pragmatic typology of recruitments_". Studies in Diversity Linguistics 31. Berlin: Language Science Press.
+    https://www.cambridge.org/highereducation/books/politeness/89113EE2FB4A1D254D4A8D2011E542E4#contents: |
+        Brown, P., &#38; Levinson, S. C. (1987). _Politeness: Some Universals in Language Usage._ Cambridge: Cambridge University Press.
+
 
 ---
 
@@ -606,14 +611,15 @@ npm and CRAN.
 
 ### Doing before asking
 
-As stated above, most human societies cultivate habits of asking before
-doing. Unsolicited pull requests reverse this custom. They represent a
-comparably more aggressive step of doing before asking. While causes for
-such cultural changes are likely complex, increased social isolation
-does seem to foster increased aggression ([Twenge et al.
-2001](https://doi.org/10.1037/0022-3514.81.6.1058)). Although coding alone is likely to increase
-ratios of PRs to issues, the increases in
-<a href="#fig-pr-to-issues-ratio" class="quarto-xref">Figure 11</a> more
+As stated above, most human societies cultivate habits of
+[asking](https://www.cambridge.org/highereducation/books/politeness/89113EE2FB4A1D254D4A8D2011E542E4#contents)
+before [doing](https://doi.org/10.5281/zenodo.4017493). Unsolicited pull
+requests reverse this custom. They represent a comparably more aggressive step
+of doing before asking. While causes for such cultural changes are likely
+complex, increased social isolation does seem to foster increased aggression
+([Twenge et al. 2001](https://doi.org/10.1037/0022-3514.81.6.1058)). Although
+coding alone is likely to increase ratios of PRs to issues, the increases in <a
+    href="#fig-pr-to-issues-ratio" class="quarto-xref">Figure 11</a> more
 likely reveal an additionally negative influence of AI coding tools.
 
 The large language models that underlie AI coding tools are trained on
@@ -669,15 +675,16 @@ your open-source repositories can have a big effect ([Hoshikawa et al.
 effects of community diversity – invite and encourage as many different
 kinds of people you can.
 
-Perhaps most importantly if you use AI coding assistants, ensure you use
-them in socially aware ways. These machines are trained to implement
-their own work-arounds to any software issues they encounter. And they
-often do so silently. Start with clear instructions in an [`AGENTS.md`
-file](https://agents.md/) or similar **NOT** to do that silently, rather
-to tell you about it. It really is quite easy to use AI coding tools in
-ways that help you as a human being connect with the human developers of
-other software. At the very least, never let an AI coding tool open an
-unsolicited pull request on any repository you do not know well. That is
-doing without asking, which is rude. Always ask first, and do so with
-your own, human words. Help to re-establish open-source communities as
-genuinely collaborative spaces.
+Perhaps most importantly if you use AI coding assistants, ensure you use them
+in socially aware ways. These machines are trained to implement their own
+work-arounds to any software issues they encounter. And they often do so
+silently. Start with clear instructions in an [`AGENTS.md`
+file](https://agents.md/) or similar **NOT** to do that silently, rather to
+tell you about it. It really is quite easy to use AI coding tools in ways that
+help you as a human being connect with the human developers of other software.
+At the very least, never let an AI coding tool open an unsolicited pull request
+on any repository you do not know well. That is [doing without
+asking](https://doi.org/10.5281/zenodo.4017493), which is
+[rude](https://www.cambridge.org/highereducation/books/politeness/89113EE2FB4A1D254D4A8D2011E542E4#contents).
+Always ask first, and do so with your own, human words. Help to re-establish
+open-source communities as genuinely collaborative spaces.

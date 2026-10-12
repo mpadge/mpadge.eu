@@ -2,12 +2,12 @@
 title: "Coding Alone"
 subtitle: "Open-source communities are being progressively replaced by solo-developers."
 author: "Mark Padgham"
-date: "11 October 2026"
+date: "12 October 2026"
 vignette: >
   %\VignetteIndexEntry{Coding Alone}
   %\VignetteEngine{quarto::html}
   %\VignetteEncoding{UTF-8}
-bibliography: 2026-10-04-coding-alone-references.bib
+bibliography: 2026-10-12-coding-alone-references.bib
 link-citations: true
 ---
 
