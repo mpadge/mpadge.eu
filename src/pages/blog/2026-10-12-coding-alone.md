@@ -87,6 +87,10 @@ that help retain community.
 
 </div>
 
+<div class="use-dropcap">
+
+</div>
+
 In 1995, Robert Putnam noticed that more Americans were bowling than
 ever before, but the growth was in solo or casual bowling at the expense
 of organised, collective bowling. He argued that this was reflective of
@@ -207,7 +211,9 @@ enormous numbers of downloads and hundreds of people opening issues. A
 few additional statistics were also extracted, and are described
 alongside the main analyses.
 
-#### But what about pull requests?
+<div class="info-block">
+
+**But what about pull requests?**
 
 GitHub also implements “pull requests”, which allow people to upload
 their own code changes and request that they be “merged” with the
@@ -223,17 +229,27 @@ The focus of these analyses is on the primary point of community
 interactions with open-source software, and these have always been
 issues and not pull requests.
 
-#### But don’t repositories settle down with age?
+</div>
+
+<div class="info-block">
+
+**But don’t repositories settle down with age?**
 
 Nope. Repository age has no effect on the analyses or conclusions here,
 as shown in [this online
 appendix](https://mpadge.github.io/coding-alone/articles/coding-alone.html#appendix).
+
+</div>
 
 ------------------------------------------------------------------------
 
 ## Main Findings
 
 ### Finding \#1: People are coding less
+
+<div class="use-dropcap">
+
+</div>
 
 Although the main focus here is on the demise of open-source
 communities, all data also reveal a pervasive decline in coding activity
@@ -272,6 +288,8 @@ abandoning GitHub for alternative sites. The rates of monthly commits of
 example. Most of these rates have declined over the past few years, and
 directly reflect genuine declines observed among those people still
 active on GitHub.
+
+&ast;
 
 ### Finding \#2: There Are Fewer Contributors
 
@@ -385,7 +403,7 @@ occurs following rigorous review processes, and so values for these two
 can’t really be directly compared with the other sources, and are likely
 affected by additional constraints and influences.)
 
-------------------------------------------------------------------------
+&ast;
 
 ### Finding \#3: New Authors Are Not Arriving
 
@@ -459,6 +477,8 @@ most popular packages. Only PyPI appears to not suffer this trend, with
 intervals between the arrival of new authors progressively decreasing
 over the past couple of years.
 
+&ast;
+
 ### Finding \#4: Spiralling Towards Solitude
 
 For each person contributing to a repository, GitHub also provides a
@@ -516,7 +536,13 @@ single person in January 2021. By October 2026, that share had risen to
     </figcaption>
 </figure>
 
+----
+
 ## What does this mean?
+
+<div class="use-dropcap">
+
+</div>
 
 Many aspects of these analyses align with what other people have
 reported about the people who keep open source software alive. A 2024
@@ -662,6 +688,8 @@ who is not.*” These analyses add nuance to that conclusion, by showing
 how AI coding assistants are a manifestation of their training being
 heavily influenced by the toxically disinhibited expressions of
 anti-social men.
+
+&ast;
 
 ## What can we do about this?
 
