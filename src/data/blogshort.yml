@@ -1,4 +1,10 @@
 -
+    title: "Coding Alone"
+    description: In which I show how, over the last few years, the world has rapidly moved from open-source software being produced and maintained by online communities, to software projects being built and maintained in isolation. By single developers, with ever-decreasing input from others. AI coding tools are now dramatically accelerating movement away from code as a collective endeavour to "coding alone". I conclude by describing how such progression need not be considered inevitable. Every step has reflected the collective influence of countless individual human decisions. The fate of open-source software communities is still determined by us.
+    created: 12 Oct 26
+    tags: code, ai
+    link: blog/coding-alone.html
+-
     title: "Machina machista"
     description: Your AI thinks you're a dude. And that's a problem for everybody who is not. Matching LLMs with decision-making scenarios shows escalatory recommendations are around 10× more likely when actors are identified as male rather than female. And default behaviour in the absence of gender specifiers is overwhelmingly "male". The more such models inform real decisions, the greater the risk of building genuine <em>machina machista</em> — machines whose ordinary use normalises misogynistic and macho behaviour throughout society.
     created: 22 Jul 26
@@ -31,9 +37,3 @@
     created: 30 Aug 22
     tags: code
     link: blog/r-cpp-debugging.html
--
-    title: Timeout on parallel jobs in R
-    description: Python's `multiprocessing` and `threading` libraries both have a timeout parameter for re-joining threads after they've finished. This provides an easy way to launch multi-threaded jobs while ensuing that no single thread exceeds a specified timeout. This post describes two ways to implement equivalent functionality in R.
-    created: 14 Jan 22
-    tags: code
-    link: blog/r-parallel-timeout.html
