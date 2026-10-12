@@ -28,9 +28,37 @@ links:
     https://mpadge.github.io/coding-alone/articles/coding-alone.html#appendix: |
         Appendix in the repository containing all analyses presented here.
     https://agents.md/: |
-        A simple, open format for guiding coding agents
+        AGENDS.md: A simple, open format for guiding coding agents
     https://github.com/mpadge/coding-alone: |
         Repository on 'github.com' containing source code for all analyses presented here.
+    https://doi.org/10.1353/jod.1995.0002: |
+        Putnam, Robert D. (1995) "_Bowling Alone: America's Declining Social Capital_." _Journal of Democracy_ 6(1): 65-78. 
+    http://bowlingalone.com/: |
+        Putnam (2000) _Bowling Alone: The Collapse and Revival of American Community_. New York: Simon & Schuster.
+    https://socket.dev/blog/the-unpaid-backbone-of-open-source: |
+        Socket (2024) "_The Unpaid Backbone of Open Source: Solo Maintainers Face Increasing Security Demands_." Socket Blog.
+    https://www.tidelift.com/open-source-maintainer-survey-2024: |
+        Tidelift (2024) "_The 2024 Tidelift Maintainer Impact Report_."
+    https://www.kubernetes.io/blog/2025/11/11/ingress-nginx-retirement/: |
+        Kubernetes SIG Network and Security Response Committee (2025) "_Ingress NGINX Retirement: What You Need to Know_." Kubernetes Blog.
+    https://arxiv.org/abs/2604.27532: |
+        Hoshikawa, Tanaka, Shimari, Kula, and Matsumoto (2026) "_A Longitudinal Analysis of Good First Issue Practices and Newcomer Pull Requests in Popular OSS Projects_." arXiv:2604.27532, accepted at EASE 2026.
+    https://doi.org/10.1109/CHASE.2013.6614728: |
+        Steinmacher, Wiese, Chaves, and Gerosa (2013) "_Why Do Newcomers Abandon Open Source Software Projects?_" In _2013 6th International Workshop on Cooperative and Human Aspects of Software Engineering (CHASE)_, 25-32.
+    https://www.fordfoundation.org/media/2976/roads-and-bridges-the-unseen-labor-behind-our-digital-infrastructure.pdf: |
+        Eghbal, Nadia (2016) "_Roads and Bridges: The Unseen Labor Behind Our Digital Infrastructure_." Ford Foundation.
+    https://blog.pragmaticengineer.com/stack-overflow-is-almost-dead/: |
+        Orosz, Gergely (2025) "_Stack Overflow Is Almost Dead_." The Pragmatic Engineer (blog).
+    https://www.ericholscher.com/blog/2025/jan/21/stack-overflows-decline/: |
+        Holscher, Eric (2025) "_Stack Overflow's Decline_." Personal blog.
+    https://arxiv.org/abs/2211.13972: |
+        Bommasani, Creel, Kumar, Jurafsky, and Liang (2022) "_Picking on the Same Person: Does Algorithmic Monoculture Lead to Outcome Homogenization?_" In _Advances in Neural Information Processing Systems (NeurIPS)_.
+    https://doi.org/10.1037/0022-3514.81.6.1058: |
+        Twenge, Baumeister, Tice, and Stucke (2001) "_If You Can't Join Them, Beat Them: Effects of Social Exclusion on Aggressive Behavior_." _Journal of Personality and Social Psychology_ 81(6): 1058-69.
+    https://doi.org/10.1089/1094931041291295: |
+        Suler, John (2004) "_The Online Disinhibition Effect_." _CyberPsychology, Behavior, and Social Networking_ 7(3): 321-26.
+    https://doi.org/10.1177/15248380261476605: |
+        Chu, Zhou, Lu, Zhang, and Liu (2026) "_Anonymity, Online Disinhibition, and Cyber Aggression: A Systematic Review and Meta-Analysis_." _Trauma, Violence, & Abuse_, epub ahead of print.
 
 ---
 
@@ -39,7 +67,7 @@ links:
 <div class="summary-block">
 
 It’s been over 30 years since Robert Putnam wrote about the American
-phenomenon of “bowling alone”. This analyses shows how the same thing is
+phenomenon of “[bowling alone](http://bowlingalone.com)”. This analyses shows how the same thing is
 now happening to coding. Over the last few years, the world has rapidly
 moved from open-source software being produced and maintained by online
 communities, to software projects being built and maintained in
@@ -62,10 +90,10 @@ into overlapping social groups. Local clubs, unions, congregations, and
 leagues had been quietly hollowing out for a generation, not because
 people had lost interest in the underlying activities, but because
 they’d stopped doing them together ([Putnam
-1995](#ref-putnam1995bowlingalone),
-[2000](#ref-putnam2000bowlingalone)). The incidental organizational
-structure of bowling leagues turned out to have been key to the way a
-potentially solitary pastime contributed to social cohesion.
+1995](https://doi.org/10.1353/jod.1995.0002),
+[2000](http://bowlingalone.com/)). The incidental organizational structure of
+bowling leagues turned out to have been key to the way a potentially solitary
+pastime contributed to social cohesion.
 
 Open-source software has its own version of a league: public
 repositories, with a few core maintainers and shifting casts of
@@ -490,15 +518,15 @@ reported about the people who keep open source software alive. A 2024
 survey of open-source maintainers found that 61% of them maintain their
 project entirely alone, and that unpaid maintainers were
 disproportionately likely to be working alone ([Socket
-2024](#ref-socket2024solomaintainers)). A 2024 survey of maintainers by
+2024](https://socket.dev/blog/the-unpaid-backbone-of-open-source)). A 2024 survey of maintainers by
 Tidelift found that 60% remain entirely unpaid and nearly 60% have quit,
 or seriously considered quitting, projects they maintain, citing reasons
 such as competing life demands, loss of interest, or burnout ([Tidelift
-2024](#ref-tidelift2024maintainer)).
+2024](https://www.tidelift.com/open-source-maintainer-survey-2024)).
 
 In November 2025, Kubernetes’ steering and security committees retired
 Ingress NGINX ([Kubernetes SIG Network and Security Response Committee
-2025](#ref-kubernetes2025ingressnginx)). This was one of the most widely
+2025](https://www.kubernetes.io/blog/2025/11/11/ingress-nginx-retirement/)). This was one of the most widely
 deployed pieces of cloud-native infrastructure in existence, and would
 sit very high in all “Q4” high-popularity strata here. NGINX had been
 maintained for years by voluntary open-source contributors, and yet the
@@ -513,28 +541,28 @@ a project. GitHub made it far easier than ever before for newcomers to
 just magically appear, mostly through opening issues to ask questions.
 Many projects actively cultivate an open and welcoming atmosphere as an
 attempt to attract as many newcomers as possible, yet even that practice
-seems to be declining ([Hoshikawa et al. 2026](#ref-hoshikawa2026)).
+seems to be declining ([Hoshikawa et al. 2026](https://arxiv.org/abs/2604.27532)).
 
 The real difficulties begin with attempts to retain the interest of
 newcomers. A decade-old study of one large Apache project found fewer
 than one in five people who initially appeared on software repositories
 became long-term contributors ([Steinmacher et al.
-2013](#ref-steinmacher2013newcomers)). A decade before any of these
+2013](https://doi.org/10.1109/CHASE.2013.6614728)). A decade before any of these
 findings, Nadia Eghbal’s *Roads and Bridges* described the ways by which
 critical open-source infrastructure was sustained by a handful of unpaid
 volunteers, and argued that the true shortages were always in people
-rather than money ([Eghbal 2016](#ref-eghbal2016roadsbridges)). Finally,
+rather than money ([Eghbal 2016](https://www.fordfoundation.org/media/2976/roads-and-bridges-the-unseen-labor-behind-our-digital-infrastructure.pdf)). Finally,
 these results also reflect the well-documented collapse of Stack
 Overflow as a community platform ([Orosz
-2025](#ref-orosz2025stackoverflow); [Holscher
-2025](#ref-holscher2025stackoverflow)).
+2025](https://blog.pragmaticengineer.com/stack-overflow-is-almost-dead/); [Holscher
+2025](https://www.ericholscher.com/blog/2025/jan/21/stack-overflows-decline/)).
 
 ### What about AI?
 
 The declines observed here began several years before the advent of AI
 as we now know it. AI has almost certainly contributed, including
 through mechanisms such as “algorithmic monoculture” ([Bommasani et al.
-2022](#ref-bommasani2022monoculture)) discouraging diverse inputs into
+2022](https://arxiv.org/abs/2211.13972)) discouraging diverse inputs into
 software. Changes over the last year or two certainly seem to be
 accelerated versions or preceding changes, including in [repo creation
 rates](#fig-commit-rate-plot), [numbers](#fig-trend-plots) and [arrival
@@ -583,7 +611,7 @@ doing. Unsolicited pull requests reverse this custom. They represent a
 comparably more aggressive step of doing before asking. While causes for
 such cultural changes are likely complex, increased social isolation
 does seem to foster increased aggression ([Twenge et al.
-2001](#ref-twenge2001)). Although coding alone is likely to increase
+2001](https://doi.org/10.1037/0022-3514.81.6.1058)). Although coding alone is likely to increase
 ratios of PRs to issues, the increases in
 <a href="#fig-pr-to-issues-ratio" class="quarto-xref">Figure 11</a> more
 likely reveal an additionally negative influence of AI coding tools.
@@ -593,11 +621,11 @@ vast corpora of primarily online data. And people act differently online
 than they do in person. I posit that an even more likely cause for
 increased PR-to-issue ratios is the embedding within AI of the widely
 acknowledged “online disinhibition effect” ([Suler
-2004](#ref-suler2004)).
+2004](https://doi.org/10.1089/1094931041291295)).
 
 AI coding tools – and of course AI in general – are more reflective of
 pathologically disinhibited online behaviour than actual human social
-behaviour. Suler’s ([2004](#ref-suler2004)) original descriptions are
+behaviour. Suler’s ([2004](https://doi.org/10.1089/1094931041291295)) original descriptions are
 insightful:
 
 > \[People\] don’t have to own their own behavior by acknowledging it …
@@ -617,10 +645,10 @@ got to do everything online, including coding, the more the behaviours
 of those doing the coding become disinhibited from their pro-social,
 in-person behaviour. AI is just the culmination of that process.
 
-Suler’s ([2004](#ref-suler2004)) original conclusions were cautiously
+Suler’s ([2004](https://doi.org/10.1089/1094931041291295)) original conclusions were cautiously
 framed, and acknowledged a complex interplay between “benign” and
 “toxic” disinhibition. More recent research ([Chu et al.
-2026](#ref-chu2026)) has demonstrated a reality that lies more to the
+2026](https://doi.org/10.1177/15248380261476605)) has demonstrated a reality that lies more to the
 toxic than benign side, especially in online spaces dominated by men.
 I’ve [said elsewhere](https://mpadge.eu/blog/machina-machista.html)
 that, “*Your AI thinks you’re a dude. And that’s a problem for everybody
@@ -636,8 +664,8 @@ anything and everything to cultivate, nurture, and maintain communities.
 Always seek to collaborate rather than doing things yourself. Even if
 you don’t know anybody to collaborate with, inviting collaboration on
 your open-source repositories can have a big effect ([Hoshikawa et al.
-2026](#ref-hoshikawa2026)). And the results of Chu et al.
-([2026](#ref-chu2026)) provide strong evidence for the pro-social
+2026](https://arxiv.org/abs/2604.27532)). And the results of Chu et al.
+([2026](https://doi.org/10.1177/15248380261476605)) provide strong evidence for the pro-social
 effects of community diversity – invite and encourage as many different
 kinds of people you can.
 
@@ -653,127 +681,3 @@ unsolicited pull request on any repository you do not know well. That is
 doing without asking, which is rude. Always ask first, and do so with
 your own, human words. Help to re-establish open-source communities as
 genuinely collaborative spaces.
-
-## References
-
-<div id="refs" class="references csl-bib-body hanging-indent"
-entry-spacing="0">
-
-<div id="ref-bommasani2022monoculture" class="csl-entry">
-
-Bommasani, Rishi, Kathleen A. Creel, Ananya Kumar, Dan Jurafsky, and
-Percy Liang. 2022. “Picking on the Same Person: Does Algorithmic
-Monoculture Lead to Outcome Homogenization?” In *Advances in Neural
-Information Processing Systems (NeurIPS)*.
-[https://arxiv.org/abs/2211.13972](https://arxiv.org/abs/2211.13972).
-
-</div>
-
-<div id="ref-chu2026" class="csl-entry">
-
-Chu, Xiaowei, Nannan Zhou, Xue Lu, Xiaoyu Zhang, and Yu Liu. 2026.
-“Anonymity, Online Disinhibition, and Cyber Aggression: A Systematic
-Review and Meta-Analysis.” *Trauma, Violence, & Abuse* Epub ahead of
-print. [https://doi.org/10.1177/15248380261476605](https://doi.org/10.1177/15248380261476605).
-
-</div>
-
-<div id="ref-eghbal2016roadsbridges" class="csl-entry">
-
-Eghbal, Nadia. 2016. “Roads and Bridges: The Unseen Labor Behind Our
-Digital Infrastructure.” Ford Foundation.
-[https://www.fordfoundation.org/media/2976/roads-and-bridges-the-unseen-labor-behind-our-digital-infrastructure.pdf](https://www.fordfoundation.org/media/2976/roads-and-bridges-the-unseen-labor-behind-our-digital-infrastructure.pdf).
-
-</div>
-
-<div id="ref-holscher2025stackoverflow" class="csl-entry">
-
-Holscher, Eric. 2025. “Stack Overflow’s Decline.” personal blog.
-[https://www.ericholscher.com/blog/2025/jan/21/stack-overflows-decline/](https://www.ericholscher.com/blog/2025/jan/21/stack-overflows-decline/).
-
-</div>
-
-<div id="ref-hoshikawa2026" class="csl-entry">
-
-Hoshikawa, Hirotatsu, Hidetake Tanaka, Kazumasa Shimari, Raula Gaikovina
-Kula, and Kenichi Matsumoto. 2026. “A Longitudinal Analysis of Good
-First Issue Practices and Newcomer Pull Requests in Popular OSS
-Projects.” arXiv:2604.27532, accepted at EASE 2026.
-[https://arxiv.org/abs/2604.27532](https://arxiv.org/abs/2604.27532).
-
-</div>
-
-<div id="ref-kubernetes2025ingressnginx" class="csl-entry">
-
-Kubernetes SIG Network and Security Response Committee. 2025. “Ingress
-NGINX Retirement: What You Need to Know.” Kubernetes Blog.
-[https://www.kubernetes.io/blog/2025/11/11/ingress-nginx-retirement/](https://www.kubernetes.io/blog/2025/11/11/ingress-nginx-retirement/).
-
-</div>
-
-<div id="ref-orosz2025stackoverflow" class="csl-entry">
-
-Orosz, Gergely. 2025. “Stack Overflow Is Almost Dead.” The Pragmatic
-Engineer (blog).
-[https://blog.pragmaticengineer.com/stack-overflow-is-almost-dead/](https://blog.pragmaticengineer.com/stack-overflow-is-almost-dead/).
-
-</div>
-
-<div id="ref-putnam1995bowlingalone" class="csl-entry">
-
-Putnam, Robert D. 1995. “Bowling Alone: America’s Declining Social
-Capital.” *Journal of Democracy* 6 (1): 65–78.
-[https://doi.org/10.1353/jod.1995.0002](https://doi.org/10.1353/jod.1995.0002).
-
-</div>
-
-<div id="ref-putnam2000bowlingalone" class="csl-entry">
-
-———. 2000. *Bowling Alone: The Collapse and Revival of American
-Community*. New York: Simon & Schuster.
-
-</div>
-
-<div id="ref-socket2024solomaintainers" class="csl-entry">
-
-Socket. 2024. “The Unpaid Backbone of Open Source: Solo Maintainers Face
-Increasing Security Demands.” Socket Blog.
-[https://socket.dev/blog/the-unpaid-backbone-of-open-source](https://socket.dev/blog/the-unpaid-backbone-of-open-source).
-
-</div>
-
-<div id="ref-steinmacher2013newcomers" class="csl-entry">
-
-Steinmacher, Igor, Igor Scaliante Wiese, Ana Paula Chaves, and Marco
-Aurélio Gerosa. 2013. “Why Do Newcomers Abandon Open Source Software
-Projects?” In *2013 6th International Workshop on Cooperative and Human
-Aspects of Software Engineering (CHASE)*, 25–32.
-[https://doi.org/10.1109/CHASE.2013.6614728](https://doi.org/10.1109/CHASE.2013.6614728).
-
-</div>
-
-<div id="ref-suler2004" class="csl-entry">
-
-Suler, John. 2004. “The Online Disinhibition Effect.” *CyberPsychology,
-Behavior, and Social Networking* 7 (3): 321–26.
-[https://doi.org/10.1089/1094931041291295](https://doi.org/10.1089/1094931041291295).
-
-</div>
-
-<div id="ref-tidelift2024maintainer" class="csl-entry">
-
-Tidelift. 2024. “The 2024 Tidelift Maintainer Impact Report.” Tidelift.
-[https://www.tidelift.com/open-source-maintainer-survey-2024](https://www.tidelift.com/open-source-maintainer-survey-2024).
-
-</div>
-
-<div id="ref-twenge2001" class="csl-entry">
-
-Twenge, Jean M., Roy F. Baumeister, Dianne M. Tice, and Tanja S. Stucke.
-2001. “If You Can’t Join Them, Beat Them: Effects of Social Exclusion on
-Aggressive Behavior.” *Journal of Personality and Social Psychology* 81
-(6): 1058–69. [https://doi.org/10.1037/0022-3514.81.6.1058](https://doi.org/10.1037/0022-3514.81.6.1058).
-
-</div>
-
-</div>
