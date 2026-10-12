@@ -703,6 +703,10 @@ your open-source repositories can have a big effect ([Hoshikawa et al.
 effects of community diversity – invite and encourage as many different
 kinds of people you can.
 
+<div class="info-block">
+
+**Use AI coding tools in ways that help**
+
 Perhaps most importantly if you use AI coding assistants, ensure you use them
 in socially aware ways. These machines are trained to implement their own
 work-arounds to any software issues they encounter. And they often do so
@@ -716,3 +720,5 @@ asking](https://doi.org/10.5281/zenodo.4017493), which is
 [rude](https://www.cambridge.org/highereducation/books/politeness/89113EE2FB4A1D254D4A8D2011E542E4#contents).
 Always ask first, and do so with your own, human words. Help to re-establish
 open-source communities as genuinely collaborative spaces.
+
+</div>
