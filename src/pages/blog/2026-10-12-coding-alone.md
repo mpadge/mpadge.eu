@@ -12,6 +12,7 @@ description: In which I show how, over the last few years, the world has
 date: 2026-10-12
 tags: code, ai
 link: coding-alone.html
+mastodon: https://nerdculture.de/@mpadge/117428718050554508
 links:
     https://npmjs.com: |
       'npm' (Node Package Manager) package distribution system for JavaScript.
