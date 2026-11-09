@@ -13,6 +13,7 @@ import named         from 'vinyl-named';
 import autoprefixer  from 'autoprefixer';
 import imagemin      from 'gulp-imagemin';
 import { blogPages as _blogPages } from './tools/blogPages';
+import { updateLlmsTxt }            from './tools/llmsTxt';
 import { execSync }                from 'child_process';
 
 const sass = require('gulp-sass')(require('sass-embedded'));
@@ -41,7 +42,7 @@ console.log(UNCSS_OPTIONS);
 // Build the "dist" folder by running all of the below tasks
 // Sass must be run later so UnCSS can search for used classes in the others assets.
 gulp.task('build',
-  gulp.series(clean, gulp.parallel(pages, blogPages, javascript, images, copy), sassBuild, cname)
+  gulp.series(clean, updateLlmsTxt, gulp.parallel(pages, blogPages, javascript, images, copy), sassBuild, cname)
 );
 
 // Build the site, run the server, and watch for file changes

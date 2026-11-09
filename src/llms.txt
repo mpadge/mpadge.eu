@@ -12,28 +12,24 @@ All software is open-source. Code is hosted on GitHub, Codeberg, Codefloe, Sourc
 - [Privacy](https://mpadge.eu/privacy/): Privacy policy
 - [RSS feed](https://mpadge.eu/feed.xml): Blog feed
 
-## Blog: AI and open-source communities
+<!-- BEGIN POSTS (generated from src/data/blog.yml by tools/llmsTxt.js) -->
+## Blog posts
 
-- [Coding Alone](https://mpadge.eu/blog/coding-alone.html): Open-source software is increasingly built and maintained by single developers in isolation, accelerated by AI coding tools; this trajectory is not inevitable
-- [Machina machista](https://mpadge.eu/blog/machina-machista.html): LLM recommendations in decision-making scenarios are far more escalatory for male than female actors, and default to "male"
-- [Purposeful joy](https://mpadge.eu/blog/purposeful-joy.html): AI replaceability, purpose, and joy as a non-capturable resource
-- [Centralisation, reversibility, and restarting](https://mpadge.eu/blog/centralisation-reversibility.html): Technical centralisation is reversible; economic and political centralisation is not
-
-## Blog: R, C++ and development tools
-
-- [Our goodpractice Package Has New Superpowers](https://mpadge.eu/blog/goodpractice.html): Upgrades to the goodpractice R package, with over 100 new checks
-- [Debugging C++ code in R with a single command](https://mpadge.eu/blog/r-cpp-debugging.html)
-- [Timeout on parallel jobs in R](https://mpadge.eu/blog/r-parallel-timeout.html)
-- [GitHub notifications from the terminal](https://mpadge.eu/blog/github-terminal-notifications.html)
-- [The allcontributors package](https://mpadge.eu/blog/allcontributors.html)
-- [The troubles with getting help files in R](https://mpadge.eu/blog/r-help-files.html)
-- [Using RcppParallel to aggregate to a vector](https://mpadge.eu/blog/rcppparallel-aggregation.html)
-- [Github 2FA, git push, and password entry](https://mpadge.eu/blog/github-2fa-push.html)
-- [What are matrices in R?](https://mpadge.eu/blog/r-matrices.html)
-- [Calling external files from C in R](https://mpadge.eu/blog/c-external-files.html)
-- [Caching via background R processes](https://mpadge.eu/blog/background-process-caching.html)
-- [C++ templates and Rcpp](https://mpadge.eu/blog/rcpp-cpp-templates.html)
-
-## Optional
-
-- [How I made this site](https://mpadge.eu/blog/making-this-site.html): How the site is built (Zurb Foundation template and gulp)
+- [Coding Alone](https://mpadge.eu/blog/coding-alone.html): In which I show how, over the last few years, the world has rapidly moved from open-source software being produced and maintained by online communities, to software projects being built and maintained in isolation.
+- [Machina machista](https://mpadge.eu/blog/machina-machista.html): Your AI thinks you're a dude.
+- [Purposeful joy](https://mpadge.eu/blog/purposeful-joy.html): The current purpose for a select few is to help computer programs replace the purposeful labour of a generation of uniquely idiosyncratic human beings.
+- [Our goodpractice Package Has New Superpowers](https://mpadge.eu/blog/goodpractice.html): We have worked hard over the past few months on major upgrades to our goodpractice package.
+- [Centralisation, reversibility, and restarting](https://mpadge.eu/blog/centralisation-reversibility.html): Technical progress tends toward centralisation: telephone multiplexing made calls easier and centralised the entire telephone industry; GitHub made coding easier and centralised the world of software development.
+- [Debugging C++ code in R with a single command](https://mpadge.eu/blog/r-cpp-debugging.html): There are several great references for how to debug C or C++ code in R, but descriptions of how to start a debugger are often not so informative.
+- [Timeout on parallel jobs in R](https://mpadge.eu/blog/r-parallel-timeout.html): Python's `multiprocessing` and `threading` libraries both have a timeout parameter for re-joining threads after they've finished.
+- [GitHub notifications from the terminal](https://mpadge.eu/blog/github-terminal-notifications.html): I work almost entirely from the terminal, and regret the few remaining tasks which still require me to venture elsewhere, such as a web browser.
+- [The allcontributors package](https://mpadge.eu/blog/allcontributors.html): An alternative implementation in R of the original 'allcontributors.org' to acknowledge all contributors in your 'README' (or elsewhere).
+- [The troubles with getting help files in R](https://mpadge.eu/blog/r-help-files.html): A primer on ways to extract the actual content of help files.
+- [Using RcppParallel to aggregate to a vector](https://mpadge.eu/blog/rcppparallel-aggregation.html): This article was recently published in the Rcpp Gallery, and demonstrates using the RcppParallel package to aggregate to an output vector.
+- [Github 2FA, git push, and password entry](https://mpadge.eu/blog/github-2fa-push.html): Activating github two-factor authentication (2FA) offers an indubitable security boost, with one notable side effect--https authentication requires entering a Personal Access Token instead of password.
+- [What are matrices in R?](https://mpadge.eu/blog/r-matrices.html): If everything in R is a vector, then what is a matrix?
+- [Calling external files from C in R](https://mpadge.eu/blog/c-external-files.html): I recently encountered a problem while bundling an old C library into a new R package.
+- [Caching via background R processes](https://mpadge.eu/blog/background-process-caching.html): Caching is implemented because it saves time, generally by saving the results of one function call for subsequent reuse.
+- [C++ templates and Rcpp](https://mpadge.eu/blog/rcpp-cpp-templates.html): C++ templates are really useful.
+- [how i made this site](https://mpadge.eu/blog/making-this-site.html): This site is built with zurb foundation, because i had read that it did everything that hugo could, but that final products were more lightweight and flexible.
+<!-- END POSTS -->
