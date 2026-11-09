@@ -32,6 +32,7 @@
     "gulp-if": "^3.0.0",
     "gulp-imagemin": "^9.2.0",
     "gulp-load-plugins": "^2.0.7",
+    "gulp-newer": "^1.4.0",
     "gulp-plumber": "^1.2.1",
     "gulp-postcss": "^10.0.0",
     "gulp-sass": "^6.0.1",

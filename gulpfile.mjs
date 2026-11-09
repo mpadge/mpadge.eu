@@ -65,10 +65,23 @@ gulp.task('default',
   gulp.series('build', server, watch)
 );
 
+// Compressing images is slow, so production builds keep the already-compressed
+// images in dist/assets/img and only process new or changed ones (see images()).
+// A marker file records that the directory holds production-compressed images;
+// dev builds delete it (a full clean), so uncompressed dev copies are never reused.
+// Pass --fresh-images to force recompressing everything.
+const IMG_DIR = path.resolve(PATHS.dist, 'assets', 'img');
+const IMG_MARKER = path.join(IMG_DIR, '.compressed');
+const FRESH_IMAGES = !!(yargs(hideBin(process.argv)).argv['fresh-images']);
+
 // Delete the "dist" folder
 // This happens every time a build starts
 function clean() {
-  return rimraf(PATHS.dist);
+  const keepImages = PRODUCTION && !FRESH_IMAGES && fs.existsSync(IMG_MARKER);
+  return rimraf(PATHS.dist, {
+    // Entries for which filter returns false (and their parents) are kept
+    filter: (p) => !(keepImages && (p === IMG_DIR || p.startsWith(IMG_DIR + path.sep)))
+  });
 }
 
 // Copy files out of the assets folder
@@ -166,9 +179,11 @@ function javascript() {
 }
 
 // Copy images to the "dist" folder
-// In production, the images are compressed
+// In production, the images are compressed, and only those that are new or
+// changed since the last production build are processed
 function images() {
   return gulp.src('src/assets/img/**/*', { encoding: false })
+    .pipe($.newer(IMG_DIR))
     .pipe($.if(PRODUCTION, imagemin([
       gifsicle({interlaced: true}),
       mozjpeg({quality: 85, progressive: true}),
@@ -180,7 +195,13 @@ function images() {
         ]
       })
     ])))
-    .pipe(gulp.dest(PATHS.dist + '/assets/img'));
+    .pipe(gulp.dest(IMG_DIR))
+    .on('finish', () => {
+      if (PRODUCTION) {
+        fs.mkdirSync(IMG_DIR, { recursive: true });
+        fs.writeFileSync(IMG_MARKER, '');
+      }
+    });
 }
 
 // Start a server with BrowserSync to preview the site in
