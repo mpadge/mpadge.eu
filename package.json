@@ -11,9 +11,9 @@
   "author": "Mark Padgham",
   "license": "MIT",
   "dependencies": {
-    "foundation-sites": "latest",
+    "foundation-sites": "^6.9.0",
     "jquery": "^3.6.0",
-    "motion-ui": "latest",
+    "motion-ui": "^2.0.8",
     "what-input": "^5.2.10"
   },
   "devDependencies": {
@@ -23,7 +23,6 @@
     "autoprefixer": "^10.4.15",
     "babel-loader": "^8.2.2",
     "browser-sync": "^2.29.3",
-    "fs": "^0.0.1-security",
     "gulp": "^4.0.0",
     "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.3.0",
@@ -40,7 +39,7 @@
     "gulp-terser": "^2.0.1",
     "js-yaml": "^4.1.0",
     "js-yaml-js-types": "^1.0.0",
-    "panini": "latest",
+    "panini": "^1.7.2",
     "postcss": "^8.4.28",
     "postcss-uncss": "^0.17.0",
     "rimraf": "^3.0.2",

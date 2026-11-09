@@ -3712,7 +3712,7 @@ form-data@~2.3.2:
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
 
-foundation-sites@latest:
+foundation-sites@^6.9.0:
   version "6.9.0"
   resolved "https://registry.yarnpkg.com/foundation-sites/-/foundation-sites-6.9.0.tgz#ef4d51fa1c669cbdf61d080d8a328686ff85992a"
   integrity sha512-bZpjL6lxuGViy1UU/NuMddyAAJP0YgJYKNh+8ZtDWhQRtiY1yQISxHmgF4V8EFx7DWHDTdZC1fwFysnMAYkdQg==
@@ -3775,11 +3775,6 @@ fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
   integrity sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==
-
-fs@^0.0.1-security:
-  version "0.0.1-security"
-  resolved "https://registry.yarnpkg.com/fs/-/fs-0.0.1-security.tgz#8a7bd37186b6dddf3813f23858b57ecaaf5e41d4"
-  integrity sha512-3XY9e1pP0CVEUCdj5BmfIZxRBTSDycnbqhIOGec9QYtmVH2fbLpj86CFWkrNOkt/Fvty4KZG5lTglL9j/gJ87w==
 
 fsevents@^1.2.7:
   version "1.2.13"
@@ -5732,7 +5727,7 @@ mkdirp@~0.5.1:
   dependencies:
     minimist "^1.2.6"
 
-motion-ui@latest:
+motion-ui@^2.0.8:
   version "2.0.8"
   resolved "https://registry.yarnpkg.com/motion-ui/-/motion-ui-2.0.8.tgz#5d643fd6478c4e3f2e4a5e0fd699826cf5ffb36b"
   integrity sha512-kFPFUYslkA9NcnrbErCdGlSGGKBxSTfp7FToapj8/wawPIoks88H1bpNmqRh0EzU+u7PydUp2YSmmO3Sv+ZiBQ==
@@ -6207,7 +6202,7 @@ p-try@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
-panini@latest:
+panini@^1.7.2:
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/panini/-/panini-1.7.2.tgz#7c2db6afc9fcc71008ec1bf16f8dfc995569c284"
   integrity sha512-JCDjsWM7K3TcMxl2eb9g3FW5JM792CH5tIIYEKdAuC/Omf7Ylk0rsap84LRNRF6t8r+G0THms+aWLPCpUYpEgg==
