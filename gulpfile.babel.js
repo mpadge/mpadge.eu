@@ -60,8 +60,8 @@ function clean(done) {
 function copy() {
   gulp.src(PATHS.assets)
     .pipe(gulp.dest(PATHS.dist + '/assets'));
-  // Also copy generated feed.xml to root of dist
-  return gulp.src('src/feed.xml')
+  // Also copy generated feed.xml and llms.txt to root of dist
+  return gulp.src(['src/feed.xml', 'src/llms.txt'])
     .pipe(gulp.dest(PATHS.dist));
 }
 

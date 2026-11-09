@@ -1,0 +1,39 @@
+# mpadge.eu
+
+> Personal site of Mark Padgham: open-source software developer (C++, R, JavaScript, Rust), reformed academic, developer of the UrbanAnalyst platform, and former lead of software peer-review for rOpenSci. The blog covers programming in R and C++, open-source software communities, and the effects of AI on code and society.
+
+All software is open-source. Code is hosted on GitHub, Codeberg, Codefloe, SourceHut and tangled (all as `mpadge`). Mastodon: https://nerdculture.de/@mpadge
+
+## Main pages
+
+- [About](https://mpadge.eu/about/): Background, availability for hire, and about this site
+- [Blog](https://mpadge.eu/blog/): All blog posts
+- [Code](https://mpadge.eu/code/): Software packages developed
+- [Privacy](https://mpadge.eu/privacy/): Privacy policy
+- [RSS feed](https://mpadge.eu/feed.xml): Blog feed
+
+## Blog: AI and open-source communities
+
+- [Coding Alone](https://mpadge.eu/blog/coding-alone.html): Open-source software is increasingly built and maintained by single developers in isolation, accelerated by AI coding tools; this trajectory is not inevitable
+- [Machina machista](https://mpadge.eu/blog/machina-machista.html): LLM recommendations in decision-making scenarios are far more escalatory for male than female actors, and default to "male"
+- [Purposeful joy](https://mpadge.eu/blog/purposeful-joy.html): AI replaceability, purpose, and joy as a non-capturable resource
+- [Centralisation, reversibility, and restarting](https://mpadge.eu/blog/centralisation-reversibility.html): Technical centralisation is reversible; economic and political centralisation is not
+
+## Blog: R, C++ and development tools
+
+- [Our goodpractice Package Has New Superpowers](https://mpadge.eu/blog/goodpractice.html): Upgrades to the goodpractice R package, with over 100 new checks
+- [Debugging C++ code in R with a single command](https://mpadge.eu/blog/r-cpp-debugging.html)
+- [Timeout on parallel jobs in R](https://mpadge.eu/blog/r-parallel-timeout.html)
+- [GitHub notifications from the terminal](https://mpadge.eu/blog/github-terminal-notifications.html)
+- [The allcontributors package](https://mpadge.eu/blog/allcontributors.html)
+- [The troubles with getting help files in R](https://mpadge.eu/blog/r-help-files.html)
+- [Using RcppParallel to aggregate to a vector](https://mpadge.eu/blog/rcppparallel-aggregation.html)
+- [Github 2FA, git push, and password entry](https://mpadge.eu/blog/github-2fa-push.html)
+- [What are matrices in R?](https://mpadge.eu/blog/r-matrices.html)
+- [Calling external files from C in R](https://mpadge.eu/blog/c-external-files.html)
+- [Caching via background R processes](https://mpadge.eu/blog/background-process-caching.html)
+- [C++ templates and Rcpp](https://mpadge.eu/blog/rcpp-cpp-templates.html)
+
+## Optional
+
+- [How I made this site](https://mpadge.eu/blog/making-this-site.html): How the site is built (Zurb Foundation template and gulp)
