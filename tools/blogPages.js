@@ -2,7 +2,7 @@ import panini              from 'panini';
 import through2            from 'through2';
 import path                from 'path';
 import fs                  from 'fs';
-import yaml                from 'js-yaml';
+import * as yaml           from 'js-yaml';
 import marked              from 'marked';
 import gulp                from 'gulp';
 import { INFO_CORNER_SVG,

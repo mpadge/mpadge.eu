@@ -1,5 +1,5 @@
 import fs   from 'fs';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 const FILE   = 'src/llms.txt';
 const BEGIN  = '<!-- BEGIN POSTS (generated from src/data/blog.yml by tools/llmsTxt.js) -->';

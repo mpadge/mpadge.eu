@@ -4,7 +4,7 @@ import { hideBin }   from 'yargs/helpers';
 import browser       from 'browser-sync';
 import gulp          from 'gulp';
 import panini        from 'panini';
-import rimraf        from 'rimraf';
+import { rimraf }    from 'rimraf';
 import sherpa        from 'style-sherpa';
 import fs            from 'fs';
 import path          from 'path';
@@ -23,15 +23,20 @@ import postcss       from 'gulp-postcss';
 import uncss         from 'postcss-uncss';
 import sourcemaps    from 'gulp-sourcemaps';
 import plumber       from 'gulp-plumber';
-import { createRequire } from 'module';
+import { load as yamlLoad, CORE_SCHEMA, defineScalarTag, NOT_RESOLVED } from 'js-yaml';
 
 const sass = gulpSass(dartSass);
 
-// js-yaml-js-types uses the CommonJS build of js-yaml, so load both via
-// require: mixing it with the ESM build makes Type instances incompatible.
-const cjsRequire = createRequire(import.meta.url);
-const yaml = cjsRequire('js-yaml');
-const unsafe = cjsRequire('js-yaml-js-types').all;
+// js-yaml 5 dropped the Type API that js-yaml-js-types relied on, so define
+// the one custom tag config.yml uses (`!!js/regexp /pattern/flags`) directly.
+const regexpTag = defineScalarTag('tag:yaml.org,2002:js/regexp', {
+  resolve(source) {
+    const m = /^\/([\s\S]*)\/([a-z]*)$/.exec(source);
+    return m ? new RegExp(m[1], m[2]) : NOT_RESOLVED;
+  },
+  identify: (data) => data instanceof RegExp,
+  represent: (data) => String(data),
+});
 
 // Load all Gulp plugins into one variable
 const $ = plugins({ config: path.resolve('package.json') });
@@ -41,9 +46,9 @@ const PRODUCTION = !!(yargs(hideBin(process.argv)).argv.production);
 
 // Load settings from settings.yml
 function loadConfig() {
-  const schema = yaml.DEFAULT_SCHEMA.extend(unsafe);
+  const schema = CORE_SCHEMA.withTags(regexpTag);
   const ymlFile = fs.readFileSync('config.yml', 'utf8');
-  return yaml.load(ymlFile, {schema});
+  return yamlLoad(ymlFile, {schema});
 }
 const { PORT, UNCSS_OPTIONS, PATHS } = loadConfig();
 
@@ -62,8 +67,8 @@ gulp.task('default',
 
 // Delete the "dist" folder
 // This happens every time a build starts
-function clean(done) {
-  rimraf(PATHS.dist, done);
+function clean() {
+  return rimraf(PATHS.dist);
 }
 
 // Copy files out of the assets folder
