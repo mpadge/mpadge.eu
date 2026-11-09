@@ -3,6 +3,8 @@ import through2            from 'through2';
 import path                from 'path';
 import fs                  from 'fs';
 import yaml                from 'js-yaml';
+import marked              from 'marked';
+import gulp                from 'gulp';
 import { INFO_CORNER_SVG,
          SUMMARY_FRAME_SVG,
          CONCLUSION_FRAME_SVG,
@@ -11,7 +13,6 @@ import { INFO_CORNER_SVG,
          PROGRESS_DIAMOND_SVG } from './blogPageDecorations.js';
 
 export function blogPages(PATHS) {
-  const marked = require('marked');
   marked.setOptions({ smartypants: true });
 
   // Build slug → created map from blog.yml
@@ -220,7 +221,7 @@ export function blogPages(PATHS) {
 
   const dateMap = loadDateMap();
 
-  return require('gulp').src('src/pages/blog/*.md', { base: 'src/pages/' })
+  return gulp.src('src/pages/blog/*.md', { base: 'src/pages/' })
     .pipe(through2.obj(function(file, enc, cb) {
       if (file.isBuffer()) {
         const slug = path.basename(file.path)
@@ -246,5 +247,5 @@ export function blogPages(PATHS) {
       data: 'src/data/',
       helpers: 'src/helpers/'
     }))
-    .pipe(require('gulp').dest(PATHS.dist));
+    .pipe(gulp.dest(PATHS.dist));
 }

@@ -1,36 +1,46 @@
 import plugins       from 'gulp-load-plugins';
 import yargs         from 'yargs';
+import { hideBin }   from 'yargs/helpers';
 import browser       from 'browser-sync';
 import gulp          from 'gulp';
 import panini        from 'panini';
 import rimraf        from 'rimraf';
 import sherpa        from 'style-sherpa';
-import yaml          from 'js-yaml';
 import fs            from 'fs';
+import path          from 'path';
 import webpackStream from 'webpack-stream';
 import webpack2      from 'webpack';
 import named         from 'vinyl-named';
 import autoprefixer  from 'autoprefixer';
-import imagemin      from 'gulp-imagemin';
-import { blogPages as _blogPages } from './tools/blogPages';
-import { updateLlmsTxt }            from './tools/llmsTxt';
+import imagemin, { gifsicle, mozjpeg, optipng, svgo } from 'gulp-imagemin';
+import { blogPages as _blogPages } from './tools/blogPages.js';
+import { updateLlmsTxt }            from './tools/llmsTxt.js';
 import { execSync }                from 'child_process';
 
-const sass = require('gulp-sass')(require('sass-embedded'));
-const postcss = require('gulp-postcss');
-const uncss = require('postcss-uncss');
-var sourcemaps = require('gulp-sourcemaps');
-var plumber = require('gulp-plumber');
+import gulpSass      from 'gulp-sass';
+import * as dartSass from 'sass-embedded';
+import postcss       from 'gulp-postcss';
+import uncss         from 'postcss-uncss';
+import sourcemaps    from 'gulp-sourcemaps';
+import plumber       from 'gulp-plumber';
+import { createRequire } from 'module';
+
+const sass = gulpSass(dartSass);
+
+// js-yaml-js-types uses the CommonJS build of js-yaml, so load both via
+// require: mixing it with the ESM build makes Type instances incompatible.
+const cjsRequire = createRequire(import.meta.url);
+const yaml = cjsRequire('js-yaml');
+const unsafe = cjsRequire('js-yaml-js-types').all;
 
 // Load all Gulp plugins into one variable
-const $ = plugins();
+const $ = plugins({ config: path.resolve('package.json') });
 
 // Check for --production flag
-const PRODUCTION = !!(yargs.argv.production);
+const PRODUCTION = !!(yargs(hideBin(process.argv)).argv.production);
 
 // Load settings from settings.yml
 function loadConfig() {
-  const unsafe = require('js-yaml-js-types').all;
   const schema = yaml.DEFAULT_SCHEMA.extend(unsafe);
   const ymlFile = fs.readFileSync('config.yml', 'utf8');
   return yaml.load(ymlFile, {schema});
@@ -59,7 +69,7 @@ function clean(done) {
 // Copy files out of the assets folder
 // This task skips over the "img", "js", and "scss" folders, which are parsed separately
 function copy() {
-  gulp.src(PATHS.assets)
+  gulp.src(PATHS.assets, { encoding: false })
     .pipe(gulp.dest(PATHS.dist + '/assets'));
   // Also copy generated feed.xml and llms.txt to root of dist
   return gulp.src(['src/feed.xml', 'src/llms.txt'])
@@ -107,7 +117,7 @@ function sassBuild() {
   .pipe(sourcemaps.init())
   .pipe(plumber())
   .pipe(sass({
-    includePaths: PATHS.sass,
+    loadPaths: PATHS.sass,
     silenceDeprecations: ['legacy-js-api', 'import', 'global-builtin', 'color-functions', 'slash-div'],
     quietDeps: true
   }).on('error', sass.logError))
@@ -153,15 +163,15 @@ function javascript() {
 // Copy images to the "dist" folder
 // In production, the images are compressed
 function images() {
-  return gulp.src('src/assets/img/**/*')
+  return gulp.src('src/assets/img/**/*', { encoding: false })
     .pipe($.if(PRODUCTION, imagemin([
-      imagemin.gifsicle({interlaced: true}),
-      imagemin.mozjpeg({quality: 85, progressive: true}),
-      imagemin.optipng({optimizationLevel: 5}),
-      imagemin.svgo({
+      gifsicle({interlaced: true}),
+      mozjpeg({quality: 85, progressive: true}),
+      optipng({optimizationLevel: 5}),
+      svgo({
+        // svgo 3: removeViewBox is on by default in preset-default
         plugins: [
-          {removeViewBox: true},
-          {cleanupIDs: false}
+          {name: 'preset-default', params: {overrides: {cleanupIds: false}}}
         ]
       })
     ])))
