@@ -4364,10 +4364,10 @@ jest-worker@^27.4.5:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
-jquery@^3.6.0:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.7.1.tgz#083ef98927c9a6a74d05a6af02806566d16274de"
-  integrity sha512-m4avr8yL8kmFN8psrbFFFmB/If14iN5o9nw/NgnnM+kybDJpRsAynV2BsfpTYrTRysYUdADVD7CkUUizgkpLfg==
+jquery@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-4.0.0.tgz#95c33ac29005ff72ec444c5ba1cf457e61404fbb"
+  integrity sha512-TXCHVR3Lb6TZdtw1l3RTLf8RBWVGexdxL6AC8/e0xZKEpBflBsjh9/8LXw+dkNFuOyW9B7iB3O1sP7hS0Kiacg==
 
 js-tokens@^4.0.0:
   version "4.0.0"
@@ -7252,10 +7252,10 @@ webpack@^5.52.1:
     watchpack "^2.6.3"
     webpack-sources "^3.6.0"
 
-what-input@^5.2.10:
-  version "5.2.12"
-  resolved "https://registry.yarnpkg.com/what-input/-/what-input-5.2.12.tgz#6eb5b5d39ebff4e2273df8bf69d8d2fc9a6e060a"
-  integrity sha512-3yrSa7nGSXGJS6wZeSkO6VNm95pB1mZ9i3wFzC1hhY7mn4/afue/MvXz04OXNdBC8bfo4AB4RRd3Dem9jXM58Q==
+what-input@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/what-input/-/what-input-6.0.1.tgz#f765945cad3ad337e0428b1ee08fef8052c2a416"
+  integrity sha512-9AE9mIMxsTSQB5EFMFz136Egi/FTL1yIMvS/wnNHWTfHBJMEH3E8lS/9q2Ppmg2VogUSd8bwwqJ337aa7wLMhw==
 
 whatwg-encoding@^1.0.1, whatwg-encoding@^1.0.5:
   version "1.0.5"
