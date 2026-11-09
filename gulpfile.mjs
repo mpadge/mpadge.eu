@@ -1,39 +1,54 @@
 import plugins       from 'gulp-load-plugins';
 import yargs         from 'yargs';
+import { hideBin }   from 'yargs/helpers';
 import browser       from 'browser-sync';
 import gulp          from 'gulp';
 import panini        from 'panini';
-import rimraf        from 'rimraf';
+import { rimraf }    from 'rimraf';
 import sherpa        from 'style-sherpa';
-import yaml          from 'js-yaml';
 import fs            from 'fs';
+import path          from 'path';
 import webpackStream from 'webpack-stream';
 import webpack2      from 'webpack';
 import named         from 'vinyl-named';
 import autoprefixer  from 'autoprefixer';
-import imagemin      from 'gulp-imagemin';
-import { blogPages as _blogPages } from './tools/blogPages';
-import { updateLlmsTxt }            from './tools/llmsTxt';
+import imagemin, { gifsicle, mozjpeg, optipng, svgo } from 'gulp-imagemin';
+import { blogPages as _blogPages } from './tools/blogPages.js';
+import { updateLlmsTxt }            from './tools/llmsTxt.js';
 import { execSync }                from 'child_process';
 
-const sass = require('gulp-sass')(require('sass-embedded'));
-const postcss = require('gulp-postcss');
-const uncss = require('postcss-uncss');
-var sourcemaps = require('gulp-sourcemaps');
-var plumber = require('gulp-plumber');
+import gulpSass      from 'gulp-sass';
+import * as dartSass from 'sass-embedded';
+import postcss       from 'gulp-postcss';
+import uncss         from 'postcss-uncss';
+import sourcemaps    from 'gulp-sourcemaps';
+import plumber       from 'gulp-plumber';
+import { load as yamlLoad, CORE_SCHEMA, defineScalarTag, NOT_RESOLVED } from 'js-yaml';
+
+const sass = gulpSass(dartSass);
+
+// js-yaml 5 dropped the Type API that js-yaml-js-types relied on, so define
+// the one custom tag config.yml uses (`!!js/regexp /pattern/flags`) directly.
+const regexpTag = defineScalarTag('tag:yaml.org,2002:js/regexp', {
+  resolve(source) {
+    const m = /^\/([\s\S]*)\/([a-z]*)$/.exec(source);
+    return m ? new RegExp(m[1], m[2]) : NOT_RESOLVED;
+  },
+  identify: (data) => data instanceof RegExp,
+  represent: (data) => String(data),
+});
 
 // Load all Gulp plugins into one variable
-const $ = plugins();
+const $ = plugins({ config: path.resolve('package.json') });
 
 // Check for --production flag
-const PRODUCTION = !!(yargs.argv.production);
+const PRODUCTION = !!(yargs(hideBin(process.argv)).argv.production);
 
 // Load settings from settings.yml
 function loadConfig() {
-  const unsafe = require('js-yaml-js-types').all;
-  const schema = yaml.DEFAULT_SCHEMA.extend(unsafe);
+  const schema = CORE_SCHEMA.withTags(regexpTag);
   const ymlFile = fs.readFileSync('config.yml', 'utf8');
-  return yaml.load(ymlFile, {schema});
+  return yamlLoad(ymlFile, {schema});
 }
 const { PORT, UNCSS_OPTIONS, PATHS } = loadConfig();
 
@@ -50,16 +65,29 @@ gulp.task('default',
   gulp.series('build', server, watch)
 );
 
+// Compressing images is slow, so production builds keep the already-compressed
+// images in dist/assets/img and only process new or changed ones (see images()).
+// A marker file records that the directory holds production-compressed images;
+// dev builds delete it (a full clean), so uncompressed dev copies are never reused.
+// Pass --fresh-images to force recompressing everything.
+const IMG_DIR = path.resolve(PATHS.dist, 'assets', 'img');
+const IMG_MARKER = path.join(IMG_DIR, '.compressed');
+const FRESH_IMAGES = !!(yargs(hideBin(process.argv)).argv['fresh-images']);
+
 // Delete the "dist" folder
 // This happens every time a build starts
-function clean(done) {
-  rimraf(PATHS.dist, done);
+function clean() {
+  const keepImages = PRODUCTION && !FRESH_IMAGES && fs.existsSync(IMG_MARKER);
+  return rimraf(PATHS.dist, {
+    // Entries for which filter returns false (and their parents) are kept
+    filter: (p) => !(keepImages && (p === IMG_DIR || p.startsWith(IMG_DIR + path.sep)))
+  });
 }
 
 // Copy files out of the assets folder
 // This task skips over the "img", "js", and "scss" folders, which are parsed separately
 function copy() {
-  gulp.src(PATHS.assets)
+  gulp.src(PATHS.assets, { encoding: false })
     .pipe(gulp.dest(PATHS.dist + '/assets'));
   // Also copy generated feed.xml and llms.txt to root of dist
   return gulp.src(['src/feed.xml', 'src/llms.txt'])
@@ -107,7 +135,7 @@ function sassBuild() {
   .pipe(sourcemaps.init())
   .pipe(plumber())
   .pipe(sass({
-    includePaths: PATHS.sass,
+    loadPaths: PATHS.sass,
     silenceDeprecations: ['legacy-js-api', 'import', 'global-builtin', 'color-functions', 'slash-div'],
     quietDeps: true
   }).on('error', sass.logError))
@@ -151,21 +179,29 @@ function javascript() {
 }
 
 // Copy images to the "dist" folder
-// In production, the images are compressed
+// In production, the images are compressed, and only those that are new or
+// changed since the last production build are processed
 function images() {
-  return gulp.src('src/assets/img/**/*')
+  return gulp.src('src/assets/img/**/*', { encoding: false })
+    .pipe($.newer(IMG_DIR))
     .pipe($.if(PRODUCTION, imagemin([
-      imagemin.gifsicle({interlaced: true}),
-      imagemin.mozjpeg({quality: 85, progressive: true}),
-      imagemin.optipng({optimizationLevel: 5}),
-      imagemin.svgo({
+      gifsicle({interlaced: true}),
+      mozjpeg({quality: 85, progressive: true}),
+      optipng({optimizationLevel: 5}),
+      svgo({
+        // svgo 3: removeViewBox is on by default in preset-default
         plugins: [
-          {removeViewBox: true},
-          {cleanupIDs: false}
+          {name: 'preset-default', params: {overrides: {cleanupIds: false}}}
         ]
       })
     ])))
-    .pipe(gulp.dest(PATHS.dist + '/assets/img'));
+    .pipe(gulp.dest(IMG_DIR))
+    .on('finish', () => {
+      if (PRODUCTION) {
+        fs.mkdirSync(IMG_DIR, { recursive: true });
+        fs.writeFileSync(IMG_MARKER, '');
+      }
+    });
 }
 
 // Start a server with BrowserSync to preview the site in

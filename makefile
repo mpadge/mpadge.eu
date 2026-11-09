@@ -51,5 +51,8 @@ test: ## Run tests
 deploy: ## Publish the site on statichost.eu
 	@bash tools/deploy.sh
 
+upgrade: ## Upgrade yarn dependencies. Use 'yarn upgrade-interactive --latest' for major upgrades
+	yarn upgrade
+
 tidycheck: ## Check HTML files with tidy and show warnings with context
 	bash tools/tidy-check.sh

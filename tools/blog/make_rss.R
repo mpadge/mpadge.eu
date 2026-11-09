@@ -1,4 +1,4 @@
-root_files <- c ("package.json", "gulpfile.babel.js")
+root_files <- c ("package.json", "gulpfile.mjs")
 if (!all (file.exists (root_files)))
     stop ("Must be run from the project root.")
 
