@@ -66,22 +66,37 @@
     which routes are calculated by weighting distances according to
     the type of way and mode of transport, yet lengths of routes
     must be calculated from direct distances.
-- link: https://docs.ropensci.org/allcontributors
-  package: allcontributors
+- link: https://docs.ropensci.org/srr/
+  package: srr
   cran: yes
-  cranlink: https://cran.r-project.org/package=allcontributors
-  cranlogs: https://cranlogs.r-pkg.org/badges/grand-total/allcontributors?color=orange
+  cranlink: https://cran.r-project.org/package=srr
+  cranlogs: https://cranlogs.r-pkg.org/badges/grand-total/srr?color=orange
   ros: 'no'
   roslink: ''
   rosstatus: ''
-  title: Acknowledge all Contributors to a Project
+  title: '''rOpenSci'' Software Review ''Roclets'''
   description: |-
-    Acknowledge all contributors to a project via a single
-    function call. The function appends to a 'README' or other
-    specified file(s) a table with names of all individuals who
-    contributed via code or repository issues.  The package also
-    includes several additional functions to extract and quantify
-    contributions to any repository.
+    Companion package to 'rOpenSci' statistical software
+    review project ('rOpenSci' authors, 2021;
+    <doi:10.5281/zenodo.5556756>), to facilitate documenting
+    software compliance with statistical standards using 'Roxygen2'
+    'roclets'.
+- link: https://docs.ropensci.org/pkgcheck/
+  package: pkgcheck
+  cran: yes
+  cranlink: https://cran.r-project.org/package=pkgcheck
+  cranlogs: https://cranlogs.r-pkg.org/badges/grand-total/pkgcheck?color=orange
+  ros: 'no'
+  roslink: ''
+  rosstatus: ''
+  title: Package Checks for 'rOpenSci'
+  description: |-
+    Check whether a package is ready for submission to the
+    'rOpenSci' peer review system ('rOpenSci' authors (2026)
+    <doi:10.5281/zenodo.2553043> "'rOpenSci' Packages: Development,
+    Maintenance, and Peer Review"). Incorporates the 'goodpractice'
+    package and many additional checks, including aspects related
+    to maintenance of online public code repositories.
 - link: https://docs.ropensci.org/pkgstats/
   package: pkgstats
   cran: yes
@@ -99,7 +114,7 @@
     database generating by applying the main function to the full
     'CRAN' archive, enabling the statistical properties of any
     package to be compared with all other 'CRAN' packages.
-- link: https://github.com/urbananalyst/gtfsrouter
+- link: https://urbananalyst.github.io/gtfsrouter/
   package: gtfsrouter
   cran: yes
   cranlink: https://cran.r-project.org/package=gtfsrouter
@@ -113,20 +128,39 @@
     routing from nominated start and end stations, for extracting
     'isochrones', and travel times from any nominated start station
     to all other stations.
-- link: https://docs.ropensci.org/mapscanner
-  package: mapscanner
+- link: https://mpadge.github.io/autotest/
+  package: autotest
   cran: yes
-  cranlink: https://cran.r-project.org/package=mapscanner
-  cranlogs: https://cranlogs.r-pkg.org/badges/grand-total/mapscanner?color=orange
-  ros: 'yes'
-  roslink: https://github.com/ropensci/software-review/330
-  rosstatus: https://badges.ropensci.org/330_status.svg
-  title: Print Maps, Draw on Them, Scan Them Back in
+  cranlink: https://cran.r-project.org/package=autotest
+  cranlogs: https://cranlogs.r-pkg.org/badges/grand-total/autotest?color=orange
+  ros: 'no'
+  roslink: ''
+  rosstatus: ''
+  title: Automatic Package Testing
   description: |-
-    Enables preparation of maps to be printed and drawn on.
-    Modified maps can then be scanned back in, and hand-drawn marks
-    converted to spatial objects.
-- link: https://mpadge.github.io/typetracer/
+    Automatic testing of R packages by tracing function calls
+    made in examples and tests, then systematically varying the
+    inputs to check that functions respond sensibly. The package is
+    a development aid for authors submitting to the 'rOpenSci'
+    statistical software review project ('rOpenSci' authors, 2021;
+    <doi:10.5281/zenodo.5556756>).
+- link: https://docs.ropensci.org/allcontributors
+  package: allcontributors
+  cran: yes
+  cranlink: https://cran.r-project.org/package=allcontributors
+  cranlogs: https://cranlogs.r-pkg.org/badges/grand-total/allcontributors?color=orange
+  ros: 'no'
+  roslink: ''
+  rosstatus: ''
+  title: Acknowledge all Contributors to a Project
+  description: |-
+    Acknowledge all contributors to a project via a single
+    function call. The function appends to a 'README' or other
+    specified file(s) a table with names of all individuals who
+    contributed via code or repository issues.  The package also
+    includes several additional functions to extract and quantify
+    contributions to any repository.
+- link: https://mpadge.tngl.sh/typetracer/
   package: typetracer
   cran: yes
   cranlink: https://cran.r-project.org/package=typetracer
@@ -144,6 +178,36 @@
     information on the properties of parameters passed to 'R'
     functions. 'typetracer' can trace individual functions or
     entire packages.
+- link: https://docs.ropensci.org/mapscanner
+  package: mapscanner
+  cran: yes
+  cranlink: https://cran.r-project.org/package=mapscanner
+  cranlogs: https://cranlogs.r-pkg.org/badges/grand-total/mapscanner?color=orange
+  ros: 'yes'
+  roslink: https://github.com/ropensci/software-review/330
+  rosstatus: https://badges.ropensci.org/330_status.svg
+  title: Print Maps, Draw on Them, Scan Them Back in
+  description: |-
+    Enables preparation of maps to be printed and drawn on.
+    Modified maps can then be scanned back in, and hand-drawn marks
+    converted to spatial objects.
+- link: https://docs.ropensci.org/pkgmatch/
+  package: pkgmatch
+  cran: yes
+  cranlink: https://cran.r-project.org/package=pkgmatch
+  cranlogs: https://cranlogs.r-pkg.org/badges/grand-total/pkgmatch?color=orange
+  ros: 'yes'
+  roslink: https://github.com/ropensci/software-review/671
+  rosstatus: https://badges.ropensci.org/671_status.svg
+  title: Find R Packages Matching Either Descriptions or Other R Packages
+  description: |-
+    Find R packages from CRAN, 'rOpenSci', or Bioconductor
+    corpora. Packages can be matched to general text descriptions,
+    to names of installed packages, or to local paths to entire
+    source repositories. The package is used to list the most
+    similar packages for each new submission to the 'rOpenSci'
+    software peer-review program ('rOpenSci' authors, 2026;
+    <doi:10.5281/zenodo.18885936>).
 - link: https://docs.ropensci.org/bikedata/
   package: bikedata
   cran: yes
@@ -184,45 +248,6 @@
   rosstatus: ''
   title: What the Package Does (One Line, Title Case)
   description: What the package does (one paragraph).
-- link: https://docs.ropensci.org/pkgmatch/
-  package: pkgmatch
-  cran: no
-  cranlink: ''
-  cranlogs: ''
-  ros: 'yes'
-  roslink: https://github.com/ropensci/software-review/671
-  rosstatus: https://badges.ropensci.org/671_status.svg
-  title: Find R Packages Matching Either Descriptions or Other R Packages
-  description: |-
-    Find R packages from 'CRAN', 'rOpenSci', or 'Bioconductor'
-    corpora. Packages can be matched to general text descriptions,
-    to names of installed packages, or to local paths to entire
-    source repositories. The package is used to list the most
-    similar packages for each new submission to the 'rOpenSci'
-    software peer-review program <doi:10.5281/zenodo.18885936>.
-- link: https://docs.ropensci.org/roreviewapi
-  package: roreviewapi
-  cran: no
-  cranlink: ''
-  cranlogs: ''
-  ros: 'no'
-  roslink: ''
-  rosstatus: ''
-  title: Plumber API to report package structure and function
-  description: Plumber API to report package structure and function.
-- link: https://github.com/mpadge/hotspotr
-  package: hotspotr
-  cran: no
-  cranlink: ''
-  cranlogs: ''
-  ros: 'no'
-  roslink: ''
-  rosstatus: ''
-  title: Compare Spatial Structure of Hotspots with Neutral Models
-  description: |-
-    Analyses whether the statistical properties of a spatial
-    pattern of hotspots may be reproduced with a simple neutral
-    model.
 - link: https://github.com/mpadge/paretoconv
   package: paretoconv
   cran: no
@@ -235,30 +260,79 @@
   description: |-
     Calculates the n-fold convolution of two Pareto
     distributions using the techniques devised by Colin Ramsay.
-- link: https://docs.ropensci.org/pkgcheck/
-  package: pkgcheck
+- link: https://mpadge.github.io/gender-conscious-routing/
+  package: genderconsciousrouting
   cran: no
   cranlink: ''
   cranlogs: ''
   ros: 'no'
   roslink: ''
   rosstatus: ''
-  title: rOpenSci Package Checks
+  title: |-
+    Gender-Conscious Routing Along Streets Named After Women Rather
+    Than Men
   description: |-
-    Check whether a package is ready for submission to
-    rOpenSci's peer review system.
-- link: https://docs.ropensci.org/srr/
-  package: srr
+    Gender-conscious routing along streets named after women
+    rather than men.
+- link: https://github.com/atfutures-labs/neighbourhoods
+  package: neighbourhoods
   cran: no
   cranlink: ''
   cranlogs: ''
   ros: 'no'
   roslink: ''
   rosstatus: ''
-  title: '''rOpenSci'' Review Roclets'
+  title: Efficient Identification of Neighbourhoods within Networks
   description: |-
-    Companion package to 'rOpenSci' statistical software
-    review project.
+    Algorithm for efficient identification of neighbourhoods
+    within networks.
+- link: https://docs.ropensci.org/roreviewapi
+  package: roreviewapi
+  cran: no
+  cranlink: ''
+  cranlogs: ''
+  ros: 'no'
+  roslink: ''
+  rosstatus: ''
+  title: Plumber API to report package structure and function
+  description: Plumber API to report package structure and function.
+- link: https://UrbanAnalyst.github.io/spatialcluster/
+  package: spatialcluster
+  cran: no
+  cranlink: ''
+  cranlogs: ''
+  ros: 'no'
+  roslink: ''
+  rosstatus: ''
+  title: Spatially Contiguous Clustering with the 'Redcap' Algorithm
+  description: |-
+    Groups spatial data into clusters of similar observations,
+    while requiring that each cluster forms a single spatially
+    contiguous region. Contiguity is enforced by first building a
+    spanning tree from the spatial relationships between points,
+    and then cutting that tree into clusters according to a matrix
+    of distances or other measures of similarity. Trees may be
+    built from first-order relationships only (direct neighbours),
+    yielding a minimum spanning tree, or from full-order
+    relationships between entire clusters, using single linkage
+    (nearest members), average linkage (mean of all pairs), or
+    complete linkage (furthest members). The single and average
+    linkage methods implement the 'Redcap' algorithm
+    ('Regionalization' with dynamically constrained agglomerative
+    clustering and partitioning). Results can be visualised as maps
+    of clusters, cluster hulls, or trees.
+- link: https://github.com/mpadge/spaceout
+  package: spaceout
+  cran: no
+  cranlink: ''
+  cranlogs: ''
+  ros: 'no'
+  roslink: ''
+  rosstatus: ''
+  title: Holds A More Spacious Styleguide
+  description: |-
+    Adds a space before parentheses & co, on top of more
+    common tidyverse-style guide conventions.
 - link: https://docs.ropensci.org/orgmetrics/
   package: orgmetrics
   cran: no
@@ -285,6 +359,19 @@
     Metrics for your code repository. Call one function to
     generate an interactive dashboard displaying the state of your
     code.
+- link: https://github.com/mpadge/hotspotr
+  package: hotspotr
+  cran: no
+  cranlink: ''
+  cranlogs: ''
+  ros: 'no'
+  roslink: ''
+  rosstatus: ''
+  title: Compare Spatial Structure of Hotspots with Neutral Models
+  description: |-
+    Analyses whether the statistical properties of a spatial
+    pattern of hotspots may be reproduced with a simple neutral
+    model.
 - link: https://github.com/ropenscilabs/r2readthedocs
   package: r2readthedocs
   cran: no
@@ -297,54 +384,6 @@
   description: |-
     Convert R package documentation to a 'readthedocs'
     website.
-- link: https://docs.ropensci.org/autotest/
-  package: autotest
-  cran: no
-  cranlink: ''
-  cranlogs: ''
-  ros: 'no'
-  roslink: ''
-  rosstatus: ''
-  title: Automatic Package Testing
-  description: Automatic testing of R packages via a simple YAML schema.
-- link: https://github.com/ropensci-review-tools/spaceout
-  package: spaceout
-  cran: no
-  cranlink: ''
-  cranlogs: ''
-  ros: 'no'
-  roslink: ''
-  rosstatus: ''
-  title: Holds A More Spacious Styleguide
-  description: |-
-    Adds a space before parentheses & co, on top of more
-    common tidyverse-style guide conventions.
-- link: https://github.com/mpadge/spatialcluster
-  package: spatialcluster
-  cran: no
-  cranlink: ''
-  cranlogs: ''
-  ros: 'no'
-  roslink: ''
-  rosstatus: ''
-  title: R port of redcap
-  description: |-
-    R port of redcap (Regionalization with dynamically
-    constrained agglomerative clustering and partitioning).
-- link: https://mpadge.github.io/gender-conscious-routing/
-  package: genderconsciousrouting
-  cran: no
-  cranlink: ''
-  cranlogs: ''
-  ros: 'no'
-  roslink: ''
-  rosstatus: ''
-  title: |-
-    Gender-Conscious Routing Along Streets Named After Women Rather
-    Than Men
-  description: |-
-    Gender-conscious routing along streets named after women
-    rather than men.
 - link: https://github.com/moveability/moveability
   package: moveability
   cran: no
@@ -355,18 +394,6 @@
   rosstatus: ''
   title: Moveability statistics for any specified city
   description: Moveability statistics for any specified city.
-- link: https://github.com/atfutures-labs/neighbourhoods
-  package: neighbourhoods
-  cran: no
-  cranlink: ''
-  cranlogs: ''
-  ros: 'no'
-  roslink: ''
-  rosstatus: ''
-  title: Efficient Identification of Neighbourhoods within Networks
-  description: |-
-    Algorithm for efficient identification of neighbourhoods
-    within networks.
 - link: https://github.com/mpadge/libfuzzerr
   package: libfuzzerr
   cran: no
