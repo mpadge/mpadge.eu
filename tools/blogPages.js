@@ -101,6 +101,12 @@ export function blogPages(PATHS) {
     const renderer = new marked.Renderer();
 
     renderer.html = function(html) {
+      // marked 0.3 treats <details>...</details> as one raw block, so markdown
+      // inside is not parsed. Use comment markers instead:
+      //   <!-- details-open: Summary text -->  ...markdown...  <!-- details-close -->
+      const dOpen = html.match(/^\s*<!--\s*details-open:\s*([\s\S]*?)\s*-->\s*$/);
+      if (dOpen) return `<details>\n<summary>${dOpen[1]}</summary>\n`;
+      if (/^\s*<!--\s*details-close\s*-->\s*$/.test(html)) return '</details>\n';
       if (html.includes('use-dropcap')) {
         nextDropcap = true;
         return '';
