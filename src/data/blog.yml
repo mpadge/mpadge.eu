@@ -2,6 +2,7 @@
     title: "Coding Alone"
     description: In which I show how, over the last few years, the world has rapidly moved from open-source software being produced and maintained by online communities, to software projects being built and maintained in isolation. By single developers, with ever-decreasing input from others. AI coding tools are now dramatically accelerating movement away from code as a collective endeavour to "coding alone". I conclude by describing how such progression need not be considered inevitable. Every step has reflected the collective influence of countless individual human decisions. The fate of open-source software communities is still determined by us.
     created: 12 Oct 26
+    mastodon: https://nerdculture.de/@mpadge/117428718050554508
     tags: code, ai
     link: coding-alone.html
 -
