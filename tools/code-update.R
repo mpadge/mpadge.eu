@@ -62,7 +62,7 @@ exclude <- c (
     "libfuzzerr",
     "hotspotr"
 )
-out <- out [which (!out$title %in% exclude), ]
+out <- out [which (!out$package %in% exclude), ]
 
 path <- "src/data/code.yml"
 yaml::write_yaml (out, path, column.major = FALSE)
