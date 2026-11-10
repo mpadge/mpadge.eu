@@ -2,7 +2,8 @@
     title: "Distributed Git"
     description: How to redefine <code>git push</code> for an era of distributed code. No canonical source; no platform lock-in. A re-implementation of <code>git push</code> that sends your code anywhere and everywhere. Nice features like branch protection are still possible, but able to defined locally, remotely, or both. Single locations can be defined as "canonical" upstream sources. Or code can have no canonical source, and just spread out and be used and interacted with wherever people like.
     created: 10 Nov 26
-    tags: code
+    mastodon: https://nerdculture.de/@mpadge/117591605285184316
+    tags: code, git
     link: git-push.html
 -
     title: "Coding Alone"
@@ -36,7 +37,7 @@
     description: 'Technical progress tends toward centralisation: telephone multiplexing made calls easier and centralised the entire telephone industry; GitHub made coding easier and centralised the world of software development. Technical centralisation is mostly reversible. The economic and political centralisation that rides alongside it is not. The real binding force is neither the technology nor the data but the interfaces imposed to make it all work together. One of the best ways to ensure centralising tendencies can be reversed is to find ways to keep those interfaces simple.'
     created: 22 May 26
     mastodon: https://nerdculture.de/@mpadge/116617670993736398
-    tags: github
+    tags: git
     link: centralisation-reversibility.html
 -
     title: Debugging C++ code in R with a single command
@@ -54,7 +55,7 @@
     title: GitHub notifications from the terminal
     description: I work almost entirely from the terminal, and regret the few remaining tasks which still require me to venture elsewhere, such as a web browser. Until recently, one of my main reasons for constantly switching to my browser was to check my GitHub notifications. This post describes how I view my notifications within the terminal, including an option to mark them as "read" on GitHub.
     created: 27 Oct 21
-    tags: code, github
+    tags: code, git
     link: github-terminal-notifications.html
 -
     title: The allcontributors package
@@ -79,7 +80,7 @@
     title: Github 2FA, git push, and password entry
     description: Activating github two-factor authentication (2FA) offers an indubitable security boost, with one notable side effect--https authentication requires entering a Personal Access Token instead of password. This entry explains how I reconfigured my git push commands with 2FA to be able to enter my password once again, instead of a random 32-character token.
     created: 25 Oct 19
-    tags: code, github
+    tags: code, git
     link: github-2fa-push.html
 -
     title: What are matrices in R?

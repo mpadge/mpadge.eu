@@ -2,7 +2,8 @@
     title: "Distributed Git"
     description: How to redefine <code>git push</code> for an era of distributed code. No canonical source; no platform lock-in. A re-implementation of <code>git push</code> that sends your code anywhere and everywhere. Nice features like branch protection are still possible, but able to defined locally, remotely, or both. Single locations can be defined as "canonical" upstream sources. Or code can have no canonical source, and just spread out and be used and interacted with wherever people like.
     created: 10 Nov 26
-    tags: code
+    mastodon: https://nerdculture.de/@mpadge/117591605285184316
+    tags: code, git
     link: blog/git-push.html
 -
     title: "Coding Alone"
@@ -36,5 +37,5 @@
     description: 'Technical progress tends toward centralisation: telephone multiplexing made calls easier and centralised the entire telephone industry; GitHub made coding easier and centralised the world of software development. Technical centralisation is mostly reversible. The economic and political centralisation that rides alongside it is not. The real binding force is neither the technology nor the data but the interfaces imposed to make it all work together. One of the best ways to ensure centralising tendencies can be reversed is to find ways to keep those interfaces simple.'
     created: 22 May 26
     mastodon: https://nerdculture.de/@mpadge/116617670993736398
-    tags: github
+    tags: git
     link: blog/centralisation-reversibility.html

@@ -9,7 +9,7 @@ description: 'Technical progress tends toward centralisation: telephone multiple
   centralising tendencies can be reversed is to find ways to keep those interfaces
   simple.'
 date: 22/05/2026
-tags: github
+tags: git
 link: centralisation-reversibility.html
 mastodon: https://nerdculture.de/@mpadge/116617670993736398
 links:
