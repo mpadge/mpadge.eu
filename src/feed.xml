@@ -6,6 +6,14 @@
     <description>Opinions on technology in the world, on open-source software, on cities, and sometimes on bicycles.</description>
     <atom:link href="https://mpadge.eu/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>"Distributed Git"</title>
+      <link>https://mpadge.eu/blog/git-push.html</link>
+      <guid>https://mpadge.eu/blog/git-push.html</guid>
+      <description>How to redefine `git push` for an era of distributed code. No canonical source; no platform lock-in. A re-implementation of `git push` that sends your code anywhere and everywhere. Nice features like branch protection are still possible, but able to defined locally, remotely, or both. Single locations can be defined as "canonical" upstream sources. Or code can have no canonical source, and just spread out and be used and interacted with wherever people like.</description>
+      <content:encoded><![CDATA[]]></content:encoded>
+      <pubDate>Tue, 10 Nov 26 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>"Coding Alone"</title>
       <link>https://mpadge.eu/blog/coding-alone.html</link>
       <guid>https://mpadge.eu/blog/coding-alone.html</guid>

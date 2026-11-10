@@ -46,7 +46,7 @@ format_blog_yaml <- function (fdat, add_blog_prefix = FALSE)
         tgs <- if (!is.null (f$tags)) paste0 ("    tags: ", f$tags) else NULL
         res <- c (res, "-",
                   paste0 ("    title: ", f$title),
-                  paste0 ("    description: ", f$description),
+                  paste0 ("    description: ", backticks_to_code (f$description)),
                   paste0 ("    created: ", f$date_cre),
                   upd,
                   mst,
@@ -54,6 +54,13 @@ format_blog_yaml <- function (fdat, add_blog_prefix = FALSE)
                   paste0 ("    link: ", link))
     }
     return (res)
+}
+
+# Descriptions are inserted as raw HTML ({{{ description }}}), so convert
+# markdown inline code to <code> tags.
+backticks_to_code <- function (x)
+{
+    gsub ("`([^`]+)`", "<code>\\1</code>", x)
 }
 
 order_blog_files <- function (blog_dir, sort_date = "modified")

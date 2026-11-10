@@ -23,8 +23,9 @@ code: ## Update the 'code' section from current r-univ pkgs list
 rss: ## Update RSS XML feed
 	Rscript 'tools/blog/make_rss.R'
 
-update: ## Update blog index and RSS XML feed
+update: ## Update blog index, RSS XML feed, and llms.txt
 	Rscript -e 'source("tools/blog/update_main.R")'
+	node --input-type=module -e 'import { updateLlmsTxt } from "./tools/llmsTxt.js"; await updateLlmsTxt ()'
 
 blog: ## Render latest blog post (or hard-code value in 'tools/blog/update_one.R')
 	Rscript -e 'source("tools/blog/update_one.R")'

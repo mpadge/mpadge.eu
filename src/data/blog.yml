@@ -1,4 +1,10 @@
 -
+    title: "Distributed Git"
+    description: How to redefine <code>git push</code> for an era of distributed code. No canonical source; no platform lock-in. A re-implementation of <code>git push</code> that sends your code anywhere and everywhere. Nice features like branch protection are still possible, but able to defined locally, remotely, or both. Single locations can be defined as "canonical" upstream sources. Or code can have no canonical source, and just spread out and be used and interacted with wherever people like.
+    created: 10 Nov 26
+    tags: code
+    link: git-push.html
+-
     title: "Coding Alone"
     description: In which I show how, over the last few years, the world has rapidly moved from open-source software being produced and maintained by online communities, to software projects being built and maintained in isolation. By single developers, with ever-decreasing input from others. AI coding tools are now dramatically accelerating movement away from code as a collective endeavour to "coding alone". I conclude by describing how such progression need not be considered inevitable. Every step has reflected the collective influence of countless individual human decisions. The fate of open-source software communities is still determined by us.
     created: 12 Oct 26
@@ -40,7 +46,7 @@
     link: r-cpp-debugging.html
 -
     title: Timeout on parallel jobs in R
-    description: Python's `multiprocessing` and `threading` libraries both have a timeout parameter for re-joining threads after they've finished. This provides an easy way to launch multi-threaded jobs while ensuing that no single thread exceeds a specified timeout. This post describes two ways to implement equivalent functionality in R.
+    description: Python's <code>multiprocessing</code> and <code>threading</code> libraries both have a timeout parameter for re-joining threads after they've finished. This provides an easy way to launch multi-threaded jobs while ensuing that no single thread exceeds a specified timeout. This post describes two ways to implement equivalent functionality in R.
     created: 14 Jan 22
     tags: code
     link: r-parallel-timeout.html
@@ -83,7 +89,7 @@
     link: r-matrices.html
 -
     title: Calling external files from C in R
-    description: I recently encountered a problem while bundling an old C library into a new R package. The library itself depends on, and includes, an external "dictionary" in plain text format used to construct a large lookup table. The creators of this library of course assume that this dictionary file will always reside in the same directory as the compiled object, and so can always be directly linked. The `src` directory of R packages is, however, only permitted to contain source code, which text files definitively are not. This blog entry is about where to put such files, and how to link them within the source code.
+    description: I recently encountered a problem while bundling an old C library into a new R package. The library itself depends on, and includes, an external "dictionary" in plain text format used to construct a large lookup table. The creators of this library of course assume that this dictionary file will always reside in the same directory as the compiled object, and so can always be directly linked. The <code>src</code> directory of R packages is, however, only permitted to contain source code, which text files definitively are not. This blog entry is about where to put such files, and how to link them within the source code.
     created: 04 Jul 19
     tags: code
     link: c-external-files.html
