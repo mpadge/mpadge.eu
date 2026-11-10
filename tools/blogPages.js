@@ -92,7 +92,7 @@ export function blogPages(PATHS) {
     return null;
   }
 
-  function buildPage(mdContent, dateStr, updatedStr, mastodonUrl, linkSummaries, description, pageUrl) {
+  function buildPage(mdContent, dateStr, updatedStr, mastodonUrl, linkSummaries, description, pageUrl, atprotoUri) {
     const yamlStripped = mdContent.replace(/^---\n[\s\S]*?\n---\n/, '');
     const { content, sidenotesHtml } = processFootnotes(yamlStripped);
 
@@ -196,7 +196,7 @@ export function blogPages(PATHS) {
       }
     }
     const frontMatter = pageTitle
-      ? `---\ntitle: "${pageTitle}"\nsitetitle: mp\n${escapedDesc ? `description: "${escapedDesc}"\n` : ''}${pageUrl ? `pageurl: "${pageUrl}"\n` : ''}${ogImage ? `ogimage: "${ogImage}"\n` : ''}---\n`
+      ? `---\ntitle: "${pageTitle}"\nsitetitle: mp\n${escapedDesc ? `description: "${escapedDesc}"\n` : ''}${pageUrl ? `pageurl: "${pageUrl}"\n` : ''}${atprotoUri ? `atproto: "${atprotoUri}"\n` : ''}${ogImage ? `ogimage: "${ogImage}"\n` : ''}---\n`
       : '';
 
     return frontMatter +
@@ -226,6 +226,9 @@ export function blogPages(PATHS) {
   }
 
   const dateMap = loadDateMap();
+  // AT-URIs of site.standard.document records, written by tools/atproto/publish.mjs
+  const atproto = fs.existsSync('src/atproto.json')
+    ? (JSON.parse(fs.readFileSync('src/atproto.json', 'utf8')).documents || {}) : {};
 
   return gulp.src('src/pages/blog/*.md', { base: 'src/pages/' })
     .pipe(through2.obj(function(file, enc, cb) {
@@ -240,7 +243,7 @@ export function blogPages(PATHS) {
         const description = meta.description || '';
         const pageUrl = `https://mpadge.eu/blog/${slug}`;
         const linkSummaries = loadLinkSummaries(file.path);
-        file.contents = Buffer.from(buildPage(file.contents.toString(enc), dateStr, updatedStr, mastodonUrl, linkSummaries, description, pageUrl));
+        file.contents = Buffer.from(buildPage(file.contents.toString(enc), dateStr, updatedStr, mastodonUrl, linkSummaries, description, pageUrl, atproto[slug] || ''));
         file.path = file.path.replace(/\.md$/, '.html')
                               .replace(/([\\/])\d{4}-\d{2}-\d{2}-/, '$1');
       }

@@ -1,0 +1,23 @@
+{
+  "publication": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.publication/mpadge",
+  "documents": {
+    "git-push.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/git-push",
+    "coding-alone.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/coding-alone",
+    "machina-machista.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/machina-machista",
+    "purposeful-joy.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/purposeful-joy",
+    "goodpractice.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/goodpractice",
+    "centralisation-reversibility.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/centralisation-reversibility",
+    "r-cpp-debugging.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/r-cpp-debugging",
+    "r-parallel-timeout.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/r-parallel-timeout",
+    "github-terminal-notifications.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/github-terminal-notifications",
+    "allcontributors.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/allcontributors",
+    "r-help-files.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/r-help-files",
+    "rcppparallel-aggregation.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/rcppparallel-aggregation",
+    "github-2fa-push.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/github-2fa-push",
+    "r-matrices.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/r-matrices",
+    "c-external-files.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/c-external-files",
+    "background-process-caching.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/background-process-caching",
+    "rcpp-cpp-templates.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/rcpp-cpp-templates",
+    "making-this-site.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/making-this-site"
+  }
+}
