@@ -57,7 +57,7 @@ console.log(UNCSS_OPTIONS);
 // Build the "dist" folder by running all of the below tasks
 // Sass must be run later so UnCSS can search for used classes in the others assets.
 gulp.task('build',
-  gulp.series(clean, updateLlmsTxt, gulp.parallel(pages, blogPages, javascript, images, copy), sassBuild, cname)
+  gulp.series(clean, updateLlmsTxt, gulp.parallel(pages, blogPages, javascript, images, copy), sassBuild, cname, atprotoWellKnown)
 );
 
 // Build the site, run the server, and watch for file changes
@@ -92,6 +92,17 @@ function copy() {
   // Also copy generated feed.xml and llms.txt to root of dist
   return gulp.src(['src/feed.xml', 'src/llms.txt'])
     .pipe(gulp.dest(PATHS.dist));
+}
+
+// Verify the site.standard.publication record (https://standard.site):
+// /.well-known/site.standard.publication must return the publication's AT-URI.
+function atprotoWellKnown() {
+  if (!fs.existsSync('src/atproto.json')) return Promise.resolve();
+  const { publication } = JSON.parse(fs.readFileSync('src/atproto.json', 'utf8'));
+  if (!publication) return Promise.resolve();
+  fs.mkdirSync(PATHS.dist + '/.well-known', { recursive: true });
+  fs.writeFileSync(PATHS.dist + '/.well-known/site.standard.publication', publication);
+  return Promise.resolve();
 }
 
 function cname() {
