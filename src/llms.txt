@@ -15,13 +15,14 @@ All software is open-source. Code is hosted on GitHub, Codeberg, Codefloe, Sourc
 <!-- BEGIN POSTS (generated from src/data/blog.yml by tools/llmsTxt.js) -->
 ## Blog posts
 
+- [Distributed Git](https://mpadge.eu/blog/git-push.html): How to redefine git push for an era of distributed code.
 - [Coding Alone](https://mpadge.eu/blog/coding-alone.html): In which I show how, over the last few years, the world has rapidly moved from open-source software being produced and maintained by online communities, to software projects being built and maintained in isolation.
 - [Machina machista](https://mpadge.eu/blog/machina-machista.html): Your AI thinks you're a dude.
 - [Purposeful joy](https://mpadge.eu/blog/purposeful-joy.html): The current purpose for a select few is to help computer programs replace the purposeful labour of a generation of uniquely idiosyncratic human beings.
 - [Our goodpractice Package Has New Superpowers](https://mpadge.eu/blog/goodpractice.html): We have worked hard over the past few months on major upgrades to our goodpractice package.
 - [Centralisation, reversibility, and restarting](https://mpadge.eu/blog/centralisation-reversibility.html): Technical progress tends toward centralisation: telephone multiplexing made calls easier and centralised the entire telephone industry; GitHub made coding easier and centralised the world of software development.
 - [Debugging C++ code in R with a single command](https://mpadge.eu/blog/r-cpp-debugging.html): There are several great references for how to debug C or C++ code in R, but descriptions of how to start a debugger are often not so informative.
-- [Timeout on parallel jobs in R](https://mpadge.eu/blog/r-parallel-timeout.html): Python's `multiprocessing` and `threading` libraries both have a timeout parameter for re-joining threads after they've finished.
+- [Timeout on parallel jobs in R](https://mpadge.eu/blog/r-parallel-timeout.html): Python's multiprocessing and threading libraries both have a timeout parameter for re-joining threads after they've finished.
 - [GitHub notifications from the terminal](https://mpadge.eu/blog/github-terminal-notifications.html): I work almost entirely from the terminal, and regret the few remaining tasks which still require me to venture elsewhere, such as a web browser.
 - [The allcontributors package](https://mpadge.eu/blog/allcontributors.html): An alternative implementation in R of the original 'allcontributors.org' to acknowledge all contributors in your 'README' (or elsewhere).
 - [The troubles with getting help files in R](https://mpadge.eu/blog/r-help-files.html): A primer on ways to extract the actual content of help files.
