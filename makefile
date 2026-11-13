@@ -23,9 +23,14 @@ code: ## Update the 'code' section from current r-univ pkgs list
 rss: ## Update RSS XML feed
 	Rscript 'tools/blog/make_rss.R'
 
-update: ## Update blog index, RSS XML feed, and llms.txt
+update: ## Update blog index, RSS XML feed, llms.txt, and atproto records
 	Rscript -e 'source("tools/blog/update_main.R")'
 	node --input-type=module -e 'import { updateLlmsTxt } from "./tools/llmsTxt.js"; await updateLlmsTxt ()'
+	@if [ -n "$$ATPROTO_APP_PASSWORD" ]; then \
+		ATPROTO_IDENTIFIER=$${ATPROTO_IDENTIFIER:-mpadge.eu} node tools/atproto/publish.mjs --publish; \
+	else \
+		echo "Skipping atproto records: set ATPROTO_APP_PASSWORD to publish them"; \
+	fi
 
 blog: ## Render latest blog post (or hard-code value in 'tools/blog/update_one.R')
 	Rscript -e 'source("tools/blog/update_one.R")'

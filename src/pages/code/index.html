@@ -13,37 +13,37 @@ title: code
     </a>
 
     <section id="code">
-    {{> sections_header}}
-    {{#each code}}
-    <div class="medium-6 large-4 cell">
-    {{> code_header}}
-    <div style="cursor: pointer;" onclick="window.open('{{ link }}', '_blank')">
-        <a target="_blank" rel="noopener noreferrer" href="{{ link }}" style="color:#262626; text-decoration: none;">
-            <div style="text-align: center;">
-                <h3>{{ package }}</h3>
+        {{> sections_header}}
+        {{#each code}}
+        <div class="medium-6 large-4 cell">
+            {{> code_header}}
+            <div style="cursor: pointer;" onclick="window.open('{{ link }}', '_blank')">
+                <a target="_blank" rel="noopener noreferrer" href="{{ link }}" style="color:#262626; text-decoration: none;">
+                    <div style="text-align: center;">
+                        <h3>{{ package }}</h3>
+                    </div>
+                </a>
+                <p style="text-align: center;">
+                    {{#if cranlink}}
+                    <a href="{{ cranlink }}" target="_blank" rel="noopener noreferrer">
+                        <img src="{{ cranlogs }}" alt="CRAN Downloads">
+                    </a>
+                    {{/if}}
+                    {{#if roslink}}
+                    <a href="{{ roslink }}" target="_blank" rel="noopener noreferrer">
+                        <img src="{{ rosstatus }}" alt="rOpenSci package status"/>
+                    </a>
+                    {{/if}}
+                </p>
+                <div class="card-section" style="text-align: center;">
+                    <p>{{ title }}</p>
+                    <p>{{ description }}</p>
+                </div>
             </div>
-        </a>
-        <p style="text-align: center;">
-        {{#if cranlink}}
-        <a href="{{ cranlink }}" target="_blank" rel="noopener noreferrer">
-            <img src="{{ cranlogs }}" alt="CRAN Downloads">
-        </a>
-        {{/if}}
-        {{#if roslink}}
-        <a href="{{ roslink }}" target="_blank" rel="noopener noreferrer">
-            <img src="{{ rosstatus }}" alt="rOpenSci package status"/>
-        </a>
-        {{/if}}
-        </p>
-        <div class="card-section" style="text-align: center;">
-            <p>{{ title }}</p>
-            <p>{{ description }}</p>
+            {{> code_footer}}
         </div>
-    </div>
-    {{> code_footer}}
-    </div>
-    {{/each}}
-    {{> sections_footer}}
+        {{/each}}
+        {{> sections_footer}}
     </section>
 
     {{> footer}}
