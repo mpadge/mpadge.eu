@@ -2,40 +2,40 @@
 
 <!doctype html>
 <html class="no-js" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{#if sitetitle}}{{sitetitle}}{{else}}mpadge{{/if}}{{#if title}} | {{title}}{{/if}}</title>
-    <meta name="description" content="{{#if description}}{{stripTags description}}{{else}}Opinions on technology in the world, on open-source software, on cities, and sometimes on bicycles.{{/if}}" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="mpadge" />
-    <meta property="og:title" content="{{#if sitetitle}}{{sitetitle}}{{else}}mpadge{{/if}}{{#if title}} | {{title}}{{/if}}" />
-    <meta property="og:description" content="{{#if description}}{{stripTags description}}{{else}}Opinions on technology in the world, on open-source software, on cities, and sometimes on bicycles.{{/if}}" />
-    {{#if ogimage}}<meta property="og:image" content="https://mpadge.eu{{ogimage}}" />{{else}}<meta property="og:image" content="https://mpadge.eu/assets/img/mpadge-og.jpg" />{{/if}}
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="{{#if sitetitle}}{{sitetitle}}{{else}}mpadge{{/if}}{{#if title}} | {{title}}{{/if}}" />
-    <meta name="twitter:image" content="https://mpadge.eu{{#if ogimage}}{{ogimage}}{{else}}/assets/img/mpadge-og.jpg{{/if}}" />
-    <meta property="og:url" content="{{#if pageurl}}{{pageurl}}{{else}}https://mpadge.eu/{{/if}}" />
-<link rel="alternate" type="application/rss+xml" title="mpadge blog" href="{{root}}feed.xml" />
-    {{#if atproto}}<link rel="site.standard.document" href="{{atproto}}" />{{/if}}
-    <link rel="stylesheet" href="{{root}}assets/css/app.css" />
-    <link rel="stylesheet" href="{{root}}assets/foundation-icons/foundation-icons.css" />
-  </head>
-<body>
-<!--
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{#if sitetitle}}{{sitetitle}}{{else}}mpadge{{/if}}{{#if title}} | {{title}}{{/if}}</title>
+        <meta name="description" content="{{#if description}}{{stripTags description}}{{else}}Opinions on technology in the world, on open-source software, on cities, and sometimes on bicycles.{{/if}}" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="mpadge" />
+        <meta property="og:title" content="{{#if sitetitle}}{{sitetitle}}{{else}}mpadge{{/if}}{{#if title}} | {{title}}{{/if}}" />
+        <meta property="og:description" content="{{#if description}}{{stripTags description}}{{else}}Opinions on technology in the world, on open-source software, on cities, and sometimes on bicycles.{{/if}}" />
+        {{#if ogimage}}<meta property="og:image" content="https://mpadge.eu{{ogimage}}" />{{else}}<meta property="og:image" content="https://mpadge.eu/assets/img/mpadge-og.jpg" />{{/if}}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="{{#if sitetitle}}{{sitetitle}}{{else}}mpadge{{/if}}{{#if title}} | {{title}}{{/if}}" />
+        <meta name="twitter:image" content="https://mpadge.eu{{#if ogimage}}{{ogimage}}{{else}}/assets/img/mpadge-og.jpg{{/if}}" />
+        <meta property="og:url" content="{{#if pageurl}}{{pageurl}}{{else}}https://mpadge.eu/{{/if}}" />
+        <link rel="alternate" type="application/rss+xml" title="mpadge blog" href="{{root}}feed.xml" />
+        {{#if atproto}}<link rel="site.standard.document" href="{{atproto}}" />{{/if}}
+        <link rel="stylesheet" href="{{root}}assets/css/app.css" />
+        <link rel="stylesheet" href="{{root}}assets/foundation-icons/foundation-icons.css" />
+    </head>
+    <body>
+        <!--
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/gruvbox-dark.min.css">
 href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/atelier-dune-light.min.css">
 -->
-<link rel="stylesheet"
-href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/atom-one-light.min.css">
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/r.min.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
+        <link rel="stylesheet"
+            href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/atom-one-light.min.css">
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/r.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
 
-{{!-- Pages you create in the src/pages/ folder are inserted here when the flattened page is created. --}}
-{{> body}}
+        {{!-- Pages you create in the src/pages/ folder are inserted here when the flattened page is created. --}}
+        {{> body}}
 
-<script src="{{root}}assets/js/app.js"></script>
-</body>
+        <script src="{{root}}assets/js/app.js"></script>
+    </body>
 </html>
