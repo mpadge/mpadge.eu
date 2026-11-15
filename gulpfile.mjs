@@ -94,14 +94,31 @@ function copy() {
     .pipe(gulp.dest(PATHS.dist));
 }
 
-// Verify the site.standard.publication record (https://standard.site):
-// /.well-known/site.standard.publication must return the publication's AT-URI.
+// Verify site.standard.publication records (https://standard.site).
+// The root publication must be served at /.well-known/site.standard.publication,
+// and a publication at a sub-path (e.g. /notes) at
+// /.well-known/site.standard.publication/notes. A static file and directory
+// cannot share the name, so when sub-path publications exist the root AT-URI is
+// written to site.standard.publication.txt and served at the root URL through
+// a forced statichost.eu rewrite (https://www.statichost.eu/docs/routing/).
 function atprotoWellKnown() {
   if (!fs.existsSync('src/atproto.json')) return Promise.resolve();
-  const { publication } = JSON.parse(fs.readFileSync('src/atproto.json', 'utf8'));
+  const { publication, publications = {} } = JSON.parse(fs.readFileSync('src/atproto.json', 'utf8'));
   if (!publication) return Promise.resolve();
-  fs.mkdirSync(PATHS.dist + '/.well-known', { recursive: true });
-  fs.writeFileSync(PATHS.dist + '/.well-known/site.standard.publication', publication);
+  const wk = PATHS.dist + '/.well-known';
+  const sub = Object.entries(publications);
+  fs.mkdirSync(wk, { recursive: true });
+  if (sub.length === 0) {
+    fs.writeFileSync(wk + '/site.standard.publication', publication);
+    return Promise.resolve();
+  }
+  fs.writeFileSync(wk + '/site.standard.publication.txt', publication);
+  fs.mkdirSync(wk + '/site.standard.publication', { recursive: true });
+  for (const [path, uri] of sub) {
+    fs.writeFileSync(`${wk}/site.standard.publication/${path}`, uri);
+  }
+  fs.appendFileSync(PATHS.dist + '/_redirects',
+    '/.well-known/site.standard.publication /.well-known/site.standard.publication.txt 200!\n');
   return Promise.resolve();
 }
 

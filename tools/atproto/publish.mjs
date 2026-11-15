@@ -20,6 +20,14 @@ const PUB = {
   name: "Mark Padgham's curated opinions",
   description: 'Opinions on technology in the world, on open-source software, on cities, and sometimes on bicycles.',
 };
+// Separate publication for short notes (lives at https://mpadge.eu/notes).
+const NOTES_RKEY = 'notes';
+const NOTES_PUB = {
+  $type: 'site.standard.publication',
+  url: `${SITE}/notes`,
+  name: 'Notes',
+  description: 'Short notes.',
+};
 const PDS = process.env.ATPROTO_PDS || 'https://tngl.sh';
 const doPublish = process.argv.includes('--publish');
 
@@ -78,6 +86,7 @@ async function put(collection, rkey, record) {
 }
 
 const pubUri = await put('site.standard.publication', PUB_RKEY, PUB);
+const notesUri = await put('site.standard.publication', NOTES_RKEY, NOTES_PUB);
 const documents = {};
 for (const post of posts) {
   const { slug, rec } = documentRecord(post, pubUri);
@@ -85,7 +94,7 @@ for (const post of posts) {
 }
 
 if (doPublish) {
-  fs.writeFileSync('src/atproto.json', JSON.stringify({ publication: pubUri, documents }, null, 2) + '\n');
+  fs.writeFileSync('src/atproto.json', JSON.stringify({ publication: pubUri, publications: { notes: notesUri }, documents }, null, 2) + '\n');
   console.log('Wrote src/atproto.json');
 } else {
   console.log('\nDry run only. Re-run with --publish to create the records.');
