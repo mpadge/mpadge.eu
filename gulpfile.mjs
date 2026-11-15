@@ -253,7 +253,12 @@ function watch() {
   gulp.watch(PATHS.assets, copy);
   gulp.watch('src/pages/**/*.html').on('all', gulp.series(pages, browser.reload));
   gulp.watch('src/pages/blog/*.md').on('all', gulp.series(blogPages, browser.reload));
-  gulp.watch('src/pages/notes/*.md').on('all', gulp.series(notesPages, browser.reload));
+  // Notes also feed the home page via src/data/notesshort.yml, so regenerate it,
+  // refresh Panini's cached data, then rebuild both the notes and the home page.
+  gulp.watch('src/pages/notes/*.md').on('all',
+    gulp.series(notesData, resetPages, notesPages, pages, browser.reload));
+  gulp.watch('src/atproto.json').on('all',
+    gulp.series(resetPages, blogPages, notesPages, browser.reload));
   gulp.watch('src/{layouts,partials}/**/*.html').on('all', gulp.series(resetPages, pages, browser.reload));
   gulp.watch('src/data/**/*.{js,json,yml}').on('all', gulp.series(resetPages, pages, browser.reload));
   gulp.watch('src/helpers/**/*.js').on('all', gulp.series(resetPages, pages, browser.reload));
