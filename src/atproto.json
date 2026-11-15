@@ -1,5 +1,8 @@
 {
   "publication": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.publication/mpadge",
+  "publications": {
+    "notes": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.publication/notes"
+  },
   "documents": {
     "git-push.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/git-push",
     "coding-alone.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/coding-alone",
