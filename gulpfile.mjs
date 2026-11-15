@@ -14,6 +14,7 @@ import named         from 'vinyl-named';
 import autoprefixer  from 'autoprefixer';
 import imagemin, { gifsicle, mozjpeg, optipng, svgo } from 'gulp-imagemin';
 import { blogPages as _blogPages } from './tools/blogPages.js';
+import { notesPages as _notesPages, writeNotesShort } from './tools/notesPages.js';
 import { updateLlmsTxt }            from './tools/llmsTxt.js';
 import { execSync }                from 'child_process';
 
@@ -57,7 +58,7 @@ console.log(UNCSS_OPTIONS);
 // Build the "dist" folder by running all of the below tasks
 // Sass must be run later so UnCSS can search for used classes in the others assets.
 gulp.task('build',
-  gulp.series(clean, updateLlmsTxt, gulp.parallel(pages, blogPages, javascript, images, copy), sassBuild, cname, atprotoWellKnown)
+  gulp.series(clean, updateLlmsTxt, notesData, gulp.parallel(pages, blogPages, notesPages, javascript, images, copy), sassBuild, cname, atprotoWellKnown)
 );
 
 // Build the site, run the server, and watch for file changes
@@ -141,6 +142,8 @@ function pages() {
 }
 
 function blogPages() { return _blogPages(PATHS); }
+function notesData() { return writeNotesShort(); }
+function notesPages() { return _notesPages(PATHS); }
 
 // Load updated HTML templates and partials into Panini
 function resetPages(done) {
@@ -250,6 +253,7 @@ function watch() {
   gulp.watch(PATHS.assets, copy);
   gulp.watch('src/pages/**/*.html').on('all', gulp.series(pages, browser.reload));
   gulp.watch('src/pages/blog/*.md').on('all', gulp.series(blogPages, browser.reload));
+  gulp.watch('src/pages/notes/*.md').on('all', gulp.series(notesPages, browser.reload));
   gulp.watch('src/{layouts,partials}/**/*.html').on('all', gulp.series(resetPages, pages, browser.reload));
   gulp.watch('src/data/**/*.{js,json,yml}').on('all', gulp.series(resetPages, pages, browser.reload));
   gulp.watch('src/helpers/**/*.js').on('all', gulp.series(resetPages, pages, browser.reload));

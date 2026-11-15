@@ -11,6 +11,7 @@
 // post slug), so re-running is idempotent: it updates records in place.
 import fs from 'fs';
 import * as yaml from 'js-yaml';
+import { loadNotes } from '../notesPages.js';
 
 const SITE = 'https://mpadge.eu';
 const PUB_RKEY = 'mpadge';
@@ -93,8 +94,24 @@ for (const post of posts) {
   documents[`${slug}.html`] = await put('site.standard.document', slug, rec);
 }
 
+// Notes: documents of the notes publication. rkeys are prefixed so they can
+// never collide with blog post slugs in the same collection.
+const noteDocuments = {};
+for (const n of loadNotes()) {
+  const rec = {
+    $type: 'site.standard.document',
+    site: notesUri,
+    path: `/notes/${n.slug}.html`,
+    title: n.title,
+    publishedAt: new Date(`${n.date}T00:00:00Z`).toISOString(),
+  };
+  if (n.description) rec.description = n.description;
+  if (n.tags) rec.tags = n.tags.split(',').map((t) => t.trim()).filter(Boolean);
+  noteDocuments[`${n.slug}.html`] = await put('site.standard.document', `note-${n.slug}`, rec);
+}
+
 if (doPublish) {
-  fs.writeFileSync('src/atproto.json', JSON.stringify({ publication: pubUri, publications: { notes: notesUri }, documents }, null, 2) + '\n');
+  fs.writeFileSync('src/atproto.json', JSON.stringify({ publication: pubUri, publications: { notes: notesUri }, documents, noteDocuments }, null, 2) + '\n');
   console.log('Wrote src/atproto.json');
 } else {
   console.log('\nDry run only. Re-run with --publish to create the records.');
