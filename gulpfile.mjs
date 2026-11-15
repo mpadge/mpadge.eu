@@ -17,6 +17,7 @@ import { blogPages as _blogPages } from './tools/blogPages.js';
 import { notesPages as _notesPages, writeNotesShort } from './tools/notesPages.js';
 import { updateLlmsTxt }            from './tools/llmsTxt.js';
 import { execSync }                from 'child_process';
+import { Transform }               from 'stream';
 
 import gulpSass      from 'gulp-sass';
 import * as dartSass from 'sass-embedded';
@@ -66,15 +67,34 @@ gulp.task('default',
   gulp.series('build', server, watch)
 );
 
-// Compressing images is slow, so production builds compress into a cache
-// directory outside "dist" (.cache/img, git-ignored) and only process images
-// that are new or changed since they were last compressed. The cache is then
-// copied into dist/assets/img. Dev builds skip compression and copy straight
-// from src, never touching the cache. Pass --fresh-images to recompress everything.
+// Compressing images is slow, so production builds write compressed copies
+// next to the originals in src/assets/img as `<name>-compressed.<ext>`, and only
+// process images that are new or changed since their compressed copy was made.
+// The compressed copies are then copied into dist/assets/img with the
+// `-compressed` suffix removed (the originals are not copied). Dev builds skip
+// compression and copy the originals. Pass --fresh-images to recompress everything.
 const IMG_SRC   = 'src/assets/img';
-const IMG_CACHE = path.resolve('.cache', 'img');
 const IMG_DIST  = path.resolve(PATHS.dist, 'assets', 'img');
+const SUFFIX    = '-compressed';
 const FRESH_IMAGES = !!(yargs(hideBin(process.argv)).argv['fresh-images']);
+
+const isCompressed = (p) => path.parse(p).name.endsWith(SUFFIX);
+const compressedName = (p) => {
+  const { dir, name, ext } = path.parse(p);
+  return path.join(dir, name + SUFFIX + ext);
+};
+const originalName = (p) => {
+  const { dir, name, ext } = path.parse(p);
+  return path.join(dir, name.slice(0, -SUFFIX.length) + ext);
+};
+
+// Object-mode stream applying fn to each vinyl file's path
+function mapPath(fn) {
+  return new Transform({
+    objectMode: true,
+    transform(file, _enc, cb) { file.path = fn(file.path); cb(null, file); }
+  });
+}
 
 // Delete the "dist" folder
 // This happens every time a build starts
@@ -206,14 +226,15 @@ function javascript() {
     .pipe(gulp.dest(PATHS.dist + '/assets/js'));
 }
 
-// Compress images that are new or changed into the cache directory.
-// Cached copies whose source has been deleted are pruned.
+// Compress images that are new or changed into `-compressed` siblings.
+// Compressed copies whose original has been deleted are removed.
 async function compressImages() {
-  if (FRESH_IMAGES) await rimraf(IMG_CACHE);
-  fs.mkdirSync(IMG_CACHE, { recursive: true });
+  walk(IMG_SRC).filter(isCompressed).forEach((f) => {
+    if (FRESH_IMAGES || !fs.existsSync(originalName(f))) fs.rmSync(f);
+  });
   await new Promise((resolve, reject) => {
-    gulp.src(IMG_SRC + '/**/*', { encoding: false })
-      .pipe($.newer(IMG_CACHE))
+    gulp.src(IMG_SRC + '/**/*', { encoding: false, nodir: true, ignore: '**/*' + SUFFIX + '.*' })
+      .pipe($.newer({ dest: IMG_SRC, map: (rel) => compressedName(rel) }))
       .pipe(imagemin([
         gifsicle({interlaced: true}),
         mozjpeg({quality: 85, progressive: true}),
@@ -225,29 +246,35 @@ async function compressImages() {
           ]
         })
       ]))
-      .pipe(gulp.dest(IMG_CACHE))
+      .pipe(mapPath(compressedName))
+      .pipe(gulp.dest(IMG_SRC))
       .on('finish', resolve)
       .on('error', reject);
   });
-  pruneCache(IMG_CACHE, IMG_SRC);
 }
 
-function pruneCache(cacheDir, srcDir, rel = '') {
-  for (const e of fs.readdirSync(path.join(cacheDir, rel), { withFileTypes: true })) {
-    const r = path.join(rel, e.name);
-    if (!fs.existsSync(path.join(srcDir, r))) {
-      fs.rmSync(path.join(cacheDir, r), { recursive: true, force: true });
-    } else if (e.isDirectory()) {
-      pruneCache(cacheDir, srcDir, r);
-    }
-  }
+function walk(dir) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const p = path.join(dir, e.name);
+    return e.isDirectory() ? walk(p) : [p];
+  });
 }
 
-// Copy images to the "dist" folder: the compressed cache in production,
-// the original files otherwise
+// Copy images to the "dist" folder: the compressed copies (suffix removed) in
+// production, the originals otherwise
 function copyImages() {
-  return gulp.src((PRODUCTION ? IMG_CACHE : IMG_SRC) + '/**/*', { encoding: false })
-    .pipe(gulp.dest(IMG_DIST));
+  const stream = gulp.src(IMG_SRC + '/**/*', { encoding: false, nodir: true });
+  const filtered = PRODUCTION
+    ? stream.pipe(new Transform({
+        objectMode: true,
+        // drop originals; their compressed copy takes the original name
+        transform(file, _enc, cb) { cb(null, isCompressed(file.path) ? file : null); }
+      })).pipe(mapPath(originalName))
+    : stream.pipe(new Transform({
+        objectMode: true,
+        transform(file, _enc, cb) { cb(null, isCompressed(file.path) ? null : file); }
+      }));
+  return filtered.pipe(gulp.dest(IMG_DIST));
 }
 
 function images(done) {
