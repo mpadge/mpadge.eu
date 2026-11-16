@@ -8,6 +8,7 @@ import fs      from 'fs';
 import * as yaml from 'js-yaml';
 import marked  from 'marked';
 import gulp    from 'gulp';
+import { pickOgImage } from './ogImage.js';
 
 const SITE = 'https://mpadge.eu';
 const NOTES_DIR = 'src/pages/notes';
@@ -65,11 +66,12 @@ const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').repl
 // Handlebars would otherwise interpret braces in note text
 const hbs = (s) => s.replace(/\{\{/g, '\\{{');
 
-function frontMatter(title, description, pageUrl, atprotoUri) {
+function frontMatter(title, description, pageUrl, atprotoUri, ogImage) {
   return `---\ntitle: "${esc(title)}"\nsitetitle: mp\n` +
     (description ? `description: "${description.replace(/"/g, '\\"')}"\n` : '') +
     `pageurl: "${pageUrl}"\n` +
-    (atprotoUri ? `atproto: "${atprotoUri}"\n` : '') + '---\n';
+    (atprotoUri ? `atproto: "${atprotoUri}"\n` : '') +
+    (ogImage ? `ogimage: "${ogImage}"\n` : 'textcard: true\n') + '---\n';
 }
 
 const WRAP_OPEN = '{{> header}}\n<div class="pageClass">\n<div class="grid-container">\n' +
@@ -103,7 +105,7 @@ function processFootnotes(md) {
 function notePage(n, atprotoUri) {
   const fn = processFootnotes(n.body);
   const html = marked(fn.content) + fn.html;
-  return frontMatter(n.title, n.description, `${SITE}/notes/${n.slug}.html`, atprotoUri) +
+  return frontMatter(n.title, n.description, `${SITE}/notes/${n.slug}.html`, atprotoUri, pickOgImage(n.body)) +
     WRAP_OPEN +
     `<p><a href="{{root}}notes">&larr; notes</a></p>\n<h1>${esc(n.title)}</h1>\n` +
     `<p class="blog-date">${n.date}</p>\n` + hbs(html) + commentsHtml(n) + WRAP_CLOSE;
