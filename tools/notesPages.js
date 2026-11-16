@@ -61,8 +61,33 @@ const WRAP_OPEN = '{{> header}}\n<div class="pageClass">\n<div class="grid-conta
   '<div class="grid-x grid-padding-x">\n<div class="cell medium-11 large-11">\n';
 const WRAP_CLOSE = '\n</div>\n</div>\n</div>\n</div>\n{{> footer}}\n';
 
+// Notes have no sidenote panel, so footnotes ([^label] / [^label]: text) are
+// rendered as numbered endnotes with links back and forth.
+function processFootnotes(md) {
+  const defs = {};
+  const order = [];
+  const defRe = /^\[\^([^\]]+)\]:\s*(.+(?:\n[ \t]+.+)*)$/gm;
+  let m;
+  while ((m = defRe.exec(md)) !== null) defs[m[1]] = m[2].replace(/\n[ \t]+/g, ' ').trim();
+  let content = md.replace(/^\[\^[^\]]+\]:\s*.+(?:\n[ \t]+.+)*\n?/gm, '');
+  content = content.replace(/\[\^([^\]]+)\]/g, (full, label) => {
+    if (!defs[label]) return full;
+    if (!order.includes(label)) order.push(label);
+    const num = order.indexOf(label) + 1;
+    return `<sup class="footnote-ref" id="fnref-${num}"><a href="#fn-${num}">${num}</a></sup>`;
+  });
+  const items = order.map((label, i) => {
+    const num = i + 1;
+    const body = marked(defs[label]).trim().replace(/^<p>/, '').replace(/<\/p>$/, '');
+    return `<li id="fn-${num}">${body} <a href="#fnref-${num}" class="footnote-back">&#8617;</a></li>`;
+  });
+  const html = items.length ? `<hr>\n<ol class="footnotes">\n${items.join('\n')}\n</ol>\n` : '';
+  return { content, html };
+}
+
 function notePage(n, atprotoUri) {
-  const html = marked(n.body);
+  const fn = processFootnotes(n.body);
+  const html = marked(fn.content) + fn.html;
   return frontMatter(n.title, n.description, `${SITE}/notes/${n.slug}.html`, atprotoUri) +
     WRAP_OPEN +
     `<p><a href="{{root}}notes">&larr; notes</a></p>\n<h1>${esc(n.title)}</h1>\n` +

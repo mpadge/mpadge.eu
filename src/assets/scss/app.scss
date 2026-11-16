@@ -907,3 +907,24 @@ code, pre {
     }
 }
 
+
+// Footnotes on notes pages (endnotes)
+sup.footnote-ref {
+    font-size: 1em;
+    font-weight: bold;
+    line-height: 0;
+    padding: 0 2px;
+
+    a {
+        color: #5588aa;
+        text-decoration: none;
+    }
+}
+
+[data-theme="dark"] sup.footnote-ref a {
+    color: #88bbdd;
+}
+
+ol.footnotes {
+    font-size: 0.95em;
+}
