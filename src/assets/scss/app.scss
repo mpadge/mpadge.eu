@@ -792,6 +792,34 @@ code, pre {
     }
 }
 
+// Tags on blog and notes index entries: same look and size as the (inactive)
+// filter buttons above (.tag-filter-btn), but not clickable.
+.entry-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em;
+    margin-bottom: 0.5rem;
+}
+
+.blog-entry .entry-tags {
+    justify-content: center;
+}
+
+.entry-tag {
+    border: 1px solid #888888;
+    border-radius: 3px;
+    padding: 0.25em 0.75em;
+    font-family: inherit;
+    font-size: 0.82em;
+    line-height: 1.15;
+    color: #444444;
+}
+
+[data-theme="dark"] .entry-tag {
+    border-color: #666666;
+    color: #cccccc;
+}
+
 // Link summary popovers
 #link-popover {
     display: none;

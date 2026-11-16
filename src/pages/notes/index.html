@@ -20,6 +20,9 @@ pageurl: "https://mpadge.eu/notes/"
 {{#if description}}
 <p>{{ description }}</p>
 {{/if}}
+{{#if tags}}
+<div class="entry-tags">{{#each (tagList tags)}}<span class="entry-tag">{{ this }}</span>{{/each}}</div>
+{{/if}}
 </div>
 {{else}}
 <p>Nothing yet.</p>
