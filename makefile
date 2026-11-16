@@ -30,15 +30,15 @@ install: ## Install everything to run/build
 	yarn install
 
 code: ## Update the 'code' section from current r-univ pkgs list
-	Rscript 'tools/code-update.R'
+	Rscript 'tools/maintenance/code-update.R'
 
 rss: ## Update RSS XML feed
 	Rscript 'tools/blog/make_rss.R'
 
 update: ## Update blog index, notes data, RSS XML feed, and llms.txt (local only)
 	Rscript -e 'source("tools/blog/update_main.R")'
-	node --input-type=module -e 'import { writeNotesShort, writeNotesData } from "./tools/notesPages.js"; await writeNotesShort (); console.log ("✔ Updated src/data/notesshort.yml"); await writeNotesData (); console.log ("✔ Updated src/data/notes.yml")'
-	node --input-type=module -e 'import { updateLlmsTxt } from "./tools/llmsTxt.js"; await updateLlmsTxt ()'
+	node --input-type=module -e 'import { writeNotesShort, writeNotesData } from "./tools/site/notesPages.js"; await writeNotesShort (); console.log ("✔ Updated src/data/notesshort.yml"); await writeNotesData (); console.log ("✔ Updated src/data/notes.yml")'
+	node --input-type=module -e 'import { updateLlmsTxt } from "./tools/site/llmsTxt.js"; await updateLlmsTxt ()'
 
 # TEXT=... reaches publish.mjs through the environment, so quotes in it are safe
 export ANNOUNCE_TEXT := $(TEXT)
@@ -59,7 +59,7 @@ hooks: ## Enable the versioned git hooks in .githooks (checks atproto records be
 	git config core.hooksPath .githooks
 
 check: ## Check that src/atproto.json covers all posts and notes
-	node tools/check-atproto.mjs
+	node tools/atproto/check.mjs
 
 blog: ## Render latest blog post (or hard-code value in 'tools/blog/update_one.R')
 	Rscript -e 'source("tools/blog/update_one.R")'
@@ -69,7 +69,7 @@ render: ## Render $(BLOG) to gfm .md from .qmd or .Rmd (no-op if only .md)
 	if [ -f "$$f.qmd" ]; then \
 		cp "$$f.md" "$$f.md.prev" 2>/dev/null || true; \
 		quarto render "$$f.qmd" --to gfm && \
-		Rscript tools/qmd-figures.R "$$f.md" "$$f.md.prev"; \
+		Rscript tools/blog/qmd-figures.R "$$f.md" "$$f.md.prev"; \
 		rm -f "$$f.md.prev"; \
 	elif [ -f "$$f.Rmd" ]; then \
 		Rscript -e 'rmarkdown::render("'"$$f.Rmd"'", output_format = rmarkdown::md_document(variant = "gfm"))'; \
@@ -84,10 +84,10 @@ test: ## Run tests
 	yarn test
 
 deploy: ## Publish the site on statichost.eu
-	@bash tools/deploy.sh
+	@bash tools/maintenance/deploy.sh
 
 upgrade: ## Upgrade yarn dependencies. Use 'yarn upgrade-interactive --latest' for major upgrades
 	yarn upgrade
 
 tidycheck: ## Check HTML files with tidy and show warnings with context
-	bash tools/tidy-check.sh
+	bash tools/maintenance/tidy-check.sh

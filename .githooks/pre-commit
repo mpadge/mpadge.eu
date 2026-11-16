@@ -4,5 +4,5 @@
 # Only runs when something in src/data/ is staged (blog.yml, notesshort.yml, ...),
 # so unrelated commits are never blocked.
 if git diff --cached --name-only | grep -q '^src/data/'; then
-    exec node tools/check-atproto.mjs
+    exec node tools/atproto/check.mjs
 fi

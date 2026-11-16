@@ -23,7 +23,7 @@ cp -r mpadge/src/partials blank/src/.
 cp -r mpadge/.git blank/.
 cp mpadge/makefile blank/.
 cp mpadge/script.sh blank/.
-cp mpadge/blank-build.sh blank/.
+cp -r mpadge/tools blank/.
 cp mpadge/.gitignore blank/.
 
 rm -rf mpadge

@@ -1,7 +1,7 @@
 // Check that src/atproto.json is consistent with the site content, so that
 // `make publish` cannot have been forgotten before a commit/build/deploy.
 //
-//   node tools/check-atproto.mjs
+//   node tools/atproto/check.mjs
 //
 // Fails (exit 1) if:
 //   - any blog post (src/data/blog.yml) or note has no AT-URI in src/atproto.json
@@ -10,7 +10,7 @@
 import fs from 'fs';
 import { execFileSync } from 'child_process';
 import * as yaml from 'js-yaml';
-import { loadNotes } from './notesPages.js';
+import { loadNotes } from '../site/notesPages.js';
 
 const FILE = 'src/atproto.json';
 const problems = [];

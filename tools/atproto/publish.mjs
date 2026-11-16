@@ -21,7 +21,7 @@
 import fs from 'fs';
 import * as yaml from 'js-yaml';
 import readline from 'readline/promises';
-import { loadNotes } from '../notesPages.js';
+import { loadNotes } from '../site/notesPages.js';
 import { addBlueskyField, addBlueskyFieldToNote, recentUnannounced, isoDate } from './announce-helpers.mjs';
 
 const SITE = 'https://mpadge.eu';

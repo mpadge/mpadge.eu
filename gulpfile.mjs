@@ -13,9 +13,9 @@ import webpack2      from 'webpack';
 import named         from 'vinyl-named';
 import autoprefixer  from 'autoprefixer';
 import imagemin, { gifsicle, mozjpeg, optipng, svgo } from 'gulp-imagemin';
-import { blogPages as _blogPages } from './tools/blogPages.js';
-import { notesPages as _notesPages, writeNotesShort, writeNotesData } from './tools/notesPages.js';
-import { updateLlmsTxt }            from './tools/llmsTxt.js';
+import { blogPages as _blogPages } from './tools/site/blogPages.js';
+import { notesPages as _notesPages, writeNotesShort, writeNotesData } from './tools/site/notesPages.js';
+import { updateLlmsTxt }            from './tools/site/llmsTxt.js';
 import { execSync }                from 'child_process';
 import { Transform }               from 'stream';
 

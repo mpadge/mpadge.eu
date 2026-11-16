@@ -140,14 +140,14 @@ root-absolute path count). Otherwise the page gets a **text card**: no image
 tags and `twitter:card=summary`, so services build the card from the title and
 description. The site-wide image (`mpadge-og.jpg`) is only used for pages that
 are not posts or notes, such as the indexes. The choice is made in
-`tools/ogImage.js`; `textcard: true` in a page's front matter (set by the
+`tools/site/ogImage.js`; `textcard: true` in a page's front matter (set by the
 build) switches off the default image in `src/layouts/default.html`.
 
 ### Pre-commit check
 
 Enable once per clone with `make hooks` (it sets `core.hooksPath` to
 `.githooks`). When anything in `src/data/` is staged, the hook runs
-`tools/check-atproto.mjs` (also `make check`), which fails if a blog post or
+`tools/atproto/check.mjs` (also `make check`), which fails if a blog post or
 note has no record in `src/atproto.json`, if the file contains dry-run
 placeholder DIDs, or if it has unstaged changes. In other words: it stops a
 commit that would ship a page whose `make publish` was forgotten. Commits that

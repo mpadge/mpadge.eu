@@ -11,7 +11,7 @@
 //       Record a specific post explicitly.
 import fs from 'fs';
 import * as yaml from 'js-yaml';
-import { loadNotes } from '../notesPages.js';
+import { loadNotes } from '../site/notesPages.js';
 import { addBlueskyField, addBlueskyFieldToNote, findAnnouncements, recentUnannounced, isoDate } from './announce-helpers.mjs';
 
 const SITE = 'https://mpadge.eu';

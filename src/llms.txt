@@ -12,7 +12,7 @@ All software is open-source. Code is hosted on GitHub, Codeberg, Codefloe, Sourc
 - [Privacy](https://mpadge.eu/privacy/): Privacy policy
 - [RSS feed](https://mpadge.eu/feed.xml): Blog feed
 
-<!-- BEGIN POSTS (generated from src/data/blog.yml by tools/llmsTxt.js) -->
+<!-- BEGIN POSTS (generated from src/data/blog.yml by tools/site/llmsTxt.js) -->
 ## Blog posts
 
 - [Distributed Git](https://mpadge.eu/blog/git-push.html): How to redefine git push for an era of distributed code.

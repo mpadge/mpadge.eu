@@ -3,7 +3,7 @@
 # Post-process a blog post rendered from .qmd to gfm, so that it works as a
 # page of this site. Called by `make render` after `quarto render`. Usage:
 #
-#   Rscript tools/qmd-figures.R <post.md> [<previous-post.md>]
+#   Rscript tools/blog/qmd-figures.R <post.md> [<previous-post.md>]
 #
 # Both arguments are paths to the rendered .md. The second is a copy of the
 # .md taken before rendering, from which the site's YAML front matter is

@@ -2,7 +2,7 @@ import fs   from 'fs';
 import * as yaml from 'js-yaml';
 
 const FILE   = 'src/llms.txt';
-const BEGIN  = '<!-- BEGIN POSTS (generated from src/data/blog.yml by tools/llmsTxt.js) -->';
+const BEGIN  = '<!-- BEGIN POSTS (generated from src/data/blog.yml by tools/site/llmsTxt.js) -->';
 const END    = '<!-- END POSTS -->';
 const SITE   = 'https://mpadge.eu';
 
