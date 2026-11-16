@@ -22,5 +22,8 @@
     "background-process-caching.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/background-process-caching",
     "rcpp-cpp-templates.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/rcpp-cpp-templates",
     "making-this-site.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/making-this-site"
+  },
+  "noteDocuments": {
+    "atproto.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/note-atproto"
   }
 }
