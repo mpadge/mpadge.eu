@@ -12,6 +12,7 @@ date: 2026-07-22
 tags: code, ai
 link: machina-machista.html
 mastodon: https://nerdculture.de/@mpadge/116964467709796223
+bluesky: https://bsky.app/profile/mpadge.eu/post/3mzxcoyy62s27
 links:
   https://codeberg.org/mpadge/gender-ai: |
     '_Gender influence on LLM decision-making outputs_.' A repository on Codeberg containing all code needed to reproduce the figures shown here.

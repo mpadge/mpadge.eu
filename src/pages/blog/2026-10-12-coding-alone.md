@@ -13,6 +13,7 @@ date: 2026-10-12
 tags: code, ai
 link: coding-alone.html
 mastodon: https://nerdculture.de/@mpadge/117428718050554508
+bluesky: https://bsky.app/profile/mpadge.eu/post/3mzxctjadtk27
 links:
     https://npmjs.com: |
       'npm' (Node Package Manager) package distribution system for JavaScript.

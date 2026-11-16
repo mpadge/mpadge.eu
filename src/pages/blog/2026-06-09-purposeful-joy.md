@@ -12,6 +12,7 @@ date: 2026-06-09
 tags: code, ai
 link: purposeful-joy.html
 mastodon: https://nerdculture.de/@mpadge/116720930983640959
+bluesky: https://bsky.app/profile/mpadge.eu/post/3mzxcffrmw227
 links:
   https://www.owenmcgrann.com/p/the-dead-economy-theory: |
     '_The Dead Economy Theory_', blog post by Owen McGrann, 1st May, 2026.
