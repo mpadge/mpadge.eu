@@ -1,7 +1,7 @@
 #!/usr/bin/make
 BLOG=2026-10-04-coding-alone
 
-.PHONY: help start serve install code rss update publish hooks check blog% render build test deploy upgrade tidycheck
+.PHONY: help start serve install code rss update publish bluesky hooks check blog% render build test deploy upgrade tidycheck
 
 help: ## Show this help
 	@printf "Usage:\033[36m make [target]\033[0m\n"
@@ -12,6 +12,7 @@ help: ## Show this help
 	@printf "  3. make publish      atproto records; writes src/atproto.json\n"
 	@printf "     make publish POST=<slug>  also create the PUBLIC Bluesky post (comment thread) for that blog post\n"
 	@printf "     make publish NOTE=<slug>  same, for a note\n"
+	@printf "     make bluesky         instead, if you posted on Bluesky by hand: finds and links your post\n"
 	@printf "  4. git commit        include src/atproto.json and all updated files\n"
 	@printf "  5. git push          codeberg webhook builds and deploys the site\n"
 	@printf "\nManual deploy instead of step 5: 'make build' then 'make deploy'.\n"
@@ -46,6 +47,9 @@ publish: ## Publish atproto records; add POST=<slug> or NOTE=<slug> to also anno
 		echo "Cannot publish atproto records: set ATPROTO_APP_PASSWORD or add atproto/app-password to pass" >&2; \
 		exit 1; \
 	fi
+
+bluesky: ## Link Bluesky posts made by hand (auto-find them, or POST=/NOTE=<slug> BSKY=<post URL>)
+	node tools/atproto/link-bluesky.mjs $(if $(POST),--post=$(POST)) $(if $(NOTE),--note=$(NOTE)) $(if $(BSKY),--url='$(BSKY)')
 
 hooks: ## Enable the versioned git hooks in .githooks (checks atproto records before commit)
 	git config core.hooksPath .githooks

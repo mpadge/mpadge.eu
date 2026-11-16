@@ -16,7 +16,7 @@ import fs from 'fs';
 import * as yaml from 'js-yaml';
 import readline from 'readline/promises';
 import { loadNotes } from '../notesPages.js';
-import { addBlueskyField, addBlueskyFieldToNote, recentUnannounced } from './announce-helpers.mjs';
+import { addBlueskyField, addBlueskyFieldToNote, recentUnannounced, isoDate } from './announce-helpers.mjs';
 
 const SITE = 'https://mpadge.eu';
 const PUB_RKEY = 'mpadge';
@@ -43,13 +43,6 @@ const argValue = (name) => {
 const announceSlug = argValue('announce');      // blog post slug
 const announceNote = argValue('announce-note'); // note slug
 
-const MONTHS = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
-function isoDate(s) { // "10 Nov 26" or "10 Nov 2026"
-  const m = /^(\d{1,2}) (\w{3})\w* (\d{2,4})$/.exec(String(s).trim());
-  if (!m) throw new Error(`Unparseable date: ${s}`);
-  const y = m[3].length === 2 ? 2000 + +m[3] : +m[3];
-  return new Date(Date.UTC(y, MONTHS[m[2]], +m[1])).toISOString();
-}
 const strip = (h) => String(h).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
 
 const posts = yaml.load(fs.readFileSync('src/data/blog.yml', 'utf8')).filter((e) => e && e.link);
