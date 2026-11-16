@@ -14,8 +14,10 @@ import named         from 'vinyl-named';
 import autoprefixer  from 'autoprefixer';
 import imagemin, { gifsicle, mozjpeg, optipng, svgo } from 'gulp-imagemin';
 import { blogPages as _blogPages } from './tools/blogPages.js';
+import { notesPages as _notesPages, writeNotesShort, writeNotesData } from './tools/notesPages.js';
 import { updateLlmsTxt }            from './tools/llmsTxt.js';
 import { execSync }                from 'child_process';
+import { Transform }               from 'stream';
 
 import gulpSass      from 'gulp-sass';
 import * as dartSass from 'sass-embedded';
@@ -57,7 +59,7 @@ console.log(UNCSS_OPTIONS);
 // Build the "dist" folder by running all of the below tasks
 // Sass must be run later so UnCSS can search for used classes in the others assets.
 gulp.task('build',
-  gulp.series(clean, updateLlmsTxt, gulp.parallel(pages, blogPages, javascript, images, copy), sassBuild, cname, atprotoWellKnown)
+  gulp.series(clean, updateLlmsTxt, notesData, gulp.parallel(pages, blogPages, notesPages, javascript, images, copy), sassBuild, cname, atprotoWellKnown)
 );
 
 // Build the site, run the server, and watch for file changes
@@ -65,23 +67,49 @@ gulp.task('default',
   gulp.series('build', server, watch)
 );
 
-// Compressing images is slow, so production builds keep the already-compressed
-// images in dist/assets/img and only process new or changed ones (see images()).
-// A marker file records that the directory holds production-compressed images;
-// dev builds delete it (a full clean), so uncompressed dev copies are never reused.
-// Pass --fresh-images to force recompressing everything.
-const IMG_DIR = path.resolve(PATHS.dist, 'assets', 'img');
-const IMG_MARKER = path.join(IMG_DIR, '.compressed');
+// Compressing images is slow, so production builds write compressed copies
+// next to the originals in src/assets/img as `<name>-compressed.<ext>`, and only
+// process images that are new or changed since their compressed copy was made.
+// The compressed copies are then copied into dist/assets/img with the
+// `-compressed` suffix removed (the originals are not copied). Dev builds skip
+// compression and copy the originals. Pass --fresh-images to recompress everything.
+const IMG_SRC   = 'src/assets/img';
+const IMG_DIST  = path.resolve(PATHS.dist, 'assets', 'img');
+const SUFFIX    = '-compressed';
 const FRESH_IMAGES = !!(yargs(hideBin(process.argv)).argv['fresh-images']);
+
+const isCompressed = (p) => path.parse(p).name.endsWith(SUFFIX);
+const compressedName = (p) => {
+  const { dir, name, ext } = path.parse(p);
+  return path.join(dir, name + SUFFIX + ext);
+};
+const originalName = (p) => {
+  const { dir, name, ext } = path.parse(p);
+  return path.join(dir, name.slice(0, -SUFFIX.length) + ext);
+};
+
+// Object-mode stream that drops directories and any file failing keep(path).
+// (gulp.src's `nodir` is not reliable here; a directory vinyl reaching mapPath
+// would be renamed and created as a junk `<dir>-compressed` directory.)
+function filesOnly(keep = () => true) {
+  return new Transform({
+    objectMode: true,
+    transform(file, _enc, cb) { cb(null, file.isDirectory() || !keep(file.path) ? null : file); }
+  });
+}
+
+// Object-mode stream applying fn to each vinyl file's path
+function mapPath(fn) {
+  return new Transform({
+    objectMode: true,
+    transform(file, _enc, cb) { file.path = fn(file.path); cb(null, file); }
+  });
+}
 
 // Delete the "dist" folder
 // This happens every time a build starts
 function clean() {
-  const keepImages = PRODUCTION && !FRESH_IMAGES && fs.existsSync(IMG_MARKER);
-  return rimraf(PATHS.dist, {
-    // Entries for which filter returns false (and their parents) are kept
-    filter: (p) => !(keepImages && (p === IMG_DIR || p.startsWith(IMG_DIR + path.sep)))
-  });
+  return rimraf(PATHS.dist);
 }
 
 // Copy files out of the assets folder
@@ -141,6 +169,8 @@ function pages() {
 }
 
 function blogPages() { return _blogPages(PATHS); }
+function notesData() { return Promise.all([writeNotesShort(), writeNotesData()]); }
+function notesPages() { return _notesPages(PATHS); }
 
 // Load updated HTML templates and partials into Panini
 function resetPages(done) {
@@ -206,30 +236,52 @@ function javascript() {
     .pipe(gulp.dest(PATHS.dist + '/assets/js'));
 }
 
-// Copy images to the "dist" folder
-// In production, the images are compressed, and only those that are new or
-// changed since the last production build are processed
-function images() {
-  return gulp.src('src/assets/img/**/*', { encoding: false })
-    .pipe($.newer(IMG_DIR))
-    .pipe($.if(PRODUCTION, imagemin([
-      gifsicle({interlaced: true}),
-      mozjpeg({quality: 85, progressive: true}),
-      optipng({optimizationLevel: 5}),
-      svgo({
-        // svgo 3: removeViewBox is on by default in preset-default
-        plugins: [
-          {name: 'preset-default', params: {overrides: {cleanupIds: false}}}
-        ]
-      })
-    ])))
-    .pipe(gulp.dest(IMG_DIR))
-    .on('finish', () => {
-      if (PRODUCTION) {
-        fs.mkdirSync(IMG_DIR, { recursive: true });
-        fs.writeFileSync(IMG_MARKER, '');
-      }
-    });
+// Compress images that are new or changed into `-compressed` siblings.
+// Compressed copies whose original has been deleted are removed.
+async function compressImages() {
+  walk(IMG_SRC).filter(isCompressed).forEach((f) => {
+    if (FRESH_IMAGES || !fs.existsSync(originalName(f))) fs.rmSync(f);
+  });
+  await new Promise((resolve, reject) => {
+    gulp.src(IMG_SRC + '/**/*', { encoding: false })
+      .pipe(filesOnly((p) => !isCompressed(p)))
+      .pipe($.newer({ dest: IMG_SRC, map: (rel) => compressedName(rel) }))
+      .pipe(imagemin([
+        gifsicle({interlaced: true}),
+        mozjpeg({quality: 85, progressive: true}),
+        optipng({optimizationLevel: 5}),
+        svgo({
+          // svgo 3: removeViewBox is on by default in preset-default
+          plugins: [
+            {name: 'preset-default', params: {overrides: {cleanupIds: false}}}
+          ]
+        })
+      ]))
+      .pipe(mapPath(compressedName))
+      .pipe(gulp.dest(IMG_SRC))
+      .on('finish', resolve)
+      .on('error', reject);
+  });
+}
+
+function walk(dir) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const p = path.join(dir, e.name);
+    return e.isDirectory() ? walk(p) : [p];
+  });
+}
+
+// Copy images to the "dist" folder: the compressed copies (suffix removed) in
+// production, the originals otherwise
+function copyImages() {
+  return gulp.src(IMG_SRC + '/**/*', { encoding: false })
+    .pipe(filesOnly(PRODUCTION ? isCompressed : (p) => !isCompressed(p)))
+    .pipe(PRODUCTION ? mapPath(originalName) : new Transform({ objectMode: true, transform(f, _e, cb) { cb(null, f); } }))
+    .pipe(gulp.dest(IMG_DIST));
+}
+
+function images(done) {
+  return gulp.series(...(PRODUCTION ? [compressImages, copyImages] : [copyImages]))(done);
 }
 
 // Start a server with BrowserSync to preview the site in
@@ -250,6 +302,13 @@ function watch() {
   gulp.watch(PATHS.assets, copy);
   gulp.watch('src/pages/**/*.html').on('all', gulp.series(pages, browser.reload));
   gulp.watch('src/pages/blog/*.md').on('all', gulp.series(blogPages, browser.reload));
+  // Notes also feed the home page via src/data/notesshort.yml and the notes index
+  // via src/data/notes.yml, so regenerate them,
+  // refresh Panini's cached data, then rebuild both the notes and the home page.
+  gulp.watch('src/pages/notes/*.md').on('all',
+    gulp.series(notesData, resetPages, notesPages, pages, browser.reload));
+  gulp.watch('src/atproto.json').on('all',
+    gulp.series(resetPages, blogPages, notesPages, browser.reload));
   gulp.watch('src/{layouts,partials}/**/*.html').on('all', gulp.series(resetPages, pages, browser.reload));
   gulp.watch('src/data/**/*.{js,json,yml}').on('all', gulp.series(resetPages, pages, browser.reload));
   gulp.watch('src/helpers/**/*.js').on('all', gulp.series(resetPages, pages, browser.reload));

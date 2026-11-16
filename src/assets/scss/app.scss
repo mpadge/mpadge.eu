@@ -3,7 +3,7 @@
 @import 'settings';
 @import 'foundation';
 @import 'motion-ui';
-@import 'global/mastodon-comments';
+@import 'global/comments';
 @import 'global/dropcaps';
 
 //@import url('https://fontlibrary.org/face/tex-gyre-adventor');
@@ -792,6 +792,34 @@ code, pre {
     }
 }
 
+// Tags on blog and notes index entries: same look and size as the (inactive)
+// filter buttons above (.tag-filter-btn), but not clickable.
+.entry-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em;
+    margin-bottom: 0.5rem;
+}
+
+.blog-entry .entry-tags {
+    justify-content: center;
+}
+
+.entry-tag {
+    border: 1px solid #888888;
+    border-radius: 3px;
+    padding: 0.25em 0.75em;
+    font-family: inherit;
+    font-size: 0.82em;
+    line-height: 1.15;
+    color: #444444;
+}
+
+[data-theme="dark"] .entry-tag {
+    border-color: #666666;
+    color: #cccccc;
+}
+
 // Link summary popovers
 #link-popover {
     display: none;
@@ -907,3 +935,24 @@ code, pre {
     }
 }
 
+
+// Footnotes on notes pages (endnotes)
+sup.footnote-ref {
+    font-size: 1em;
+    font-weight: bold;
+    line-height: 0;
+    padding: 0 2px;
+
+    a {
+        color: #5588aa;
+        text-decoration: none;
+    }
+}
+
+[data-theme="dark"] sup.footnote-ref a {
+    color: #88bbdd;
+}
+
+ol.footnotes {
+    font-size: 0.95em;
+}

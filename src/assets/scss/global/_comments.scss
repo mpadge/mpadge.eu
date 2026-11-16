@@ -1,24 +1,24 @@
-#mastodon-comments-section {
+#comments-section {
     margin-top: 2.5rem;
     padding-top: 1.5rem;
     border-top: 1px solid #e0e0e0;
 }
 
-[data-theme="dark"] #mastodon-comments-section {
+[data-theme="dark"] #comments-section {
     border-top-color: #333333;
 }
 
-.mastodon-comments-heading {
+.comments-heading {
     font-size: 1.1rem;
     color: #444444;
     margin-bottom: 1.25rem;
 }
 
-[data-theme="dark"] .mastodon-comments-heading {
+[data-theme="dark"] .comments-heading {
     color: #cccccc;
 }
 
-.mastodon-no-comments {
+.comments-none {
     color: #888888;
     font-size: 0.9rem;
 
@@ -27,17 +27,17 @@
     }
 }
 
-[data-theme="dark"] .mastodon-no-comments {
+[data-theme="dark"] .comments-none {
     color: #aaaaaa;
 }
 
-.mastodon-comments-list {
+.comments-list {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.mastodon-comment {
+.comment-comment {
     margin-bottom: 1.25rem;
     padding: 0.85rem 1rem;
     border: 1px solid #e6e6e6;
@@ -49,28 +49,28 @@
     &[data-depth="4"] { margin-left: 4rem; }
 }
 
-[data-theme="dark"] .mastodon-comment {
+[data-theme="dark"] .comment-comment {
     border-color: #333333;
     background: #222222;
 }
 
-.mastodon-comment-header {
+.comment-comment-header {
     display: flex;
     align-items: center;
     gap: 0.6rem;
     margin-bottom: 0.6rem;
 }
 
-.mastodon-avatar-link {
+.comment-avatar-link {
     flex-shrink: 0;
 }
 
-.mastodon-avatar {
+.comment-avatar {
     border-radius: 50%;
     display: block;
 }
 
-.mastodon-comment-meta {
+.comment-comment-meta {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -78,7 +78,7 @@
     min-width: 0;
 }
 
-.mastodon-display-name {
+.comment-display-name {
     font-weight: bold;
     font-size: 0.9rem;
     color: #222222;
@@ -92,20 +92,20 @@
     }
 }
 
-[data-theme="dark"] .mastodon-display-name {
+[data-theme="dark"] .comment-display-name {
     color: #e0e0e0;
 }
 
-.mastodon-handle {
+.comment-handle {
     font-size: 0.8rem;
     color: #888888;
 }
 
-[data-theme="dark"] .mastodon-handle {
+[data-theme="dark"] .comment-handle {
     color: #aaaaaa;
 }
 
-.mastodon-timestamp {
+.comment-timestamp {
     font-size: 0.8rem;
     color: #888888;
     text-decoration: none;
@@ -117,11 +117,11 @@
     }
 }
 
-[data-theme="dark"] .mastodon-timestamp {
+[data-theme="dark"] .comment-timestamp {
     color: #aaaaaa;
 }
 
-.mastodon-comment-content {
+.comment-comment-content {
     font-size: 0.9rem;
     color: #333333;
     line-height: 1.55;
@@ -139,7 +139,7 @@
     }
 }
 
-[data-theme="dark"] .mastodon-comment-content {
+[data-theme="dark"] .comment-comment-content {
     color: #cccccc;
 
     a {
@@ -147,7 +147,7 @@
     }
 }
 
-.mastodon-reply-link {
+.comments-reply-links {
     margin-top: 1rem;
     font-size: 0.85rem;
 
@@ -156,6 +156,24 @@
     }
 }
 
-[data-theme="dark"] .mastodon-reply-link a {
+[data-theme="dark"] .comments-reply-links a {
     color: #7cb8e8;
+}
+
+.comment-source {
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    line-height: 1;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.comment-source-mastodon { background: #6364ff; }
+.comment-source-bluesky  { background: #1185fe; }
+
+.comment-text-bluesky {
+    // Bluesky text is a single paragraph with <br> line breaks
+    overflow-wrap: anywhere;
 }

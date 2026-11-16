@@ -29,6 +29,11 @@ title: blog
             <p>{{{ description }}}</p>
         </div>
     </a>
+    {{#if tags}}
+    <div style="text-align: center;">
+        <div class="entry-tags">{{#each (tagList tags)}}<span class="entry-tag">{{ this }}</span>{{/each}}</div>
+    </div>
+    {{/if}}
     {{> blog_footer}}
     {{/each}}
     {{> sections_footer}}

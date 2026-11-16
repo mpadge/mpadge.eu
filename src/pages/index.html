@@ -31,6 +31,33 @@
         {{> sections_footer}}
     </section>
 
+    <a href="{{root}}notes" style="color:#262626;">
+        <div class="grid-y grid-margin y">
+            <div class="cell"><h1 style="text-align: center;">notes</h1></div>
+            <div class="cell"><h4 style="text-align: center;">Short Notes</h4></div>
+        </div>
+    </a>
+
+    <section id="notes">
+        {{> sections_header}}
+        {{#each notesshort}}
+        {{> blog_header}}
+        <a href="{{ link }}" style="color:#262626;">
+            <div style="text-align: center;">
+                <h3>{{ title }}</h3>
+            </div>
+            <div style="text-align: center;">
+                <p style="color:#888888;">{{ created }}</p>
+            </div>
+            <div style="text-align: center;">
+                <p>{{ description }}</p>
+            </div>
+        </a>
+        {{> blog_footer}}
+        {{/each}}
+        {{> sections_footer}}
+    </section>
+
     <a href="{{root}}code" style="color:#262626;">
         <div class="grid-y grid-margin y">
             <div class="cell"><h1 style="text-align: center;">code</h1></div>

@@ -264,12 +264,12 @@ $(document).foundation();
     setTimeout(updateProgress, 300);
 }());
 
-// Tag filter for blog index
+// Tag filter for blog index and notes index
 (function () {
     var filterBar = document.getElementById('tag-filter');
     if (!filterBar) return;
 
-    var entries = Array.from(document.querySelectorAll('.blog-entry'));
+    var entries = Array.from(document.querySelectorAll('.blog-entry, .note-entry'));
     if (!entries.length) return;
 
     var tagSet = {};
