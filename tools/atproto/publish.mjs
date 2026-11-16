@@ -9,6 +9,10 @@
 //   ... --publish --announce=<slug>        # also create a PUBLIC Bluesky post for that
 //   ... --publish --announce-note=<slug>   # blog post / note (asks for confirmation;
 //                                          # skipped if it already has a `bluesky:` link)
+//   ... --text='...' (or env ANNOUNCE_TEXT)  # post this text instead of "title + description"
+//                                          # (with exactly one of the two --announce options)
+// The post text is "<title>\n\n<description>" and must fit Bluesky's 300-character
+// limit; this is checked before anything is written to the PDS.
 //
 // Uses putRecord with deterministic rkeys (publication: "mpadge"; documents:
 // post slug), so re-running is idempotent: it updates records in place.
@@ -42,10 +46,12 @@ const argValue = (name) => {
 };
 const announceSlug = argValue('announce');      // blog post slug
 const announceNote = argValue('announce-note'); // note slug
+const textOverride = argValue('text') || process.env.ANNOUNCE_TEXT || ''; // ANNOUNCE_TEXT is set by `make publish TEXT=...`
 
 const strip = (h) => String(h).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
 
 const posts = yaml.load(fs.readFileSync('src/data/blog.yml', 'utf8')).filter((e) => e && e.link);
+const notes = loadNotes();
 
 function documentRecord(post, pubUri) {
   const slug = post.link.replace(/\.html$/, '');
@@ -70,6 +76,50 @@ async function xrpc(method, path, body, token) {
   });
   if (!res.ok) throw new Error(`${path}: ${res.status} ${await res.text()}`);
   return res.json();
+}
+
+// ---- Bluesky post text: validated up front, before anything is written ----
+const POST_LIMIT = 300; // graphemes
+const graphemes = (str) => [...new Intl.Segmenter('en', { granularity: 'grapheme' }).segment(str)].length;
+
+function announcementText(what, title, description, override) {
+  const text = override || (description ? `${title}\n\n${description}` : title);
+  const n = graphemes(text);
+  if (n > POST_LIMIT) {
+    throw new Error(`Bluesky post for ${what} would be ${n} characters, over the ${POST_LIMIT} limit ` +
+      (override ? '(the TEXT you gave).' : `(title ${graphemes(title)} + description ${graphemes(description)} + 2 for the blank line). `) +
+      (override ? '' : 'Shorten the description, or give your own text with TEXT="..." (make publish ... TEXT="...").'));
+  }
+  return text;
+}
+
+// One plan per requested announcement; announceStep() carries them out.
+const plans = [];
+if (textOverride && !(!announceSlug !== !announceNote)) {
+  throw new Error('TEXT needs exactly one of POST=<slug> or NOTE=<slug>');
+}
+if (announceSlug) {
+  const post = posts.find((p) => p.link === `${announceSlug}.html`);
+  if (!post) throw new Error(`No blog post with slug "${announceSlug}"`);
+  const { rec } = documentRecord(post, '');
+  const what = `blog post "${announceSlug}"`;
+  plans.push({
+    what, existing: post.bluesky, title: rec.title, description: rec.description,
+    text: post.bluesky ? '' : announcementText(what, rec.title, rec.description, textOverride),
+    uri: `${SITE}/blog/${post.link}`,
+    save: (url) => `${addBlueskyField(announceSlug, post.link, url)} and src/data/blog.yml`,
+  });
+}
+if (announceNote) {
+  const note = notes.find((n) => n.slug === announceNote);
+  if (!note) throw new Error(`No note with slug "${announceNote}"`);
+  const what = `note "${announceNote}"`;
+  plans.push({
+    what, existing: note.bluesky, title: note.title, description: note.description,
+    text: note.bluesky ? '' : announcementText(what, note.title, note.description, textOverride),
+    uri: `${SITE}/notes/${note.slug}.html`,
+    save: (url) => addBlueskyFieldToNote(announceNote, url),
+  });
 }
 
 let did = 'did:plc:DRYRUN';
@@ -101,7 +151,6 @@ for (const post of posts) {
 // Notes: documents of the notes publication. rkeys are prefixed so they can
 // never collide with blog post slugs in the same collection.
 const noteDocuments = {};
-const notes = loadNotes();
 for (const n of notes) {
   const rec = {
     $type: 'site.standard.document',
@@ -121,6 +170,10 @@ if (doPublish) {
   await announceStep();
 } else {
   console.log('\nDry run only. Re-run with --publish to create the records.');
+  for (const plan of plans) {
+    console.log(plan.existing ? `\n${plan.what} already has a Bluesky post; would not announce.`
+      : `\nWould offer to post for ${plan.what}:\n---\n${plan.text}\n---\n  (${graphemes(plan.text)}/${POST_LIMIT} characters; link card: ${plan.uri})`);
+  }
 }
 
 // ---- Bluesky announcements (public posts that serve as comment threads) ----
@@ -133,14 +186,14 @@ async function confirm(question) {
   return answer.trim().toLowerCase() === 'y';
 }
 
-// Create a Bluesky post (text = title, plus a link card) and save its URL via save().
-async function announceOne({ what, existing, title, description, uri, save }) {
+// Create a Bluesky post (text validated earlier, plus a link card) and save its URL via save().
+async function announceOne({ what, existing, title, description, text, uri, save }) {
   if (existing) {
     console.log(`\n${what} already has a Bluesky post (${existing}); nothing to announce.`);
     return;
   }
   const desc = description.length > 280 ? `${description.slice(0, 277)}...` : description;
-  console.log(`\nAbout to create a PUBLIC Bluesky post as ${identifier} for ${what}:\n  text: ${title}\n  link card: ${uri}`);
+  console.log(`\nAbout to create a PUBLIC Bluesky post as ${identifier} for ${what}:\n---\n${text}\n---\n  link card: ${uri}`);
   if (!(await confirm('Post it? [y/N] '))) { console.log('Not announced.'); return; }
 
   const r = await xrpc('POST', 'com.atproto.repo.createRecord', {
@@ -148,7 +201,7 @@ async function announceOne({ what, existing, title, description, uri, save }) {
     collection: 'app.bsky.feed.post',
     record: {
       $type: 'app.bsky.feed.post',
-      text: title,
+      text,
       langs: ['en'],
       createdAt: new Date().toISOString(),
       embed: { $type: 'app.bsky.embed.external', external: { uri, title, description: desc } },
@@ -176,23 +229,5 @@ async function announceStep() {
     return;
   }
 
-  if (announceSlug) {
-    const post = posts.find((p) => p.link === `${announceSlug}.html`);
-    if (!post) throw new Error(`No blog post with slug "${announceSlug}"`);
-    const { rec } = documentRecord(post, pubUri);
-    await announceOne({
-      what: `blog post "${announceSlug}"`, existing: post.bluesky, title: rec.title,
-      description: rec.description, uri: `${SITE}/blog/${post.link}`,
-      save: (url) => `${addBlueskyField(announceSlug, post.link, url)} and src/data/blog.yml`,
-    });
-  }
-  if (announceNote) {
-    const note = notes.find((n) => n.slug === announceNote);
-    if (!note) throw new Error(`No note with slug "${announceNote}"`);
-    await announceOne({
-      what: `note "${announceNote}"`, existing: note.bluesky, title: note.title,
-      description: note.description, uri: `${SITE}/notes/${note.slug}.html`,
-      save: (url) => addBlueskyFieldToNote(announceNote, url),
-    });
-  }
+  for (const plan of plans) await announceOne(plan);
 }

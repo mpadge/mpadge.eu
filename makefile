@@ -11,7 +11,8 @@ help: ## Show this help
 	@printf "  2. make update       local: blog and notes data, RSS, llms.txt\n"
 	@printf "  3. make publish      atproto records; writes src/atproto.json\n"
 	@printf "     make publish POST=<slug>  also create the PUBLIC Bluesky post (comment thread) for that blog post\n"
-	@printf "     make publish NOTE=<slug>  same, for a note\n"
+	@printf "     make publish NOTE=<slug>  same, for a note (post text = title + description, max 300 characters;\n"
+	@printf "                               add TEXT=\"...\" to write your own text instead)\n"
 	@printf "     make bluesky         instead, if you posted on Bluesky by hand: finds and links your post\n"
 	@printf "  4. git commit        include src/atproto.json and all updated files\n"
 	@printf "  5. git push          codeberg webhook builds and deploys the site\n"
@@ -39,7 +40,10 @@ update: ## Update blog index, notes data, RSS XML feed, and llms.txt (local only
 	node --input-type=module -e 'import { writeNotesShort, writeNotesData } from "./tools/notesPages.js"; await writeNotesShort (); console.log ("✔ Updated src/data/notesshort.yml"); await writeNotesData (); console.log ("✔ Updated src/data/notes.yml")'
 	node --input-type=module -e 'import { updateLlmsTxt } from "./tools/llmsTxt.js"; await updateLlmsTxt ()'
 
-publish: ## Publish atproto records; add POST=<slug> or NOTE=<slug> to also announce on Bluesky
+# TEXT=... reaches publish.mjs through the environment, so quotes in it are safe
+export ANNOUNCE_TEXT := $(TEXT)
+
+publish: ## Publish atproto records; add POST=<slug> or NOTE=<slug> (and optional TEXT=...) to also announce on Bluesky
 	@export ATPROTO_APP_PASSWORD="$${ATPROTO_APP_PASSWORD:-$$(pass show atproto/app-password 2>/dev/null | head -n1)}"; \
 	if [ -n "$$ATPROTO_APP_PASSWORD" ]; then \
 		ATPROTO_IDENTIFIER=mpadge.eu node tools/atproto/publish.mjs --publish $(if $(POST),--announce=$(POST)) $(if $(NOTE),--announce-note=$(NOTE)); \
