@@ -1,4 +1,8 @@
 #!/bin/bash
 # Enable with: make hooks
 # Refuse to commit if atproto records are out of step with the site content.
-exec node tools/check-atproto.mjs
+# Only runs when something in src/data/ is staged (blog.yml, notesshort.yml, ...),
+# so unrelated commits are never blocked.
+if git diff --cached --name-only | grep -q '^src/data/'; then
+    exec node tools/check-atproto.mjs
+fi
