@@ -88,6 +88,16 @@ const originalName = (p) => {
   return path.join(dir, name.slice(0, -SUFFIX.length) + ext);
 };
 
+// Object-mode stream that drops directories and any file failing keep(path).
+// (gulp.src's `nodir` is not reliable here; a directory vinyl reaching mapPath
+// would be renamed and created as a junk `<dir>-compressed` directory.)
+function filesOnly(keep = () => true) {
+  return new Transform({
+    objectMode: true,
+    transform(file, _enc, cb) { cb(null, file.isDirectory() || !keep(file.path) ? null : file); }
+  });
+}
+
 // Object-mode stream applying fn to each vinyl file's path
 function mapPath(fn) {
   return new Transform({
@@ -233,7 +243,8 @@ async function compressImages() {
     if (FRESH_IMAGES || !fs.existsSync(originalName(f))) fs.rmSync(f);
   });
   await new Promise((resolve, reject) => {
-    gulp.src(IMG_SRC + '/**/*', { encoding: false, nodir: true, ignore: '**/*' + SUFFIX + '.*' })
+    gulp.src(IMG_SRC + '/**/*', { encoding: false })
+      .pipe(filesOnly((p) => !isCompressed(p)))
       .pipe($.newer({ dest: IMG_SRC, map: (rel) => compressedName(rel) }))
       .pipe(imagemin([
         gifsicle({interlaced: true}),
@@ -263,18 +274,10 @@ function walk(dir) {
 // Copy images to the "dist" folder: the compressed copies (suffix removed) in
 // production, the originals otherwise
 function copyImages() {
-  const stream = gulp.src(IMG_SRC + '/**/*', { encoding: false, nodir: true });
-  const filtered = PRODUCTION
-    ? stream.pipe(new Transform({
-        objectMode: true,
-        // drop originals; their compressed copy takes the original name
-        transform(file, _enc, cb) { cb(null, isCompressed(file.path) ? file : null); }
-      })).pipe(mapPath(originalName))
-    : stream.pipe(new Transform({
-        objectMode: true,
-        transform(file, _enc, cb) { cb(null, isCompressed(file.path) ? null : file); }
-      }));
-  return filtered.pipe(gulp.dest(IMG_DIST));
+  return gulp.src(IMG_SRC + '/**/*', { encoding: false })
+    .pipe(filesOnly(PRODUCTION ? isCompressed : (p) => !isCompressed(p)))
+    .pipe(PRODUCTION ? mapPath(originalName) : new Transform({ objectMode: true, transform(f, _e, cb) { cb(null, f); } }))
+    .pipe(gulp.dest(IMG_DIST));
 }
 
 function images(done) {
