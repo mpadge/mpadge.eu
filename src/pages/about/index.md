@@ -23,6 +23,8 @@ that, as you can read about in [my blog pages]({{root}}/blog).
 
 Email: mark.padgham\<at\>email.com
 
+Signal: [mpadge.93](https://signal.me/#eu/K75l3C4btAe5vWzLXE_pm3fK028dsRwfMpze3V0ObD5Lr8xIWs5Ld74YwWACUjxM)
+
 </section>
 
 ---
