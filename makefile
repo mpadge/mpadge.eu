@@ -10,6 +10,7 @@ help: ## Show this help
 	@printf "  1. make blog         render the post (or 'make render' for BLOG)\n"
 	@printf "  2. make update       local: blog index, RSS, llms.txt\n"
 	@printf "  3. make publish      atproto records; writes src/atproto.json\n"
+	@printf "     make publish POST=<slug>  also create the PUBLIC Bluesky post (comment thread) for that blog post\n"
 	@printf "  4. git commit        include src/atproto.json and all updated files\n"
 	@printf "  5. git push          codeberg webhook builds and deploys the site\n"
 	@printf "\nManual deploy instead of step 5: 'make build' then 'make deploy'.\n"
@@ -35,10 +36,10 @@ update: ## Update blog index, RSS XML feed, and llms.txt (local only)
 	Rscript -e 'source("tools/blog/update_main.R")'
 	node --input-type=module -e 'import { updateLlmsTxt } from "./tools/llmsTxt.js"; await updateLlmsTxt ()'
 
-publish: ## Publish atproto records (app password from env or `pass`)
+publish: ## Publish atproto records; add POST=<slug> to also announce that post on Bluesky
 	@export ATPROTO_APP_PASSWORD="$${ATPROTO_APP_PASSWORD:-$$(pass show atproto/app-password 2>/dev/null | head -n1)}"; \
 	if [ -n "$$ATPROTO_APP_PASSWORD" ]; then \
-		ATPROTO_IDENTIFIER=mpadge.eu node tools/atproto/publish.mjs --publish; \
+		ATPROTO_IDENTIFIER=mpadge.eu node tools/atproto/publish.mjs --publish $(if $(POST),--announce=$(POST)); \
 	else \
 		echo "Cannot publish atproto records: set ATPROTO_APP_PASSWORD or add atproto/app-password to pass" >&2; \
 		exit 1; \

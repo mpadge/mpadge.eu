@@ -6,12 +6,17 @@
 //   (PDS defaults to https://tngl.sh; override with ATPROTO_PDS)
 //   ATPROTO_IDENTIFIER=mpadge.eu ATPROTO_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx \
 //     node tools/atproto/publish.mjs --publish
+//   ... --publish --announce=<slug>   # also create a PUBLIC Bluesky post for that blog
+//                                     # post (asks for confirmation; skipped if the
+//                                     # post already has a `bluesky:` link)
 //
 // Uses putRecord with deterministic rkeys (publication: "mpadge"; documents:
 // post slug), so re-running is idempotent: it updates records in place.
 import fs from 'fs';
 import * as yaml from 'js-yaml';
+import readline from 'readline/promises';
 import { loadNotes } from '../notesPages.js';
+import { addBlueskyField, recentUnannounced } from './announce-helpers.mjs';
 
 const SITE = 'https://mpadge.eu';
 const PUB_RKEY = 'mpadge';
@@ -31,6 +36,8 @@ const NOTES_PUB = {
 };
 const PDS = process.env.ATPROTO_PDS || 'https://tngl.sh';
 const doPublish = process.argv.includes('--publish');
+const announceArg = process.argv.find((a) => a.startsWith('--announce='));
+const announceSlug = announceArg ? announceArg.slice('--announce='.length) : '';
 
 const MONTHS = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
 function isoDate(s) { // "10 Nov 26" or "10 Nov 2026"
@@ -70,8 +77,8 @@ async function xrpc(method, path, body, token) {
 
 let did = 'did:plc:DRYRUN';
 let token;
+const { ATPROTO_IDENTIFIER: identifier, ATPROTO_APP_PASSWORD: password } = process.env;
 if (doPublish) {
-  const { ATPROTO_IDENTIFIER: identifier, ATPROTO_APP_PASSWORD: password } = process.env;
   if (!identifier || !password) throw new Error('Set ATPROTO_IDENTIFIER and ATPROTO_APP_PASSWORD');
   const s = await xrpc('POST', 'com.atproto.server.createSession', { identifier, password });
   did = s.did; token = s.accessJwt;
@@ -113,6 +120,60 @@ for (const n of loadNotes()) {
 if (doPublish) {
   fs.writeFileSync('src/atproto.json', JSON.stringify({ publication: pubUri, publications: { notes: notesUri }, documents, noteDocuments }, null, 2) + '\n');
   console.log('Wrote src/atproto.json');
+  await announceStep();
 } else {
   console.log('\nDry run only. Re-run with --publish to create the records.');
+}
+
+// ---- Bluesky announcements (public posts that serve as comment threads) ----
+
+async function confirm(question) {
+  if (!process.stdin.isTTY) throw new Error('Announcing needs an interactive terminal for confirmation');
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  const answer = await rl.question(question);
+  rl.close();
+  return answer.trim().toLowerCase() === 'y';
+}
+
+async function announceStep() {
+  if (!announceSlug) {
+    const pending = recentUnannounced(posts, (p) => new Date(isoDate(p)));
+    console.log('\nNo Bluesky post created: this run only published the atproto records.');
+    if (pending.length) {
+      console.log('Recent posts with no `bluesky:` link (no Bluesky comments yet):');
+      for (const p of pending) console.log(`  ${p.link.replace(/\.html$/, '')}  (${p.created})`);
+      console.log('To announce one on Bluesky: make publish POST=<slug>');
+      console.log('That creates a PUBLIC post on your account, asks for confirmation, and is skipped for posts that already have a link.');
+    } else {
+      console.log('All posts from the last 30 days already have a `bluesky:` link; nothing to announce.');
+    }
+    return;
+  }
+
+  const post = posts.find((p) => p.link === `${announceSlug}.html`);
+  if (!post) throw new Error(`No blog post with slug "${announceSlug}"`);
+  if (post.bluesky) {
+    console.log(`\n"${announceSlug}" already has a Bluesky post (${post.bluesky}); nothing to announce.`);
+    return;
+  }
+  const { rec } = documentRecord(post, pubUri);
+  const uri = `${SITE}/blog/${post.link}`;
+  const description = rec.description.length > 280 ? `${rec.description.slice(0, 277)}...` : rec.description;
+  console.log(`\nAbout to create a PUBLIC Bluesky post as ${identifier}:\n  text: ${rec.title}\n  link card: ${uri}`);
+  if (!(await confirm('Post it? [y/N] '))) { console.log('Not announced.'); return; }
+
+  const r = await xrpc('POST', 'com.atproto.repo.createRecord', {
+    repo: did,
+    collection: 'app.bsky.feed.post',
+    record: {
+      $type: 'app.bsky.feed.post',
+      text: rec.title,
+      langs: ['en'],
+      createdAt: new Date().toISOString(),
+      embed: { $type: 'app.bsky.embed.external', external: { uri, title: rec.title, description } },
+    },
+  }, token);
+  const url = `https://bsky.app/profile/${identifier}/post/${r.uri.split('/').pop()}`;
+  const mdFile = addBlueskyField(announceSlug, post.link, url);
+  console.log(`Posted ${url}\nAdded bluesky: field to ${mdFile} and src/data/blog.yml; commit both.`);
 }
