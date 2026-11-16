@@ -1,7 +1,7 @@
 #!/usr/bin/make
 BLOG=2026-10-04-coding-alone
 
-.PHONY: help start serve install code blog% render build test tidycheck
+.PHONY: help start serve install code rss update publish blog% render build test deploy upgrade tidycheck
 
 help: ## Show this help
 	@printf "Usage:\033[36m make [target]\033[0m\n"
@@ -23,13 +23,17 @@ code: ## Update the 'code' section from current r-univ pkgs list
 rss: ## Update RSS XML feed
 	Rscript 'tools/blog/make_rss.R'
 
-update: ## Update blog index, RSS XML feed, llms.txt, and atproto records
+update: ## Update blog index, RSS XML feed, and llms.txt (local only)
 	Rscript -e 'source("tools/blog/update_main.R")'
 	node --input-type=module -e 'import { updateLlmsTxt } from "./tools/llmsTxt.js"; await updateLlmsTxt ()'
-	@if [ -n "$$ATPROTO_APP_PASSWORD" ]; then \
-		ATPROTO_IDENTIFIER=$${ATPROTO_IDENTIFIER:-mpadge.eu} node tools/atproto/publish.mjs --publish; \
+
+publish: ## Publish atproto records (app password from env or `pass`)
+	@export ATPROTO_APP_PASSWORD="$${ATPROTO_APP_PASSWORD:-$$(pass show atproto/app-password 2>/dev/null | head -n1)}"; \
+	if [ -n "$$ATPROTO_APP_PASSWORD" ]; then \
+		ATPROTO_IDENTIFIER=mpadge.eu node tools/atproto/publish.mjs --publish; \
 	else \
-		echo "Skipping atproto records: set ATPROTO_APP_PASSWORD to publish them"; \
+		echo "Cannot publish atproto records: set ATPROTO_APP_PASSWORD or add atproto/app-password to pass" >&2; \
+		exit 1; \
 	fi
 
 blog: ## Render latest blog post (or hard-code value in 'tools/blog/update_one.R')
