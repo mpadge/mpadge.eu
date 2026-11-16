@@ -155,7 +155,9 @@ for (const n of notes) {
   const rec = {
     $type: 'site.standard.document',
     site: notesUri,
-    path: `/notes/${n.slug}.html`,
+    // Relative to the notes publication url (https://mpadge.eu/notes), so not
+    // "/notes/..." (readers join publication url + path).
+    path: `/${n.slug}.html`,
     title: n.title,
     publishedAt: new Date(`${n.date}T00:00:00Z`).toISOString(),
   };
