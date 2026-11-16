@@ -19,7 +19,8 @@ export function parseNote(file, raw) {
   const slug = path.basename(file, '.md').replace(/^\d{4}-\d{2}-\d{2}-/, '');
   const date = fm.date instanceof Date ? fm.date.toISOString().slice(0, 10) : String(fm.date || '');
   return { slug, date, title: fm.title || slug, description: fm.description || '',
-           tags: fm.tags ? String(fm.tags) : '', body: m ? m[2] : raw };
+           tags: fm.tags ? String(fm.tags) : '', body: m ? m[2] : raw,
+           mastodon: fm.mastodon ? String(fm.mastodon) : '', bluesky: fm.bluesky ? String(fm.bluesky) : '' };
 }
 
 export function loadNotes() {
@@ -91,7 +92,16 @@ function notePage(n, atprotoUri) {
   return frontMatter(n.title, n.description, `${SITE}/notes/${n.slug}.html`, atprotoUri) +
     WRAP_OPEN +
     `<p><a href="{{root}}notes">&larr; notes</a></p>\n<h1>${esc(n.title)}</h1>\n` +
-    `<p class="blog-date">${n.date}</p>\n` + hbs(html) + WRAP_CLOSE;
+    `<p class="blog-date">${n.date}</p>\n` + hbs(html) + commentsHtml(n) + WRAP_CLOSE;
+}
+
+// Replies from Mastodon and/or Bluesky, rendered client-side by comments.js.
+// Only included when the note's front matter has `mastodon:` and/or `bluesky:`.
+function commentsHtml(n) {
+  if (!n.mastodon && !n.bluesky) return '';
+  return `\n<div id="comments" data-mastodon-url="${esc(n.mastodon)}" data-bluesky-url="${esc(n.bluesky)}"></div>\n` +
+    '<script defer src="/assets/js/comments.js"></script>\n' +
+    '<div id="comments-section">\n<noscript>Enable JavaScript to load comments.</noscript>\n</div>\n';
 }
 
 function indexPage(notes) {

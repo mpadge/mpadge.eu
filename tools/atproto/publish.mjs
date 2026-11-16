@@ -6,9 +6,9 @@
 //   (PDS defaults to https://tngl.sh; override with ATPROTO_PDS)
 //   ATPROTO_IDENTIFIER=mpadge.eu ATPROTO_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx \
 //     node tools/atproto/publish.mjs --publish
-//   ... --publish --announce=<slug>   # also create a PUBLIC Bluesky post for that blog
-//                                     # post (asks for confirmation; skipped if the
-//                                     # post already has a `bluesky:` link)
+//   ... --publish --announce=<slug>        # also create a PUBLIC Bluesky post for that
+//   ... --publish --announce-note=<slug>   # blog post / note (asks for confirmation;
+//                                          # skipped if it already has a `bluesky:` link)
 //
 // Uses putRecord with deterministic rkeys (publication: "mpadge"; documents:
 // post slug), so re-running is idempotent: it updates records in place.
@@ -16,7 +16,7 @@ import fs from 'fs';
 import * as yaml from 'js-yaml';
 import readline from 'readline/promises';
 import { loadNotes } from '../notesPages.js';
-import { addBlueskyField, recentUnannounced } from './announce-helpers.mjs';
+import { addBlueskyField, addBlueskyFieldToNote, recentUnannounced } from './announce-helpers.mjs';
 
 const SITE = 'https://mpadge.eu';
 const PUB_RKEY = 'mpadge';
@@ -36,8 +36,12 @@ const NOTES_PUB = {
 };
 const PDS = process.env.ATPROTO_PDS || 'https://tngl.sh';
 const doPublish = process.argv.includes('--publish');
-const announceArg = process.argv.find((a) => a.startsWith('--announce='));
-const announceSlug = announceArg ? announceArg.slice('--announce='.length) : '';
+const argValue = (name) => {
+  const a = process.argv.find((x) => x.startsWith(`--${name}=`));
+  return a ? a.slice(name.length + 3) : '';
+};
+const announceSlug = argValue('announce');      // blog post slug
+const announceNote = argValue('announce-note'); // note slug
 
 const MONTHS = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
 function isoDate(s) { // "10 Nov 26" or "10 Nov 2026"
@@ -104,7 +108,8 @@ for (const post of posts) {
 // Notes: documents of the notes publication. rkeys are prefixed so they can
 // never collide with blog post slugs in the same collection.
 const noteDocuments = {};
-for (const n of loadNotes()) {
+const notes = loadNotes();
+for (const n of notes) {
   const rec = {
     $type: 'site.standard.document',
     site: notesUri,
@@ -135,31 +140,14 @@ async function confirm(question) {
   return answer.trim().toLowerCase() === 'y';
 }
 
-async function announceStep() {
-  if (!announceSlug) {
-    const pending = recentUnannounced(posts, (p) => new Date(isoDate(p)));
-    console.log('\nNo Bluesky post created: this run only published the atproto records.');
-    if (pending.length) {
-      console.log('Recent posts with no `bluesky:` link (no Bluesky comments yet):');
-      for (const p of pending) console.log(`  ${p.link.replace(/\.html$/, '')}  (${p.created})`);
-      console.log('To announce one on Bluesky: make publish POST=<slug>');
-      console.log('That creates a PUBLIC post on your account, asks for confirmation, and is skipped for posts that already have a link.');
-    } else {
-      console.log('All posts from the last 30 days already have a `bluesky:` link; nothing to announce.');
-    }
+// Create a Bluesky post (text = title, plus a link card) and save its URL via save().
+async function announceOne({ what, existing, title, description, uri, save }) {
+  if (existing) {
+    console.log(`\n${what} already has a Bluesky post (${existing}); nothing to announce.`);
     return;
   }
-
-  const post = posts.find((p) => p.link === `${announceSlug}.html`);
-  if (!post) throw new Error(`No blog post with slug "${announceSlug}"`);
-  if (post.bluesky) {
-    console.log(`\n"${announceSlug}" already has a Bluesky post (${post.bluesky}); nothing to announce.`);
-    return;
-  }
-  const { rec } = documentRecord(post, pubUri);
-  const uri = `${SITE}/blog/${post.link}`;
-  const description = rec.description.length > 280 ? `${rec.description.slice(0, 277)}...` : rec.description;
-  console.log(`\nAbout to create a PUBLIC Bluesky post as ${identifier}:\n  text: ${rec.title}\n  link card: ${uri}`);
+  const desc = description.length > 280 ? `${description.slice(0, 277)}...` : description;
+  console.log(`\nAbout to create a PUBLIC Bluesky post as ${identifier} for ${what}:\n  text: ${title}\n  link card: ${uri}`);
   if (!(await confirm('Post it? [y/N] '))) { console.log('Not announced.'); return; }
 
   const r = await xrpc('POST', 'com.atproto.repo.createRecord', {
@@ -167,13 +155,51 @@ async function announceStep() {
     collection: 'app.bsky.feed.post',
     record: {
       $type: 'app.bsky.feed.post',
-      text: rec.title,
+      text: title,
       langs: ['en'],
       createdAt: new Date().toISOString(),
-      embed: { $type: 'app.bsky.embed.external', external: { uri, title: rec.title, description } },
+      embed: { $type: 'app.bsky.embed.external', external: { uri, title, description: desc } },
     },
   }, token);
   const url = `https://bsky.app/profile/${identifier}/post/${r.uri.split('/').pop()}`;
-  const mdFile = addBlueskyField(announceSlug, post.link, url);
-  console.log(`Posted ${url}\nAdded bluesky: field to ${mdFile} and src/data/blog.yml; commit both.`);
+  console.log(`Posted ${url}`);
+  console.log(`Added bluesky: field to ${save(url)}; commit it.`);
+}
+
+async function announceStep() {
+  if (!announceSlug && !announceNote) {
+    const pendingPosts = recentUnannounced(posts, (p) => new Date(isoDate(p.created)));
+    const pendingNotes = recentUnannounced(notes, (n) => new Date(`${n.date}T00:00:00Z`));
+    console.log('\nNo Bluesky post created: this run only published the atproto records.');
+    if (pendingPosts.length || pendingNotes.length) {
+      console.log('Recent items with no `bluesky:` link (no Bluesky comments yet):');
+      for (const p of pendingPosts) console.log(`  post ${p.link.replace(/\.html$/, '')}  (${p.created})`);
+      for (const n of pendingNotes) console.log(`  note ${n.slug}  (${n.date})`);
+      console.log('To announce on Bluesky: make publish POST=<post slug>   or   make publish NOTE=<note slug>');
+      console.log('That creates a PUBLIC post on your account, asks for confirmation, and is skipped for items that already have a link.');
+    } else {
+      console.log('Everything from the last 30 days already has a `bluesky:` link; nothing to announce.');
+    }
+    return;
+  }
+
+  if (announceSlug) {
+    const post = posts.find((p) => p.link === `${announceSlug}.html`);
+    if (!post) throw new Error(`No blog post with slug "${announceSlug}"`);
+    const { rec } = documentRecord(post, pubUri);
+    await announceOne({
+      what: `blog post "${announceSlug}"`, existing: post.bluesky, title: rec.title,
+      description: rec.description, uri: `${SITE}/blog/${post.link}`,
+      save: (url) => `${addBlueskyField(announceSlug, post.link, url)} and src/data/blog.yml`,
+    });
+  }
+  if (announceNote) {
+    const note = notes.find((n) => n.slug === announceNote);
+    if (!note) throw new Error(`No note with slug "${announceNote}"`);
+    await announceOne({
+      what: `note "${announceNote}"`, existing: note.bluesky, title: note.title,
+      description: note.description, uri: `${SITE}/notes/${note.slug}.html`,
+      save: (url) => addBlueskyFieldToNote(announceNote, url),
+    });
+  }
 }
