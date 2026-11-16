@@ -14,6 +14,8 @@
 // The post text is "<title>\n\n<description>" and must fit Bluesky's 300-character
 // limit; this is checked before anything is written to the PDS.
 //
+// Also files a network.cosmik.card per post/note (Semble) in the matching collection.
+//
 // Uses putRecord with deterministic rkeys (publication: "mpadge"; documents:
 // post slug), so re-running is idempotent: it updates records in place.
 import fs from 'fs';
@@ -165,6 +167,72 @@ for (const n of notes) {
   if (n.tags) rec.tags = n.tags.split(',').map((t) => t.trim()).filter(Boolean);
   noteDocuments[`${n.slug}.html`] = await put('site.standard.document', `note-${n.slug}`, rec);
 }
+
+// ---- Semble (network.cosmik) cards, filed in the "mpadge blog entries" / "mpadge note entries"
+// collections (created by hand in Semble; looked up by name). A URL that already has a
+// card (e.g. saved by hand) is reused, never duplicated or modified, and an existing
+// collection link is left alone, so re-running is idempotent.
+const COSMIK = { card: 'network.cosmik.card', collection: 'network.cosmik.collection', link: 'network.cosmik.collectionLink' };
+const BLOG_COLLECTION = 'mpadge blog entries';
+const NOTE_COLLECTION = 'mpadge note entries';
+const readRepo = doPublish ? did : (identifier || 'mpadge.eu');
+
+async function listAll(collection) {
+  const out = [];
+  let cursor = '';
+  do {
+    const q = new URLSearchParams({ repo: readRepo, collection, limit: '100', ...(cursor && { cursor }) });
+    const r = await xrpc('GET', `com.atproto.repo.listRecords?${q}`);
+    out.push(...r.records);
+    cursor = r.cursor;
+  } while (cursor);
+  return out;
+}
+
+async function cosmikStep() {
+  const [cards, collections, links] = await Promise.all([COSMIK.card, COSMIK.collection, COSMIK.link].map(listAll));
+  const collectionByName = (name) => {
+    const c = collections.find((x) => x.value.name === name);
+    if (!c) throw new Error(`No Semble collection named "${name}" in ${readRepo}'s repo`);
+    return c;
+  };
+  const blogColl = collectionByName(BLOG_COLLECTION);
+  const noteColl = collectionByName(NOTE_COLLECTION);
+  const cardByUrl = new Map(cards.filter((c) => c.value.content?.url).map((c) => [c.value.content.url, c]));
+  const linked = new Set(links.map((l) => `${l.value.collection?.uri}|${l.value.card?.uri}`));
+
+  const items = [
+    ...posts.map((p) => {
+      const { slug, rec } = documentRecord(p, '');
+      return { key: `blog-${slug}`, url: `${SITE}/blog/${p.link}`, title: rec.title, description: rec.description,
+        date: rec.publishedAt, coll: blogColl };
+    }),
+    ...notes.map((n) => ({ key: `note-${n.slug}`, url: `${SITE}/notes/${n.slug}.html`, title: n.title,
+      description: n.description, date: new Date(`${n.date}T00:00:00Z`).toISOString(), coll: noteColl })),
+  ];
+
+  for (const it of items) {
+    let card = cardByUrl.get(it.url);
+    if (!card) {
+      const metadata = { $type: 'network.cosmik.card#urlMetadata', type: 'article', title: it.title,
+        siteName: 'mpadge.eu', publishedDate: it.date };
+      if (it.description) metadata.description = it.description.slice(0, 1000);
+      const value = { $type: COSMIK.card, type: 'URL', createdAt: new Date().toISOString(),
+        content: { $type: 'network.cosmik.card#urlContent', url: it.url, metadata } };
+      const uri = await put(COSMIK.card, it.key, value);
+      card = { uri, cid: doPublish ? (await xrpc('GET', `com.atproto.repo.getRecord?${new URLSearchParams({ repo: did, collection: COSMIK.card, rkey: it.key })}`)).cid : 'DRYRUN' };
+    }
+    if (linked.has(`${it.coll.uri}|${card.uri}`)) continue;
+    const now = new Date().toISOString();
+    await put(COSMIK.link, it.key, {
+      $type: COSMIK.link,
+      card: { uri: card.uri, cid: card.cid },
+      collection: { uri: it.coll.uri, cid: it.coll.cid },
+      addedBy: did, addedAt: now, createdAt: now,
+    });
+  }
+}
+await cosmikStep();
 
 if (doPublish) {
   fs.writeFileSync('src/atproto.json', JSON.stringify({ publication: pubUri, publications: { notes: notesUri }, documents, noteDocuments }, null, 2) + '\n');

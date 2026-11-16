@@ -122,6 +122,15 @@ in the text; reposts and other accounts are ignored; if several match, the
 earliest is used). It only edits local files; commit them. The explicit form
 links one post and refuses to overwrite an existing link.
 
+### Semble cards
+
+`make publish` also files a `network.cosmik.card` for every blog post and note
+(visible at <https://semble.so/profile/mpadge.eu>), in the Semble collections
+"mpadge blog entries" and "mpadge note entries" (create these by hand in Semble;
+they are looked up by name). A URL that already has a card is reused, and an
+existing collection link is left alone, so re-running is idempotent. Cards are
+not updated after creation; edit them in Semble.
+
 ### Preview cards
 
 The social preview (`og:` and `twitter:` tags) of a blog post or note is its
