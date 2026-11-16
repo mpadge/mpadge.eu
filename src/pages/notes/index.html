@@ -1,0 +1,29 @@
+---
+title: "notes"
+sitetitle: mp
+description: "Short notes."
+pageurl: "https://mpadge.eu/notes/"
+---
+{{> header}}
+<div class="pageClass">
+<div class="grid-container">
+<div class="grid-x grid-padding-x">
+<div class="cell medium-11 large-11">
+<h1>notes</h1>
+<h4>Short notes</h4>
+{{#each notes}}
+<div class="note-entry">
+<h3><a href="{{ link }}">{{ title }}</a></h3>
+<p class="blog-date">{{ date }}</p>
+{{#if description}}
+<p>{{ description }}</p>
+{{/if}}
+</div>
+{{else}}
+<p>Nothing yet.</p>
+{{/each}}
+</div>
+</div>
+</div>
+</div>
+{{> footer}}

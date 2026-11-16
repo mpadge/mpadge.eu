@@ -3,7 +3,6 @@
 // sidenotes or section navigation).
 import panini  from 'panini';
 import through2 from 'through2';
-import Vinyl   from 'vinyl';
 import path    from 'path';
 import fs      from 'fs';
 import * as yaml from 'js-yaml';
@@ -44,6 +43,21 @@ export function writeNotesShort(n = 6) {
     ...(x.tags && { tags: x.tags }), link: `notes/${x.slug}.html`,
   }));
   fs.writeFileSync('src/data/notesshort.yml', yaml.dump(entries.length ? entries : []));
+  return Promise.resolve();
+}
+
+// Write src/data/notes.yml (every note, newest first) for the notes index page,
+// src/pages/notes/index.html. `link` is relative to /notes/, `date` is ISO and
+// `created` the short form used elsewhere in the site data.
+export function writeNotesData() {
+  const entries = loadNotes().map((x) => ({
+    title: x.title, description: x.description, date: x.date, created: shortDate(x.date),
+    ...(x.tags && { tags: x.tags }),
+    ...(x.mastodon && { mastodon: x.mastodon }),
+    ...(x.bluesky && { bluesky: x.bluesky }),
+    link: `${x.slug}.html`,
+  }));
+  fs.writeFileSync('src/data/notes.yml', yaml.dump(entries));
   return Promise.resolve();
 }
 
@@ -104,32 +118,15 @@ function commentsHtml(n) {
     '<div id="comments-section">\n<noscript>Enable JavaScript to load comments.</noscript>\n</div>\n';
 }
 
-function indexPage(notes) {
-  const items = notes.map((n) =>
-    `<div class="note-entry">\n<h3><a href="${n.slug}.html">${esc(n.title)}</a></h3>\n` +
-    `<p class="blog-date">${n.date}</p>\n` +
-    (n.description ? `<p>${esc(n.description)}</p>\n` : '') + '</div>').join('\n');
-  return frontMatter('notes', 'Short notes.', `${SITE}/notes/`) + WRAP_OPEN +
-    '<h1>notes</h1>\n<h4>Short notes</h4>\n' + (items || '<p>Nothing yet.</p>') + WRAP_CLOSE;
-}
-
 export function notesPages(PATHS) {
   const atproto = fs.existsSync('src/atproto.json')
     ? (JSON.parse(fs.readFileSync('src/atproto.json', 'utf8')).noteDocuments || {}) : {};
-  const notes = [];
   return gulp.src(`${NOTES_DIR}/*.md`, { base: 'src/pages/' })
     .pipe(through2.obj(function (file, enc, cb) {
       const n = parseNote(file.path, file.contents.toString(enc));
-      notes.push(n);
       file.contents = Buffer.from(notePage(n, atproto[`${n.slug}.html`] || ''));
       file.path = path.join(file.base, 'notes', `${n.slug}.html`);
       cb(null, file);
-    }, function (cb) {
-      notes.sort((a, b) => b.date.localeCompare(a.date));
-      this.push(new Vinyl({ cwd: process.cwd(), base: path.resolve('src/pages/'),
-        path: path.resolve('src/pages/notes/index.html'),
-        contents: Buffer.from(indexPage(notes)) }));
-      cb();
     }))
     .pipe(panini({
       root: 'src/pages/', layouts: 'src/layouts/', partials: 'src/partials/',

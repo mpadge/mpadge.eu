@@ -14,7 +14,7 @@ import named         from 'vinyl-named';
 import autoprefixer  from 'autoprefixer';
 import imagemin, { gifsicle, mozjpeg, optipng, svgo } from 'gulp-imagemin';
 import { blogPages as _blogPages } from './tools/blogPages.js';
-import { notesPages as _notesPages, writeNotesShort } from './tools/notesPages.js';
+import { notesPages as _notesPages, writeNotesShort, writeNotesData } from './tools/notesPages.js';
 import { updateLlmsTxt }            from './tools/llmsTxt.js';
 import { execSync }                from 'child_process';
 import { Transform }               from 'stream';
@@ -169,7 +169,7 @@ function pages() {
 }
 
 function blogPages() { return _blogPages(PATHS); }
-function notesData() { return writeNotesShort(); }
+function notesData() { return Promise.all([writeNotesShort(), writeNotesData()]); }
 function notesPages() { return _notesPages(PATHS); }
 
 // Load updated HTML templates and partials into Panini
@@ -302,7 +302,8 @@ function watch() {
   gulp.watch(PATHS.assets, copy);
   gulp.watch('src/pages/**/*.html').on('all', gulp.series(pages, browser.reload));
   gulp.watch('src/pages/blog/*.md').on('all', gulp.series(blogPages, browser.reload));
-  // Notes also feed the home page via src/data/notesshort.yml, so regenerate it,
+  // Notes also feed the home page via src/data/notesshort.yml and the notes index
+  // via src/data/notes.yml, so regenerate them,
   // refresh Panini's cached data, then rebuild both the notes and the home page.
   gulp.watch('src/pages/notes/*.md').on('all',
     gulp.series(notesData, resetPages, notesPages, pages, browser.reload));
