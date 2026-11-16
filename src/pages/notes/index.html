@@ -10,9 +10,11 @@ pageurl: "https://mpadge.eu/notes/"
 <div class="grid-x grid-padding-x">
 <div class="cell medium-11 large-11">
 <h1>notes</h1>
-<h4>Short notes</h4>
+<p>Short notes. A bit longer than social media posts, but shorter than my <a href="{{root}}blog">blog posts</a>.</p>
+<div id="tag-filter" class="grid-x" style="margin-bottom:1rem;">
+</div>
 {{#each notes}}
-<div class="note-entry">
+<div class="note-entry" data-tags="{{ tags }}">
 <h3><a href="{{ link }}">{{ title }}</a></h3>
 <p class="blog-date">{{ date }}</p>
 {{#if description}}

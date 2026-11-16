@@ -8,7 +8,7 @@ help: ## Show this help
 	@grep -E '^[a-zA-Z_%_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 	@printf "\n\033[36mWorkflow for a new post or note (order matters):\033[0m\n"
 	@printf "  1. make blog         render the post (or 'make render' for BLOG)\n"
-	@printf "  2. make update       local: blog index, RSS, llms.txt\n"
+	@printf "  2. make update       local: blog and notes data, RSS, llms.txt\n"
 	@printf "  3. make publish      atproto records; writes src/atproto.json\n"
 	@printf "     make publish POST=<slug>  also create the PUBLIC Bluesky post (comment thread) for that blog post\n"
 	@printf "     make publish NOTE=<slug>  same, for a note\n"
@@ -33,8 +33,9 @@ code: ## Update the 'code' section from current r-univ pkgs list
 rss: ## Update RSS XML feed
 	Rscript 'tools/blog/make_rss.R'
 
-update: ## Update blog index, RSS XML feed, and llms.txt (local only)
+update: ## Update blog index, notes data, RSS XML feed, and llms.txt (local only)
 	Rscript -e 'source("tools/blog/update_main.R")'
+	node --input-type=module -e 'import { writeNotesShort, writeNotesData } from "./tools/notesPages.js"; await writeNotesShort (); console.log ("✔ Updated src/data/notesshort.yml"); await writeNotesData (); console.log ("✔ Updated src/data/notes.yml")'
 	node --input-type=module -e 'import { updateLlmsTxt } from "./tools/llmsTxt.js"; await updateLlmsTxt ()'
 
 publish: ## Publish atproto records; add POST=<slug> or NOTE=<slug> to also announce on Bluesky
