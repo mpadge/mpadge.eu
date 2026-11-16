@@ -123,9 +123,11 @@ if (process.argv.includes('--unread')) {
   console.error(`# ${count} unread (AppView getUnreadCount); ${unread.length} listed`);
   for (const n of unread) {
     const out = { time: n.indexedAt, reason: n.reason, handle: n.author.handle, did: n.author.did,
-      uri: n.uri, subject: n.reasonSubject, text: n.record?.text };
+      uri: n.uri, subject: n.reasonSubject, text: n.record?.text,
+      // likes/reposts: link to YOUR post that was liked; everything else: the notifying record
+      url: httpsUrl(['like', 'repost'].includes(n.reason) && n.reasonSubject ? n.reasonSubject : n.uri, n.author.handle) };
     if (asJson) console.log(JSON.stringify(out));
-    else console.log(`${out.time}  ${out.reason.padEnd(9)} ${out.handle}${out.text ? `\n    ${out.text.replace(/\s+/g, ' ')}` : ''}\n    ${out.uri}`);
+    else console.log(`${out.time}  ${out.reason.padEnd(9)} ${out.handle}${out.text ? `\n    ${out.text.replace(/\s+/g, ' ')}` : ''}\n    ${out.url}`);
   }
   process.exit(0);
 }
@@ -182,6 +184,18 @@ function classify(collection, paths, onlyText) {
   }
 }
 
+// --- https links ----------------------------------------------------------------------------
+// at:// URIs only open in atproto tools. Posts map to bsky.app; follows to the follower's profile;
+// everything else (Semble, Tangled, ...) to the atproto.at record viewer, which works for any record.
+function httpsUrl(uri, who) {
+  const m = /^at:\/\/([^/]+)\/([^/]+)\/([^/]+)$/.exec(uri || '');
+  if (!m) return undefined;
+  const [, repo, collection, rkey] = m;
+  if (collection === 'app.bsky.feed.post') return `https://bsky.app/profile/${who || repo}/post/${rkey}`;
+  if (collection === 'app.bsky.graph.follow') return `https://bsky.app/profile/${who || repo}`;
+  return `https://atproto.at/uri/${uri}`;
+}
+
 // --- handle resolution (cached) -------------------------------------------------------------
 const handles = new Map();
 async function handleOf(did) {
@@ -210,13 +224,14 @@ async function report(ev) {
     did,
     collection: c.collection,
     uri: `at://${did}/${c.collection}/${c.rkey}`,
+    url: httpsUrl(`at://${did}/${c.collection}/${c.rkey}`, undefined),
     paths,
     text: c.record.text,
   };
   if (asJson) {
     console.log(JSON.stringify(hit));
   } else {
-    console.log(`${hit.time}  ${kind.padEnd(9)} ${hit.handle}  ${hit.collection}${hit.text ? `\n    ${hit.text.replace(/\s+/g, ' ')}` : ''}\n    ${hit.uri}`);
+    console.log(`${hit.time}  ${kind.padEnd(9)} ${hit.handle}  ${hit.collection}${hit.text ? `\n    ${hit.text.replace(/\s+/g, ' ')}` : ''}\n    ${hit.url}`);
   }
 }
 
