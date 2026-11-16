@@ -1,0 +1,4 @@
+#!/bin/bash
+# Enable with: make hooks
+# Refuse to commit if atproto records are out of step with the site content.
+exec node tools/check-atproto.mjs

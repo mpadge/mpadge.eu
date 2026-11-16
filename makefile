@@ -1,11 +1,19 @@
 #!/usr/bin/make
 BLOG=2026-10-04-coding-alone
 
-.PHONY: help start serve install code rss update publish blog% render build test deploy upgrade tidycheck
+.PHONY: help start serve install code rss update publish hooks check blog% render build test deploy upgrade tidycheck
 
 help: ## Show this help
 	@printf "Usage:\033[36m make [target]\033[0m\n"
 	@grep -E '^[a-zA-Z_%_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+	@printf "\n\033[36mWorkflow for a new post or note (order matters):\033[0m\n"
+	@printf "  1. make blog         render the post (or 'make render' for BLOG)\n"
+	@printf "  2. make update       local: blog index, RSS, llms.txt\n"
+	@printf "  3. make publish      atproto records; writes src/atproto.json\n"
+	@printf "  4. git commit        include src/atproto.json and all updated files\n"
+	@printf "  5. git push          codeberg webhook builds and deploys the site\n"
+	@printf "\nManual deploy instead of step 5: 'make build' then 'make deploy'.\n"
+	@printf "src/atproto.json must be current BEFORE the build, so never build or deploy before 'make publish'.\n"
 
 .DEFAULT_GOAL := help
 
@@ -35,6 +43,12 @@ publish: ## Publish atproto records (app password from env or `pass`)
 		echo "Cannot publish atproto records: set ATPROTO_APP_PASSWORD or add atproto/app-password to pass" >&2; \
 		exit 1; \
 	fi
+
+hooks: ## Enable the versioned git hooks in .githooks (checks atproto records before commit)
+	git config core.hooksPath .githooks
+
+check: ## Check that src/atproto.json covers all posts and notes
+	node tools/check-atproto.mjs
 
 blog: ## Render latest blog post (or hard-code value in 'tools/blog/update_one.R')
 	Rscript -e 'source("tools/blog/update_one.R")'
