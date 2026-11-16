@@ -22,7 +22,7 @@ export function blogPages(PATHS) {
     const map = {};
     for (const entry of entries) {
       if (entry && entry.link) {
-        map[entry.link] = { created: entry.created || '', updated: entry.updated || '', mastodon: entry.mastodon || '', description: entry.description || '' };
+        map[entry.link] = { created: entry.created || '', updated: entry.updated || '', mastodon: entry.mastodon || '', bluesky: entry.bluesky || '', description: entry.description || '' };
       }
     }
     return map;
@@ -92,7 +92,7 @@ export function blogPages(PATHS) {
     return null;
   }
 
-  function buildPage(mdContent, dateStr, updatedStr, mastodonUrl, linkSummaries, description, pageUrl, atprotoUri) {
+  function buildPage(mdContent, dateStr, updatedStr, mastodonUrl, blueskyUrl, linkSummaries, description, pageUrl, atprotoUri) {
     const yamlStripped = mdContent.replace(/^---\n[\s\S]*?\n---\n/, '');
     const { content, sidenotesHtml } = processFootnotes(yamlStripped);
 
@@ -220,7 +220,7 @@ export function blogPages(PATHS) {
       '<div id="sidenotes-panel" class="cell medium-2 large-2">\n' +
       sidenotesHtml + '\n' +
       '</div>\n' +
-      `<div id="mastodon-comments" data-mastodon-url="${mastodonUrl || ''}"></div>\n` +
+      `<div id="comments" data-mastodon-url="${mastodonUrl || ''}" data-bluesky-url="${blueskyUrl || ''}"></div>\n` +
       '{{> blog_entry_footer}}\n' +
       '{{> footer}}\n';
   }
@@ -240,10 +240,11 @@ export function blogPages(PATHS) {
         const dateStr = meta.created || '';
         const updatedStr = meta.updated || '';
         const mastodonUrl = meta.mastodon || '';
+        const blueskyUrl = meta.bluesky || '';
         const description = meta.description || '';
         const pageUrl = `https://mpadge.eu/blog/${slug}`;
         const linkSummaries = loadLinkSummaries(file.path);
-        file.contents = Buffer.from(buildPage(file.contents.toString(enc), dateStr, updatedStr, mastodonUrl, linkSummaries, description, pageUrl, atproto[slug] || ''));
+        file.contents = Buffer.from(buildPage(file.contents.toString(enc), dateStr, updatedStr, mastodonUrl, blueskyUrl, linkSummaries, description, pageUrl, atproto[slug] || ''));
         file.path = file.path.replace(/\.md$/, '.html')
                               .replace(/([\\/])\d{4}-\d{2}-\d{2}-/, '$1');
       }

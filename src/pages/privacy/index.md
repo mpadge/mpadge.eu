@@ -5,8 +5,10 @@ so. You can't log in; you can't track anything other than the pages people look
 at. But the site itself won't even do that. There are no analytics; there is no
 way the site itself can or will track who looks at what, how often, or how many.
 Well, okay, "you can't log in" is not quite true - commenting requires logging
-in. To a Mastodon instance somewhere. Any comments appearing here are merely
-re-rendered versions taken directly from Mastodon. Other than that, there are
+in. To a Mastodon instance somewhere, or to Bluesky. Any comments appearing
+here are merely re-rendered versions taken directly from Mastodon or Bluesky,
+fetched by your browser from the public APIs of those services when you view a
+blog post. Other than that, there are
 no cookies, nor are any loaded by any other libraries used to serve this site.
 No external calls are made to load fonts, because they are embedded
 courtesy of the 
