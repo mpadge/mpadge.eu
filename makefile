@@ -1,7 +1,7 @@
 #!/usr/bin/make
 BLOG=2026-10-04-coding-alone
 
-.PHONY: help start serve install code rss update publish bluesky hooks check blog% render build test deploy upgrade tidycheck
+.PHONY: help start serve install code rss update publish bluesky notify hooks check blog% render build test deploy upgrade tidycheck
 
 help: ## Show this help
 	@printf "Usage:\033[36m make [target]\033[0m\n"
@@ -54,6 +54,9 @@ publish: ## Publish atproto records; add POST=<slug> or NOTE=<slug> (and optiona
 
 bluesky: ## Link Bluesky posts made by hand (auto-find them, or POST=/NOTE=<slug> BSKY=<post URL>)
 	node tools/atproto/link-bluesky.mjs $(if $(POST),--post=$(POST)) $(if $(NOTE),--note=$(NOTE)) $(if $(BSKY),--url='$(BSKY)')
+
+notify: ## Unread notifications from Bluesky, Semble and Tangled (ARGS='--only=semble --json --mark-seen')
+	node tools/atproto/notifications.mjs --unread $(ARGS)
 
 hooks: ## Enable the versioned git hooks in .githooks (checks atproto records before commit)
 	git config core.hooksPath .githooks
