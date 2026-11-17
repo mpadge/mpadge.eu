@@ -24,6 +24,7 @@
     "making-this-site.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/making-this-site"
   },
   "noteDocuments": {
+    "silly-mistakes.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/note-silly-mistakes",
     "atproto.html": "at://did:plc:yrzruxieyscusyvcz6t5xlvh/site.standard.document/note-atproto"
   }
 }
