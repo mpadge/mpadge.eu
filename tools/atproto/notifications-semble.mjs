@@ -14,7 +14,7 @@ import { fileURLToPath } from 'url';
 import { paginate } from './agent.mjs';
 import { printNotification } from './notifications-common.mjs';
 
-const BASE = process.env.SEMBLE_API_URL || 'https://api.semble.so/xrpc';
+const base = () => process.env.SEMBLE_API_URL || 'https://api.semble.so/xrpc';
 const PAGE_SIZE = 50;
 
 function apiKey() {
@@ -29,7 +29,7 @@ function apiKey() {
 }
 
 async function get(key, method, query) {
-  const res = await fetch(`${BASE}/${method}?${new URLSearchParams(query)}`, {
+  const res = await fetch(`${base()}/${method}?${new URLSearchParams(query)}`, {
     headers: { 'x-api-key': key, 'x-semble-client': 'mpadge-notifications' },
   });
   if (!res.ok) throw new Error(`Semble ${method}: ${res.status} ${(await res.text()).slice(0, 200)}`);
