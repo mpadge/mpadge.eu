@@ -3,6 +3,7 @@ title: "Silly mistakes"
 description: I made a silly mistake
 date: 2026-11-17
 tags: atproto
+bluesky: https://bsky.app/profile/mpadge.eu/post/3n2iz72qap22o
 ---
 
 
