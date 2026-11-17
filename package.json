@@ -11,6 +11,8 @@
   "author": "Mark Padgham",
   "license": "MIT",
   "dependencies": {
+    "@atproto/api": "^0.32.1",
+    "@atproto/identity": "^0.5.23",
     "foundation-sites": "^6.9.0",
     "jquery": "^4.0.0",
     "motion-ui": "^2.0.8",

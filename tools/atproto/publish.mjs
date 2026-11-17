@@ -16,12 +16,16 @@
 //
 // Also files a network.cosmik.card per post/note (Semble) in the matching collection.
 //
+// Uses the official @atproto/api SDK (session reused between runs: see auth.mjs).
 // Uses putRecord with deterministic rkeys (publication: "mpadge"; documents:
 // post slug), so re-running is idempotent: it updates records in place.
 import fs from 'fs';
 import * as yaml from 'js-yaml';
 import readline from 'readline/promises';
 import { loadNotes } from '../site/notesPages.js';
+import { RichText } from '@atproto/api';
+import { agentFor, paginate, pdsUrl, describeError } from './agent.mjs';
+import { login } from './auth.mjs';
 import { addBlueskyField, addBlueskyFieldToNote, recentUnannounced, isoDate } from './announce-helpers.mjs';
 
 const SITE = 'https://mpadge.eu';
@@ -40,7 +44,7 @@ const NOTES_PUB = {
   name: 'Notes',
   description: 'Short notes.',
 };
-const PDS = process.env.ATPROTO_PDS || 'https://tngl.sh';
+const PDS = pdsUrl();
 const doPublish = process.argv.includes('--publish');
 const argValue = (name) => {
   const a = process.argv.find((x) => x.startsWith(`--${name}=`));
@@ -70,19 +74,9 @@ function documentRecord(post, pubUri) {
   return { slug, rec };
 }
 
-async function xrpc(method, path, body, token) {
-  const res = await fetch(`${PDS}/xrpc/${path}`, {
-    method,
-    headers: { 'content-type': 'application/json', ...(token && { authorization: `Bearer ${token}` }) },
-    body: body && JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`${path}: ${res.status} ${await res.text()}`);
-  return res.json();
-}
-
 // ---- Bluesky post text: validated up front, before anything is written ----
 const POST_LIMIT = 300; // graphemes
-const graphemes = (str) => [...new Intl.Segmenter('en', { granularity: 'grapheme' }).segment(str)].length;
+const graphemes = (str) => new RichText({ text: str }).graphemeLength;
 
 function announcementText(what, title, description, override) {
   const text = override || (description ? `${title}\n\n${description}` : title);
@@ -125,21 +119,22 @@ if (announceNote) {
 }
 
 let did = 'did:plc:DRYRUN';
-let token;
-const { ATPROTO_IDENTIFIER: identifier, ATPROTO_APP_PASSWORD: password } = process.env;
+let agent; // authenticated (--publish only)
+let identifier = process.env.ATPROTO_IDENTIFIER;
 if (doPublish) {
-  if (!identifier || !password) throw new Error('Set ATPROTO_IDENTIFIER and ATPROTO_APP_PASSWORD');
-  const s = await xrpc('POST', 'com.atproto.server.createSession', { identifier, password });
-  did = s.did; token = s.accessJwt;
+  if (!identifier) throw new Error('Set ATPROTO_IDENTIFIER');
+  ({ agent, did } = await login({ identifier, purpose: 'publish records' }));
 }
+// Reads of existing records need no login.
+const reader = agent || agentFor(PDS);
 
 async function put(collection, rkey, record) {
   const uri = `at://${did}/${collection}/${rkey}`;
   if (!doPublish) { console.log(uri, JSON.stringify(record, null, 2)); return uri; }
-  const r = await xrpc('POST', 'com.atproto.repo.putRecord',
-    { repo: did, collection, rkey, record, validate: false }, token);
-  console.log('put', r.uri);
-  return r.uri;
+  // validate: false, as the site.standard.* and network.cosmik.* lexicons are unknown to the SDK
+  const { data } = await agent.com.atproto.repo.putRecord({ repo: did, collection, rkey, record, validate: false });
+  console.log('put', data.uri);
+  return data.uri;
 }
 
 const pubUri = await put('site.standard.publication', PUB_RKEY, PUB);
@@ -177,17 +172,9 @@ const BLOG_COLLECTION = 'mpadge blog entries';
 const NOTE_COLLECTION = 'mpadge note entries';
 const readRepo = doPublish ? did : (identifier || 'mpadge.eu');
 
-async function listAll(collection) {
-  const out = [];
-  let cursor = '';
-  do {
-    const q = new URLSearchParams({ repo: readRepo, collection, limit: '100', ...(cursor && { cursor }) });
-    const r = await xrpc('GET', `com.atproto.repo.listRecords?${q}`);
-    out.push(...r.records);
-    cursor = r.cursor;
-  } while (cursor);
-  return out;
-}
+const listAll = (collection) => paginate(
+  async (cursor) => (await reader.com.atproto.repo.listRecords({ repo: readRepo, collection, limit: 100, cursor })).data,
+  (r) => r.records);
 
 async function cosmikStep() {
   const [cards, collections, links] = await Promise.all([COSMIK.card, COSMIK.collection, COSMIK.link].map(listAll));
@@ -220,7 +207,7 @@ async function cosmikStep() {
       const value = { $type: COSMIK.card, type: 'URL', createdAt: new Date().toISOString(),
         content: { $type: 'network.cosmik.card#urlContent', url: it.url, metadata } };
       const uri = await put(COSMIK.card, it.key, value);
-      card = { uri, cid: doPublish ? (await xrpc('GET', `com.atproto.repo.getRecord?${new URLSearchParams({ repo: did, collection: COSMIK.card, rkey: it.key })}`)).cid : 'DRYRUN' };
+      card = { uri, cid: doPublish ? (await agent.com.atproto.repo.getRecord({ repo: did, collection: COSMIK.card, rkey: it.key })).data.cid : 'DRYRUN' };
     }
     if (linked.has(`${it.coll.uri}|${card.uri}`)) continue;
     const now = new Date().toISOString();
@@ -232,7 +219,11 @@ async function cosmikStep() {
     });
   }
 }
-await cosmikStep();
+try {
+  await cosmikStep();
+} catch (e) {
+  throw new Error(`atproto request failed: ${describeError(e)}`);
+}
 
 if (doPublish) {
   fs.writeFileSync('src/atproto.json', JSON.stringify({ publication: pubUri, publications: { notes: notesUri }, documents, noteDocuments }, null, 2) + '\n');
@@ -266,17 +257,15 @@ async function announceOne({ what, existing, title, description, text, uri, save
   console.log(`\nAbout to create a PUBLIC Bluesky post as ${identifier} for ${what}:\n---\n${text}\n---\n  link card: ${uri}`);
   if (!(await confirm('Post it? [y/N] '))) { console.log('Not announced.'); return; }
 
-  const r = await xrpc('POST', 'com.atproto.repo.createRecord', {
-    repo: did,
-    collection: 'app.bsky.feed.post',
-    record: {
-      $type: 'app.bsky.feed.post',
-      text,
-      langs: ['en'],
-      createdAt: new Date().toISOString(),
-      embed: { $type: 'app.bsky.embed.external', external: { uri, title, description: desc } },
-    },
-  }, token);
+  // Links, @mentions and #hashtags in the text become facets.
+  const rt = new RichText({ text });
+  await rt.detectFacets(agent);
+  const r = await agent.post({
+    text: rt.text,
+    facets: rt.facets,
+    langs: ['en'],
+    embed: { $type: 'app.bsky.embed.external', external: { uri, title, description: desc } },
+  });
   const url = `https://bsky.app/profile/${identifier}/post/${r.uri.split('/').pop()}`;
   console.log(`Posted ${url}`);
   console.log(`Added bluesky: field to ${save(url)}; commit it.`);

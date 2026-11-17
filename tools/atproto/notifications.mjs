@@ -7,7 +7,8 @@
 //
 // --unread logs in as publish.mjs does: ATPROTO_IDENTIFIER (default: --actor, i.e. mpadge.eu),
 // ATPROTO_APP_PASSWORD (default: first line of `pass show atproto/app-password`) and
-// ATPROTO_PDS (default https://tngl.sh). The "unread" state is a `seenAt` timestamp kept by the
+// ATPROTO_PDS (default https://tngl.sh); the session is reused between runs (see auth.mjs; --no-session
+// disables that). The "unread" state is a `seenAt` timestamp kept by the
 // AppView for your account, not a record in your repo. This only READS it: updateSeen is never
 // called, so your unread badge in the Bluesky app is left alone. The AppView only reports what it
 // indexes (Bluesky-lexicon activity, after your mutes/blocks), and prunes old notifications.
@@ -42,9 +43,9 @@
 //  - Not caught: anything that only refers to you indirectly (e.g. by CID, or via a post
 //    that merely sits in a thread of yours).
 import fs from 'fs';
-import { execFileSync } from 'child_process';
+import { publicAgent, paginate, handleOf, describeError } from './agent.mjs';
+import { login } from './auth.mjs';
 
-const APPVIEW = 'https://public.api.bsky.app';
 // Public Jetstream instances; tried in turn when one drops.
 const HOSTS = [
   'jetstream1.us-east.bsky.network',
@@ -65,13 +66,7 @@ const parseDuration = (s) => {
 };
 const duration = argValue('duration') ? parseDuration(argValue('duration')) : null;
 
-async function getJson(url) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`${url}: ${res.status} ${await res.text()}`);
-  return res.json();
-}
-
-const profile = await getJson(`${APPVIEW}/xrpc/app.bsky.actor.getProfile?actor=${encodeURIComponent(actor)}`);
+const { data: profile } = await publicAgent().app.bsky.actor.getProfile({ actor });
 const me = profile.did;
 // Strings that count as "pointing at you": your DID, plus (for Jetstream) your handle/domain, so
 // that e.g. a Semble (network.cosmik.card) saving https://mpadge.eu/... is caught: such a card
@@ -80,44 +75,26 @@ const needles = [me, ...(argValue('match') ?? profile.handle).split(',').filter(
 
 // --- --unread: ask the AppView (authenticated), then exit -----------------------------------------
 if (process.argv.includes('--unread')) {
-  const PDS = process.env.ATPROTO_PDS || 'https://tngl.sh';
-  const identifier = process.env.ATPROTO_IDENTIFIER || actor;
-  let password = process.env.ATPROTO_APP_PASSWORD;
-  if (!password) {
-    try {
-      password = execFileSync('pass', ['show', 'atproto/app-password'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).split('\n')[0].trim();
-    } catch { /* handled below */ }
-  }
-  if (!password) throw new Error('Set ATPROTO_APP_PASSWORD or add atproto/app-password to pass');
-
-  const call = async (method, path, { body, token, query } = {}) => {
-    const res = await fetch(`${PDS}/xrpc/${path}${query ? `?${new URLSearchParams(query)}` : ''}`, {
-      method,
-      headers: {
-        'content-type': 'application/json',
-        ...(token && { authorization: `Bearer ${token}`, 'atproto-proxy': 'did:web:api.bsky.app#bsky_appview' }),
-      },
-      body: body && JSON.stringify(body),
-    });
-    if (!res.ok) throw new Error(`${path}: ${res.status} ${await res.text()}`);
-    return res.json();
-  };
-
-  const { accessJwt: token, did } = await call('POST', 'com.atproto.server.createSession', { body: { identifier, password } });
+  const { agent, did } = await login({ identifier: process.env.ATPROTO_IDENTIFIER || actor, purpose: 'read your unread notifications' });
   if (did !== me) console.error(`# note: logged in as ${did}, not ${me}`);
-  const { count } = await call('GET', 'app.bsky.notification.getUnreadCount', { token });
-
-  // Newest first; stop at the first notification that is already read.
-  const unread = [];
-  let cur = '', done = false;
-  while (!done && unread.length < count + 100) {
-    const r = await call('GET', 'app.bsky.notification.listNotifications', { token, query: { limit: '100', ...(cur && { cursor: cur }) } });
-    for (const n of r.notifications) {
-      if (n.isRead) { done = true; break; }
-      unread.push(n);
-    }
-    cur = r.cursor;
-    if (!cur) done = true;
+  // Notification calls go through the PDS, proxied to the Bluesky AppView.
+  const appview = agent.withProxy('bsky_appview', 'did:web:api.bsky.app');
+  let count, unread;
+  try {
+    ({ data: { count } } = await appview.app.bsky.notification.getUnreadCount());
+    // Newest first; stop at the first notification that is already read.
+    unread = [];
+    let done = false;
+    await paginate(async (cursor) => {
+      const { data } = await appview.app.bsky.notification.listNotifications({ limit: 100, cursor });
+      for (const n of data.notifications) {
+        if (n.isRead) { done = true; break; }
+        unread.push(n);
+      }
+      return done || unread.length >= count + 100 ? { ...data, cursor: undefined } : data;
+    }, () => []);
+  } catch (e) {
+    throw new Error(`Bluesky request failed: ${describeError(e)}`);
   }
 
   console.error(`# ${count} unread (AppView getUnreadCount); ${unread.length} listed`);
@@ -194,20 +171,6 @@ function httpsUrl(uri, who) {
   if (collection === 'app.bsky.feed.post') return `https://bsky.app/profile/${who || repo}/post/${rkey}`;
   if (collection === 'app.bsky.graph.follow') return `https://bsky.app/profile/${who || repo}`;
   return `https://atproto.at/uri/${uri}`;
-}
-
-// --- handle resolution (cached) -------------------------------------------------------------
-const handles = new Map();
-async function handleOf(did) {
-  if (handles.has(did)) return handles.get(did);
-  let h = did;
-  try {
-    const doc = await getJson(did.startsWith('did:web:')
-      ? `https://${did.slice(8)}/.well-known/did.json` : `https://plc.directory/${did}`);
-    h = doc.alsoKnownAs?.find((a) => a.startsWith('at://'))?.slice(5) || did;
-  } catch { /* leave as DID */ }
-  handles.set(did, h);
-  return h;
 }
 
 // --- output ---------------------------------------------------------------------------------

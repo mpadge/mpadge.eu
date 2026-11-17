@@ -12,11 +12,11 @@
 import fs from 'fs';
 import * as yaml from 'js-yaml';
 import { loadNotes } from '../site/notesPages.js';
+import { publicAgent, paginate, describeError } from './agent.mjs';
 import { addBlueskyField, addBlueskyFieldToNote, findAnnouncements, recentUnannounced, isoDate } from './announce-helpers.mjs';
 
 const SITE = 'https://mpadge.eu';
 const HANDLE = 'mpadge.eu';
-const API = 'https://public.api.bsky.app/xrpc/';
 const MAX_PAGES = 5; // x 100 posts
 
 const argValue = (name) => {
@@ -25,12 +25,6 @@ const argValue = (name) => {
 };
 const posts = yaml.load(fs.readFileSync('src/data/blog.yml', 'utf8')).filter((e) => e && e.link);
 const notes = loadNotes();
-
-async function getJson(path) {
-  const res = await fetch(`${API}${path}`);
-  if (!res.ok) throw new Error(`${path}: ${res.status} ${await res.text()}`);
-  return res.json();
-}
 
 const linkPost = (post, url) => addBlueskyField(post.link.replace(/\.html$/, ''), post.link, url);
 const linkNote = (note, url) => addBlueskyFieldToNote(note.slug, url);
@@ -65,14 +59,15 @@ if (!missingPosts.length && !missingNotes.length) {
   process.exit(0);
 }
 
-const { did } = await getJson(`com.atproto.identity.resolveHandle?handle=${HANDLE}`);
-const feed = [];
-let cursor = '';
-for (let i = 0; i < MAX_PAGES; i++) {
-  const page = await getJson(`app.bsky.feed.getAuthorFeed?actor=${did}&filter=posts_no_replies&limit=100${cursor && `&cursor=${encodeURIComponent(cursor)}`}`);
-  feed.push(...page.feed);
-  cursor = page.cursor;
-  if (!cursor) break;
+const agent = publicAgent();
+let did, feed;
+try {
+  ({ data: { did } } = await agent.com.atproto.identity.resolveHandle({ handle: HANDLE }));
+  feed = await paginate(
+    async (cursor) => (await agent.app.bsky.feed.getAuthorFeed({ actor: did, filter: 'posts_no_replies', limit: 100, cursor })).data,
+    (page) => page.feed, { maxPages: MAX_PAGES });
+} catch (e) {
+  throw new Error(`Bluesky request failed: ${describeError(e)}`);
 }
 console.log(`Checked ${feed.length} recent Bluesky posts by ${HANDLE}.`);
 
