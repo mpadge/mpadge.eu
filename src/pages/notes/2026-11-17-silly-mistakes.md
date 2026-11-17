@@ -48,3 +48,6 @@ you lose.
 <div id="decision-chart"></div>
 
 <script defer src="/assets/js/silly-mistakes.js"></script>
+
+Luckily, my personal silly mistake kept me confined entirely to the left side.
+I've learn from it, and shall now go forth. Phew!
