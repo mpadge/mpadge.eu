@@ -26,3 +26,4 @@ PATHS:
   entries:
     - "src/assets/js/app.js"
     - "src/assets/js/comments.js"
+    - "src/assets/js/silly-mistakes.js"
